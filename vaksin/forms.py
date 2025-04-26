@@ -11,3 +11,12 @@ class VaksinForm(forms.ModelForm):
             'stok': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Stok Vaksin'}),
         }
 
+class UpdateVaksinForm(forms.ModelForm):
+    class Meta:
+        model = Vaksin
+        fields = ['kode', 'nama', 'harga']
+        widgets = {
+            'kode': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'nama': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Vaksin'}),
+            'harga': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Harga Vaksin'}),
+        }

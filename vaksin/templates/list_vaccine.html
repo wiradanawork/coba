@@ -58,7 +58,7 @@
             <td>{{ vaksin.stok }}</td>
             <td>
                 <button onclick="location.href='#'">Update Stok</button>
-                <button onclick="location.href='#'">Update</button>
+                <button onclick="location.href='{% url 'vaksin:update_vaksin' vaksin.kode %}'">Update</button>
                 <button onclick="location.href='#'">Delete</button>
             </td>
         </tr>
