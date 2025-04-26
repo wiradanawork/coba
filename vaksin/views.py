@@ -29,3 +29,17 @@ def update_vaksin(request, kode):
         form = UpdateVaksinForm(instance=vaksin)
 
     return render(request, 'update_vaccine.html', {'form': form, 'vaksin': vaksin})
+
+def update_stok_vaksin(request, kode):
+    vaksin = get_object_or_404(Vaksin, kode=kode)
+
+    if request.method == 'POST':
+        form = UpdateStokVaksinForm(request.POST, instance=vaksin)
+        if form.is_valid():
+            form.save()
+            return redirect('vaksin:list_vaksin')
+    else:
+        form = UpdateStokVaksinForm(instance=vaksin)
+
+    return render(request, 'update_vaccine_stock.html', {'form': form, 'vaksin': vaksin})
+
