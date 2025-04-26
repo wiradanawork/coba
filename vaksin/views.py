@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.http import require_POST
 from .models import *
 from .forms import *
 
@@ -42,4 +43,10 @@ def update_stok_vaksin(request, kode):
         form = UpdateStokVaksinForm(instance=vaksin)
 
     return render(request, 'update_vaccine_stock.html', {'form': form, 'vaksin': vaksin})
+
+@require_POST
+def delete_vaksin(request, kode):
+    vaksin = get_object_or_404(Vaksin, kode=kode)
+    vaksin.delete()
+    return redirect('vaksin:list_vaksin')
 

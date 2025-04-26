@@ -59,7 +59,10 @@
             <td>
                 <button onclick="location.href='{% url 'vaksin:update_stok_vaksin' vaksin.kode %}'">Update Stok</button>
                 <button onclick="location.href='{% url 'vaksin:update_vaksin' vaksin.kode %}'">Update</button>
-                <button onclick="location.href='#'">Delete</button>
+                <form action="{% url 'vaksin:delete_vaksin' vaksin.kode %}" method="post" style="display:inline;" onsubmit="return confirmDelete('{{ vaksin.nama }}', '{{ vaksin.kode }}')">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>                
             </td>
         </tr>
         {% empty %}
@@ -89,6 +92,10 @@ function searchTable() {
             }
         }
     }
+}
+
+function confirmDelete(nama, kode) {
+    return confirm(`Delete Vaccine\n\nApakah kamu yakin untuk menghapus Vaksin ${nama} dengan ${kode}?`);
 }
 </script>
 
