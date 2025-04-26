@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Vaccine</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: center;
+        }
+        button {
+            margin: 0 2px;
+            padding: 5px 10px;
+            background: none;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        #searchInput {
+            margin-bottom: 10px;
+            padding: 5px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>List Vaccine</h1>
+
+<input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari nama vaksin...">
+
+<table id="vaksinTable">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>ID Vaksin</th>
+            <th>Nama Vaksin</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for vaksin in vaksin_list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ vaksin.kode }}</td>
+            <td>{{ vaksin.nama }}</td>
+            <td>Rp {{ vaksin.harga }}</td>
+            <td>{{ vaksin.stok }}</td>
+            <td>
+                <button onclick="location.href='#'">Update Stok</button>
+                <button onclick="location.href='#'">Update</button>
+                <button onclick="location.href='#'">Delete</button>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">Belum ada data vaksin.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function searchTable() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("vaksinTable");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+        td = tr[i].getElementsByTagName("td")[2];
+        if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+            } else {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+}
+</script>
+
+</body>
+</html>
