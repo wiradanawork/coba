@@ -1,0 +1,13 @@
+from django import forms
+from .models import Vaksin
+
+class VaksinForm(forms.ModelForm):
+    class Meta:
+        model = Vaksin
+        fields = ['nama', 'harga', 'stok']
+        widgets = {
+            'nama': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Vaksin'}),
+            'harga': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Harga Vaksin'}),
+            'stok': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Stok Vaksin'}),
+        }
+

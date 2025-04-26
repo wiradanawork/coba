@@ -31,6 +31,10 @@
 
 <h1>List Vaccine</h1>
 
+<a href="{% url 'vaksin:create_vaksin' %}">
+    <button class="create-btn">Add New Vaccine</button>
+</a>
+
 <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari nama vaksin...">
 
 <table id="vaksinTable">
