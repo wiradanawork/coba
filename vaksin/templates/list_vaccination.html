@@ -11,7 +11,7 @@
         <h1 class="text-3xl font-bold mb-6 text-center">List Vaccination</h1>
 
         <div class="flex justify-between items-center mb-4">
-            <a href="#">
+            <a href="{% url 'vaksin:create_vaksinasi' %}">
                 <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                     Add New Vaccination
                 </button>
@@ -39,7 +39,7 @@
                         <td class="border px-4 py-2">{{ vaccination.tanggal }}</td>
                         <td class="border px-4 py-2">{{ vaccination.vaksin }}</td>
                         <td class="border px-4 py-2 flex justify-center gap-2">
-                            <button onclick="location.href='#'" class="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded text-sm">Update</button>
+                            <button onclick="location.href='{% url 'vaksin:update_vaksinasi' vaccination.id %}'" class="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded text-sm">Update</button>
                           
                             <form action="{% url 'vaksin:delete_vaksinasi' vaccination.id %}" method="post" class="inline" onsubmit="return confirmDelete('{{ vaccination.kunjungan }}', '{{ vaccination.vaksin }}')">
                                 {% csrf_token %}
