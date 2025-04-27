@@ -1,0 +1,25 @@
+{% extends 'navbar/base.html' %}
+
+{% block title %}Delete Perawatan Hewan{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Delete Perawatan Hewan</h1>
+    
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Konfirmasi Penghapusan</h4>
+        <p>Apakah Anda yakin ingin menghapus perawatan berikut?</p>
+        <hr>
+        <p>ID Kunjungan: <strong>{{ perawatan.id_kunjungan }}</strong></p>
+        <p>Kode Jenis Perawatan: <strong>{{ perawatan.kode_jenis_perawatan }}</strong></p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'perawatan_hewan_list' %}" class="btn btn-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
