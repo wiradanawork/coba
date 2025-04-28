@@ -4,17 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Treatment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Create New Treatment</h1>
-    
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }} 
-        <button type="submit">Create</button>
-    </form>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
 
-    <br>
-    <a href="{% url 'perawatan:list_perawatan' %}">Cancel</a>
+    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-xl">
+        <h1 class="text-2xl font-bold mb-6">Create New Treatment</h1>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="flex flex-col space-y-2">
+                <label for="nama_perawatan" class="font-medium text-gray-700">Nama Perawatan</label>
+                {{ form.nama_perawatan }}
+            </div>
+
+            <div class="flex flex-col space-y-2">
+                <label for="biaya_perawatan" class="font-medium text-gray-700">Biaya Perawatan</label>
+                {{ form.biaya_perawatan }}
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+                <button type="submit" class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+                    Create
+                </button>
+                <a href="{% url 'perawatan:list_perawatan' %}" class="text-gray-600 hover:text-gray-900">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>
