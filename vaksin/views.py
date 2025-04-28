@@ -89,3 +89,34 @@ def update_vaksinasi(request, id):
         'vaccination': vaccination
     }
     return render(request, 'update_vaccination.html', context)
+
+clients = [
+    {"email": "john.doe@example.com", "nama": "John Doe", "jenis": "Individu"},
+    {"email": "jane.smith@example.com", "nama": "Jane Smith", "jenis": "Perusahaan"},
+    {"email": "alice.wonder@example.com", "nama": "Alice Wonder", "jenis": "Individu"},
+]
+
+def list_client(request):
+    return render(request, 'list_client.html', {'clients': clients})
+
+def detail_client(request, email):
+    client_data = {
+        "nomor_identitas": "123456789",
+        "nama_depan": "John",
+        "nama_tengah": "Anderson",
+        "nama_belakang": "Doe",
+        "alamat": "Jl. Mawar No. 123, Jakarta",
+        "nomor_telepon": "08123456789",
+        "email": "john.doe@example.com",
+        "tanggal_registrasi": "2024-01-01",
+    }
+
+    hewan_peliharaan = [
+        {"nama": "Bruno", "jenis": "Anjing", "tanggal_lahir": "2022-05-20"},
+        {"nama": "Milo", "jenis": "Kucing", "tanggal_lahir": "2023-03-15"},
+    ]
+
+    return render(request, 'detail_client.html', {
+        'client': client_data,
+        'hewan_peliharaan': hewan_peliharaan,
+    })

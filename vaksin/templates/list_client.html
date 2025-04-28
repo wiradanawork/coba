@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Clients</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+
+    <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">List Clients</h1>
+
+        <div class="flex justify-between items-center mb-4">
+            <a href="#">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                    Add New Client
+                </button>
+            </a>
+            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari nama klien..."
+                class="border border-gray-300 rounded-lg px-4 py-2 w-80 focus:ring-2 focus:ring-blue-300" />
+        </div>
+
+        <div class="overflow-x-auto">
+            <table id="clientTable" class="w-full table-auto border-collapse">
+                <thead>
+                    <tr class="bg-blue-100">
+                        <th class="border px-4 py-2">No</th>
+                        <th class="border px-4 py-2">Email</th>
+                        <th class="border px-4 py-2">Nama</th>
+                        <th class="border px-4 py-2">Jenis</th>
+                        <th class="border px-4 py-2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr class="hover:bg-gray-100">
+                        <td class="border px-4 py-2">{{ forloop.counter }}</td>
+                        <td class="border px-4 py-2">{{ client.email }}</td>
+                        <td class="border px-4 py-2">{{ client.nama }}</td>
+                        <td class="border px-4 py-2">{{ client.jenis }}</td>
+                        <td class="border px-4 py-2 text-center">
+                            <button onclick="location.href='{% url 'vaksin:detail_client' client.email %}'"
+                                class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm">
+                                Detail
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="border px-4 py-2 text-center">Belum ada data klien.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function searchTable() {
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("clientTable");
+            tr = table.getElementsByTagName("tr");
+
+            for (i = 1; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[2]; // Kolom Nama
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+</body>
+</html>

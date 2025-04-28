@@ -13,4 +13,6 @@ urlpatterns = [
     path('create-vaksinasi/', create_vaksinasi, name='create_vaksinasi'),
     path('update-vaksinasi/<str:id>/', update_vaksinasi, name='update_vaksinasi'),
     path('delete-vaksinasi/<str:id>/', delete_vaksinasi, name='delete_vaksinasi'),
+    path('list-client/', list_client, name='list_client'),
+    path('detail-client/<str:email>/', detail_client, name='detail_client'),
 ]

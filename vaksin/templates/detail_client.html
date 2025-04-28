@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">Detail Client</h1>
+
+        <div class="mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><strong>Nomor Identitas:</strong> {{ client.nomor_identitas }}</div>
+                <div><strong>Nama Depan:</strong> {{ client.nama_depan }}</div>
+                <div><strong>Nama Tengah:</strong> {{ client.nama_tengah }}</div>
+                <div><strong>Nama Belakang:</strong> {{ client.nama_belakang }}</div>
+                <div><strong>Alamat:</strong> {{ client.alamat }}</div>
+                <div><strong>Nomor Telepon:</strong> {{ client.nomor_telepon }}</div>
+                <div><strong>Email:</strong> {{ client.email }}</div>
+                <div><strong>Tanggal Registrasi:</strong> {{ client.tanggal_registrasi }}</div>
+            </div>
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-semibold mb-4">Daftar Hewan Peliharaan</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border-collapse">
+                    <thead>
+                        <tr class="bg-blue-100">
+                            <th class="border px-4 py-2">No</th>
+                            <th class="border px-4 py-2">Nama</th>
+                            <th class="border px-4 py-2">Jenis</th>
+                            <th class="border px-4 py-2">Tanggal Lahir</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hewan in hewan_peliharaan %}
+                        <tr class="hover:bg-gray-100">
+                            <td class="border px-4 py-2">{{ forloop.counter }}</td>
+                            <td class="border px-4 py-2">{{ hewan.nama }}</td>
+                            <td class="border px-4 py-2">{{ hewan.jenis }}</td>
+                            <td class="border px-4 py-2">{{ hewan.tanggal_lahir }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="border px-4 py-2 text-center">Belum ada hewan peliharaan.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-6 text-center">
+            <a href="{% url 'vaksin:list_client' %}">
+                <button class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded">
+                    Kembali ke List Client
+                </button>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
