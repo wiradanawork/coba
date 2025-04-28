@@ -1,0 +1,98 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">Pet Clinic</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                {% if role == 'guest' %}
+                <!-- Guest (Belum Login) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:register' %}">Registrasi</a>
+                </li>
+                {% elif role == 'klien' %}
+                <!-- Klien (Login) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'klien:kelola_hewan' %}">Kelola Hewan Peliharaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                </li>
+                {% elif role == 'front_desk' %}
+                <!-- Front-Desk Officer (Login) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'jenis_hewan:list' %}">Kelola Jenis Hewan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'klien:kelola_hewan' %}">Kelola Hewan Peliharaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'kunjungan:list' %}">Kelola Kunjungan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'klien:daftar_klien' %}">Daftar Klien</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                </li>
+                {% elif role == 'dokter_hewan' %}
+                <!-- Dokter Hewan (Login) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'jenis_hewan:list' %}">Daftar Jenis Hewan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perawatan_hewan:list' %}">Perawatan Hewan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'rekam_medis:list' %}">Kelola Rekam Medis</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'obat:list' %}">Manajemen Obat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perawatan:list' %}">Manajemen Jenis Perawatan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perawatan_obat:list' %}">Manajemen Pemberian Obat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'vaksinasi:list' %}">Manajemen Vaksinasi Hewan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                </li>
+                {% elif role == 'perawat_hewan' %}
+                <!-- Perawat Hewan (Login) -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'obat:list' %}">Manajemen Obat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perawatan:list' %}">Manajemen Jenis Perawatan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'vaksin:list' %}">Manajemen Vaksin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -45,8 +45,7 @@ INSTALLED_APPS = [
     'perawatan_obat',
     'vaksinasi',
     'klien',
-    'navbar',
-
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,7 +70,6 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'navbar.context_processors.user_role_processor',
             ],
         },
     },

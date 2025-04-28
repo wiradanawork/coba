@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Update Perawatan Hewan</h2>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="post" action="{% url 'perawatan_hewan:update' perawatan.id_kunjungan perawatan.kode_perawatan.kode_perawatan %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_kunjungan">ID Kunjungan</label>
+            <input type="text" class="form-control" id="id_kunjungan" value="{{ perawatan.id_kunjungan }}" disabled>
+        </div>
+        
+        <div class="form-group">
+            <label for="kode_perawatan">Jenis Perawatan</label>
+            <select class="form-control" id="kode_perawatan" name="kode_perawatan" required>
+                {% for jenis_perawatan in perawatan_list %}
+                <option value="{{ jenis_perawatan.kode_perawatan }}" {% if perawatan.kode_perawatan.kode_perawatan == jenis_perawatan.kode_perawatan %}selected{% endif %}>
+                    {{ jenis_perawatan.kode_perawatan }} - {{ jenis_perawatan.nama_perawatan }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="catatan">Catatan Medis</label>
+            <textarea class="form-control" id="catatan" name="catatan" rows="3">{{ perawatan.catatan }}</textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="{% url 'perawatan_hewan:list' %}" class="btn btn-secondary">Batal</a>
+    </form>
+</div>
+{% endblock %}
