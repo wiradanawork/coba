@@ -1,17 +1,16 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Medicines</title>
-    <link href="{% static 'css/tailwind.css' %}" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
     <div class="bg-white p-6 rounded-md shadow-md w-full max-w-6xl">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">List Medicines</h1>
-            <a href="{% url 'add_medicine' %}" class="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition">
+            <a href="{% url 'obat:create_obat' %}" class="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition">
                 + Add New Medicine
             </a>
         </div>
@@ -47,15 +46,15 @@
                         <td class="py-2 px-4 border-b">{{ medicine.stok }}</td>
                         <td class="py-2 px-4 border-b">{{ medicine.dosis }}</td>
                         <td class="py-2 px-4 border-b space-x-2">
-                            <a href="{% url 'update_stock' medicine.kode %}" 
+                            <a href="{% url 'obat:update_stok_obat' medicine.kode %}" 
                                class="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm hover:bg-gray-300">
                                 Update Stock
                             </a>
-                            <a href="{% url 'update' medicine.kode %}" 
+                            <a href="{% url 'obat:update_obat' medicine.kode %}" 
                                class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm hover:bg-gray-800">
                                 Update
                             </a>
-                            <a href="{% url 'delete' medicine.kode %}" 
+                            <a href="{% url 'obat:delete_obat' medicine.kode %}" 
                                class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600">
                                 Delete
                             </a>
