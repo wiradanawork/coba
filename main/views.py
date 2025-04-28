@@ -7,7 +7,7 @@ def start_screen(request):
     return HttpResponse(template.render())
 
 def register(request):
-    template = loader.get_template('register.html')
+    template = loader.get_template('login_register/register.html')
     return HttpResponse(template.render())
 
 def register_ph(request): 

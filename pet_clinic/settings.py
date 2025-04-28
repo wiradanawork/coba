@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'obat',
     'perawatan',
     'perawatan_obat',
-]
+    'vaksinasi',
+    'klien',
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
