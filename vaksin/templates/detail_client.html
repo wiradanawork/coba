@@ -11,7 +11,7 @@
         <h1 class="text-3xl font-bold mb-6 text-center">Detail Client</h1>
 
         <div class="mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-4">
                 <div><strong>Nomor Identitas:</strong> {{ client.nomor_identitas }}</div>
                 <div><strong>Nama Depan:</strong> {{ client.nama_depan }}</div>
                 <div><strong>Nama Tengah:</strong> {{ client.nama_tengah }}</div>
@@ -21,7 +21,7 @@
                 <div><strong>Email:</strong> {{ client.email }}</div>
                 <div><strong>Tanggal Registrasi:</strong> {{ client.tanggal_registrasi }}</div>
             </div>
-        </div>
+        </div>        
 
         <div>
             <h2 class="text-2xl font-semibold mb-4">Daftar Hewan Peliharaan</h2>
@@ -53,9 +53,9 @@
             </div>
         </div>
 
-        <div class="mt-6 text-center">
+        <div class="mt-6 text-right">
             <a href="{% url 'vaksin:list_klien' %}">
-                <button class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                     Kembali ke List Client
                 </button>
             </a>

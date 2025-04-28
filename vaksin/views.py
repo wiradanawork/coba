@@ -93,24 +93,34 @@ def update_vaksinasi(request, id):
 
 # dummy data klien
 clients = [
-    {"email": "john.doe@example.com", "nama": "John Doe", "jenis": "Individu"},
-    {"email": "jane.smith@example.com", "nama": "Jane Smith", "jenis": "Perusahaan"},
-    {"email": "alice.wonder@example.com", "nama": "Alice Wonder", "jenis": "Individu"},
+    {"nomor_identitas": 123456789, "email": "john.doe@example.com", "nama": "John Anderson Doe", "jenis": "Individu"},
+    {"nomor_identitas": 987654321, "email": "jane.smith@example.com", "nama": "Jane Smith", "jenis": "Perusahaan"},
+    {"nomor_identitas": 192837465, "email": "alice.wonder@example.com", "nama": "Alice Wonder", "jenis": "Individu"},
 ]
 
 def list_klien(request):
     return render(request, 'list_client.html', {'clients': clients})
 
-def detail_klien(request, email):
+def detail_klien(request, no_identitas):
+    client = next((c for c in clients if c['nomor_identitas'] == no_identitas), None)
+    
+    if not client:
+        return render(request, '404.html', status=404)
+
+    nama_split = client["nama"].split()
+    nama_depan = nama_split[0]
+    nama_tengah = nama_split[1] if len(nama_split) > 2 else ''
+    nama_belakang = nama_split[-1] if len(nama_split) > 1 else ''
+
     data_klien = {
-        "nomor_identitas": "123456789",
-        "nama_depan": "John",
-        "nama_tengah": "Anderson",
-        "nama_belakang": "Doe",
-        "alamat": "Jl. Mawar No. 123, Jakarta",
-        "nomor_telepon": "08123456789",
-        "email": "john.doe@example.com",
-        "tanggal_registrasi": "2024-01-01",
+        "nomor_identitas": client["nomor_identitas"],
+        "nama_depan": nama_depan,
+        "nama_tengah": nama_tengah,
+        "nama_belakang": nama_belakang,
+        "alamat": "Jl. Mawar No. 123, Jakarta",  # Dummy
+        "nomor_telepon": "08123456789",           # Dummy
+        "email": client["email"],
+        "tanggal_registrasi": "2024-01-01",        # Dummy
     }
 
     hewan_peliharaan = [

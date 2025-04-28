@@ -14,5 +14,5 @@ urlpatterns = [
     path('update-vaksinasi/<str:id>/', update_vaksinasi, name='update_vaksinasi'),
     path('delete-vaksinasi/<str:id>/', delete_vaksinasi, name='delete_vaksinasi'),
     path('list-klien/', list_klien, name='list_klien'),
-    path('detail-klien/<str:email>/', detail_klien, name='detail_klien'),
+    path('detail-klien/<int:no_identitas>/', detail_klien, name='detail_klien'),
 ]
