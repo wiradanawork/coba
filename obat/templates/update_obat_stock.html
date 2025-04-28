@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Medicine Stock</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+
+    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-xl">
+        <h1 class="text-2xl font-bold mb-2">Update Medicine Stock</h1>
+        <h2 class="text-lg text-gray-600 mb-6">{{ obat.kode }} - {{ obat.nama }}</h2>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="flex flex-col space-y-2">
+                <label for="stok" class="font-medium text-gray-700">Stok Obat</label>
+                {{ form.stok }}
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+                <button type="submit" class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+                    Update Stock
+                </button>
+                <a href="{% url 'obat:list_obat' %}" class="text-gray-600 hover:text-gray-900">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

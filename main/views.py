@@ -29,3 +29,11 @@ def register_individu(request):
 def register_perusahaan(request): 
     template = loader.get_template('register_perusahaan.html')
     return HttpResponse(template.render())
+
+def login(request): 
+    template = loader.get_template('login_register/login.html')
+    return HttpResponse(template.render())
+
+def show_main(request): 
+    template = loader.get_template('start_screen.html')
+    return HttpResponse(template.render())

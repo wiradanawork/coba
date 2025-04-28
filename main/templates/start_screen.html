@@ -7,11 +7,17 @@
     rel="stylesheet">
 </head>
 <body>
-    <div>
-        <h1>Pet Clinic - C05</h1>
-        <div>
-            <button>Login</button>
-            <button>Register</button>
+    <div class="bg-white p-6 rounded-md shadow-md text-center w-80">
+        <h1 class="text-xl font-bold mb-6">Pet Clinic - 5</h1>
+        <div class="flex justify-center space-x-4">
+            <a href="{% url 'main:login' %}" 
+               class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+               Login
+            </a>
+            <a href="{% url 'main:register' %}" 
+               class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+               Register
+            </a>
         </div>
     </div>
 </body>

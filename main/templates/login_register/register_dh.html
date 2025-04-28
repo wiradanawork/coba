@@ -6,9 +6,85 @@
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" 
     rel="stylesheet">
 </head>
-<body>
-    <div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-6">
+    <div class="max-w-md w-full rounded-lg shadow-lg p-6 text-left">
+        <h1 class="text-3xl font-bold mb-4 text-gray-900">FORM REGISTER</h1>
+        <p class="text-lg font-semibold mb-2 text-gray-700">Dokter Hewan</p>
+        <p class="text-sm font-semibold mb-2 text-gray-700">Informasi Umum</p>
+        <hr class="my-4 border-gray-300">
+        <form class="max-w-sm">
+            <div class="mb-5">
+                <label for="nomor_izin_praktik" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Izin Praktik</label>
+                <input type="number" id="nomor_izin_praktek" name="nomor_izin_praktik" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Nomor Izin Praktik" />
+            </div>
 
+            <div class="mb-5">
+                <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                <input type="email" id="email" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="name@flowbite.com" required />
+            </div>
+
+            <div class="mb-5">
+                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                <input type="password" id="password" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
+            </div>
+
+            <div class="mb-5">
+                <label for="nomor_telepon" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Nomor Telepon</label>
+                <input type="tel" id="nomor_telepon" name="nomor_telepon" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="081234567890" />
+            </div>
+
+            <div class="mb-5">
+                <label for="tanggal_diterima" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Diterima</label>
+                <input type="date" id="tanggal_diterima" name="tanggal_diterima" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
+            </div>
+
+            <div class="mb-5">
+                <label for="alamat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alamat</label>
+                <textarea id="alamat" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Alamat"></textarea>
+            </div>
+
+            <form>
+                <p class="text-sm font-semibold mb-2 text-gray-700">Kompetensi</p>
+                <hr class="my-4 border-gray-300">
+
+                <div class="mb-5">
+                    <label for="nomor_sertifikat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nomor Sertifikat</label>
+                    <input type="number" id="nomor_sertifikat" name="nomor_sertifikat" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Nomor Sertifikat" />
+                </div>
+
+                <div class="mb-5">
+                    <label for="nama_sertifikat" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Sertifikat</label>
+                    <input type="text" id="nama_sertifikat" name="nama_sertifikat" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" placeholder="Nama Sertifikat" />
+                </div>
+            </form>
+
+            <form>
+                <p class="text-sm font-semibold mb-2 text-gray-700">Jadwal Praktik</p>
+                <hr class="my-4 border-gray-300">
+
+                <div class="mb-5">
+                    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hari</label>
+                    <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                        <option>Senin</option>
+                        <option>Selasa</option>
+                        <option>Rabu</option>
+                        <option>Kamis</option>
+                        <option>Jumat</option>
+                        <option>Sabtu</option>
+                        <option>Minggu</option>
+
+                    </select>
+                </div>
+
+                <div class="mb-5">
+                    <label for="jam" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jam</label>
+                    <input type="time" id="jam" name="jam" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" />
+                </div>
+            </form>
+
+            <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition w-full">Register</button>
+        </form>
     </div>
 </body>
 
