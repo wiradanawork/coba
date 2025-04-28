@@ -4,18 +4,18 @@ from .models import Perawatan
 class PerawatanForm(forms.ModelForm):
     class Meta:
         model = Perawatan
-        fields = ['nama', 'biaya']
+        fields = ['nama_perawatan', 'biaya_perawatan']
         widgets = {
-            'nama': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama'}),
-            'biaya': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Biaya'}),
+            'nama_perawatan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama'}),
+            'biaya_perawatan': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Biaya'}),
         }
 
 class UpdatePerawatanForm(forms.ModelForm):
     class Meta:
         model = Perawatan
-        fields = ['kode', 'nama', 'biaya']
+        fields = ['kode_perawatan', 'nama_perawatan', 'biaya_perawatan']
         widgets = {
-            'kode': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
-            'nama': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Perawatan'}),
-            'biaya': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Biaya'}),
+            'kode_perawatan': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'nama_perawatan': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nama Perawatan'}),
+            'biaya_perawatan': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Biaya'}),
         }
