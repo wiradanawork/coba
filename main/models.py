@@ -15,7 +15,7 @@ class User(models.Model):
 
 class Front_desk(models.Model):
     no_front_desk = models.UUIDField(primary_key=True, default=generate_uuid, editable=False)
-    no_pegawai = models.ForeignKey(models.Pegawai, on_delete=models.CASCADE, db_column='no_front_desk')
+    # no_pegawai = models.ForeignKey(models.Pegawai, on_delete=models.CASCADE, db_column='no_front_desk')
 
     class Meta:
         db_table = 'front_desk'
@@ -30,7 +30,7 @@ class Klien(models.Model):
 
 class Dokter_hewan(models.Model):
     no_dokter_hewan = models.UUIDField(primary_key=True, default=generate_uuid, editable=False)
-    no_tenaga_medis = models.ForeignKey(models.Tenaga_Medis, on_delete=models.CASCADE, db_column='no_dokter_hewan')
+    # no_tenaga_medis = models.ForeignKey(models.Tenaga_Medis, on_delete=models.CASCADE, db_column='no_dokter_hewan')
 
     class Meta:
         db_table = 'dokter_hewan'
