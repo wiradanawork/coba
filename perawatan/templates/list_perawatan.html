@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Treatment Types</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-6xl">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">List Treatment Types</h1>
+            <a href="{% url 'perawatan:create_perawatan' %}" class="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition">
+                + Add New Treatment Type
+            </a>
+        </div>
+
+        <div class="flex mb-4">
+            <input type="text" placeholder="Search Treatment Name"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button class="bg-gray-900 text-white px-4 py-2 rounded-r-md hover:bg-gray-800 transition">
+                🔍
+            </button>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="py-2 px-4 border-b">No</th>
+                        <th class="py-2 px-4 border-b">Kode Jenis Perawatan</th>
+                        <th class="py-2 px-4 border-b">Nama Jenis Perawatan</th>
+                        <th class="py-2 px-4 border-b">Biaya</th>
+                        <th class="py-2 px-4 border-b">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for treatment in treatments %}
+                    <tr class="text-center">
+                        <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
+                        <td class="py-2 px-4 border-b">{{ treatment.kode_perawatan }}</td>
+                        <td class="py-2 px-4 border-b">{{ treatment.nama_perawatan }}</td>
+                        <td class="py-2 px-4 border-b">{{ treatment.biaya_perawatan|floatformat:0 }}</td>
+                        <td class="py-2 px-4 border-b space-x-2">
+                            <a href="{% url 'perawatan:update_perawatan' treatment.kode_perawatan %}" 
+                               class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm hover:bg-gray-800">
+                                Update
+                            </a>
+                            <a href="{% url 'perawatan:delete_perawatan' treatment.kode_perawatan %}" 
+                               class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="py-4 text-center text-gray-500">
+                            No treatment found.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
