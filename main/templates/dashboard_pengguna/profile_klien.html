@@ -23,8 +23,14 @@
             </div>
             <div class="flex">
                 <strong class="w-1/3">Nama</strong>
-                <span class="w-2/3">: {{ pengguna.nama }}</span>
-            </div>
+                <span class="w-2/3">:
+                    {% if pengguna.nama_depan or pengguna.nama_tengah or pengguna.nama_belakang %}
+                        {{ pengguna.nama_depan|default:"" }} {{ pengguna.nama_tengah|default:"" }} {{ pengguna.nama_belakang|default:"" }}
+                    {% else %}
+                        {{ pengguna.nama }}
+                    {% endif %}
+                </span>
+            </div>            
             <div class="flex">
                 <strong class="w-1/3">Tanggal Pendaftaran</strong>
                 <span class="w-2/3">: {{ pengguna.tanggal_registrasi }}</span>
@@ -40,12 +46,12 @@
         </div>
 
         <div class="flex justify-end space-x-4">
-            <a href="{% url 'main:update_password' pengguna.no_identitas %}">
+            <a href="{% url 'main:update_password' pengguna.email %}">
                 <button class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">
                     Update Password
                 </button>
             </a>
-            <a href="{% url 'main:update_profile' pengguna.no_identitas %}">
+            <a href="{% url 'main:update_profile' pengguna.email %}">
                 <button class="bg-gray-900 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800">
                     Update Profile
                 </button>
