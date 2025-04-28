@@ -4,17 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Vaccine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Create New Vaccine</h1>
-    
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }} 
-        <button type="submit">Create</button>
-    </form>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
 
-    <br>
-    <a href="{% url 'vaksin:list_vaksin' %}">Cancel</a>
+    <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-2xl font-bold mb-6 text-center">Create New Vaccine</h1>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="flex items-center justify-between">
+                <button type="submit" 
+                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">
+                    Create
+                </button>
+                <a href="{% url 'vaksin:list_vaksin' %}" 
+                    class="text-gray-600 hover:text-gray-800 underline">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
 </body>
 </html>

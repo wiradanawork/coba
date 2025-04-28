@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from .models import *
 from .forms import *
+from django.template import loader
+from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponseNotFound
 
 def list_vaksin(request):
     vaksin_list = Vaksin.objects.all()
@@ -50,3 +54,71 @@ def delete_vaksin(request, kode):
     vaksin.delete()
     return redirect('vaksin:list_vaksin')
 
+# dummy data vaksinasi
+vaksinasi_list = [
+    {"id": "1", "kunjungan": "Kunjungan 1", "tanggal": "2025-01-01", "vaksin": "Vaksin A"},
+    {"id": "2", "kunjungan": "Kunjungan 2", "tanggal": "2025-01-05", "vaksin": "Vaksin B"},
+    {"id": "3", "kunjungan": "Kunjungan 3", "tanggal": "2025-01-10", "vaksin": "Vaksin C"},
+]
+
+def list_vaksinasi(request):
+    return render(request, 'list_vaccination.html', {'vaksinasi_list': vaksinasi_list})
+
+def delete_vaksinasi(request, id):
+    global vaksinasi_list
+    vaksinasi_list = [vacc for vacc in vaksinasi_list if vacc['id'] != id]
+    messages.success(request, "Vaksinasi berhasil dihapus.")
+    return redirect('vaksin:list_vaksinasi')
+
+def create_vaksinasi(request): 
+    template = loader.get_template('create_vaccination.html')
+    return HttpResponse(template.render())
+
+def update_vaksinasi(request, id):
+    vaksinasi = next((v for v in vaksinasi_list if v['id'] == str(id)), None)
+    if vaksinasi is None:
+        return HttpResponseNotFound('Vaksinasi tidak ditemukan.')
+
+
+    if request.method == 'POST':
+        vaksin = request.POST.get('vaksin')
+        vaksinasi['vaksin'] = vaksin
+        messages.success(request, f"Vaksinasi untuk {vaksinasi['kunjungan']} telah diperbarui.")
+        return redirect('vaksin:list_vaksinasi')
+
+    context = {
+        'vaksinasi': vaksinasi
+    }
+    return render(request, 'update_vaccination.html', context)
+
+# dummy data klien
+clients = [
+    {"email": "john.doe@example.com", "nama": "John Doe", "jenis": "Individu"},
+    {"email": "jane.smith@example.com", "nama": "Jane Smith", "jenis": "Perusahaan"},
+    {"email": "alice.wonder@example.com", "nama": "Alice Wonder", "jenis": "Individu"},
+]
+
+def list_klien(request):
+    return render(request, 'list_client.html', {'clients': clients})
+
+def detail_klien(request, email):
+    data_klien = {
+        "nomor_identitas": "123456789",
+        "nama_depan": "John",
+        "nama_tengah": "Anderson",
+        "nama_belakang": "Doe",
+        "alamat": "Jl. Mawar No. 123, Jakarta",
+        "nomor_telepon": "08123456789",
+        "email": "john.doe@example.com",
+        "tanggal_registrasi": "2024-01-01",
+    }
+
+    hewan_peliharaan = [
+        {"nama": "Bruno", "jenis": "Anjing", "tanggal_lahir": "2022-05-20"},
+        {"nama": "Milo", "jenis": "Kucing", "tanggal_lahir": "2023-03-15"},
+    ]
+
+    return render(request, 'detail_client.html', {
+        'client': data_klien,
+        'hewan_peliharaan': hewan_peliharaan,
+    })
