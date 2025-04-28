@@ -13,28 +13,33 @@
 
         <form method="post" class="space-y-4">
             {% csrf_token %}
+
+            <!-- Dummy data -->
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 
             <div class="space-y-2">
                 <label for="kunjungan" class="block text-sm font-semibold text-gray-700">Kunjungan</label>
-                <input type="text" id="kunjungan" name="kunjungan" value="{{ vaccination.kunjungan }}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300" readonly />
+                <input type="text" id="kunjungan" name="kunjungan" value="{{ vaksinasi.kunjungan }}" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300" readonly />
             </div>
 
             <div class="space-y-2">
                 <label for="vaksin" class="block text-sm font-semibold text-gray-700">Vaksin</label>
                 <select id="vaksin" name="vaksin" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    <option value="vaksinA" {% if vaccination.vaksin == "Vaksin A" %}selected{% endif %}>Vaksin A</option>
-                    <option value="vaksinB" {% if vaccination.vaksin == "Vaksin B" %}selected{% endif %}>Vaksin B</option>
-                    <option value="vaksinC" {% if vaccination.vaksin == "Vaksin C" %}selected{% endif %}>Vaksin C</option>
-                    <option value="vaksinD" {% if vaccination.vaksin == "Vaksin D" %}selected{% endif %}>Vaksin D</option>
+                    <option value="vaksinA" {% if vaksinasi.vaksin == "Vaksin A" %}selected{% endif %}>Vaksin A</option>
+                    <option value="vaksinB" {% if vaksinasi.vaksin == "Vaksin B" %}selected{% endif %}>Vaksin B</option>
+                    <option value="vaksinC" {% if vaksinasi.vaksin == "Vaksin C" %}selected{% endif %}>Vaksin C</option>
+                    <option value="vaksinD" {% if vaksinasi.vaksin == "Vaksin D" %}selected{% endif %}>Vaksin D</option>
                 </select>
             </div>
+             <!-- Dummy data -->
 
             <div class="flex items-center justify-between">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                <button type="submit" 
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                     Update
                 </button>
-                <a href="{% url 'vaksin:list_vaksinasi' %}" class="text-gray-600 hover:text-gray-800 underline">
+                <a href="{% url 'vaksin:list_vaksinasi' %}" 
+                    class="text-gray-600 hover:text-gray-800 underline">
                     Cancel
                 </a>
             </div>

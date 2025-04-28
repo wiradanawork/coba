@@ -21,7 +21,7 @@
         </div>
 
         <div class="overflow-x-auto">
-            <table id="vaccinationTable" class="w-full table-auto border-collapse">
+            <table id="vaksinasiTable" class="w-full table-auto border-collapse">
                 <thead>
                     <tr class="bg-blue-100">
                         <th class="border px-4 py-2">No</th>
@@ -32,18 +32,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for vaccination in vaccinations %}
+                    {% for vaksinasi in vaksinasi_list %}
                     <tr class="hover:bg-gray-100">
                         <td class="border px-4 py-2">{{ forloop.counter }}</td>
-                        <td class="border px-4 py-2">{{ vaccination.kunjungan }}</td>
-                        <td class="border px-4 py-2">{{ vaccination.tanggal }}</td>
-                        <td class="border px-4 py-2">{{ vaccination.vaksin }}</td>
+                        <td class="border px-4 py-2">{{ vaksinasi.kunjungan }}</td>
+                        <td class="border px-4 py-2">{{ vaksinasi.tanggal }}</td>
+                        <td class="border px-4 py-2">{{ vaksinasi.vaksin }}</td>
                         <td class="border px-4 py-2 flex justify-center gap-2">
-                            <button onclick="location.href='{% url 'vaksin:update_vaksinasi' vaccination.id %}'" class="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded text-sm">Update</button>
-                          
-                            <form action="{% url 'vaksin:delete_vaksinasi' vaccination.id %}" method="post" class="inline" onsubmit="return confirmDelete('{{ vaccination.kunjungan }}', '{{ vaccination.vaksin }}')">
+                            <button onclick="location.href='{% url 'vaksin:update_vaksinasi' vaksinasi.id %}'" 
+                                class="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded text-sm">
+                                    Update
+                            </button>
+                            <form action="{% url 'vaksin:delete_vaksinasi' vaksinasi.id %}" method="post" class="inline" onsubmit="return confirmDelete('{{ vaksinasi.kunjungan }}', '{{ vaksinasi.vaksin }}')">
                                 {% csrf_token %}
-                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">
+                                <button type="submit" 
+                                    class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">
                                     Delete
                                 </button>
                             </form>
@@ -51,7 +54,7 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="5" class="border px-4 py-2 text-center">No vaccination records found.</td>
+                        <td colspan="5" class="border px-4 py-2 text-center">Belum ada data vaksinasi.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -64,7 +67,7 @@
             var input, filter, table, tr, td, i, txtValue;
             input = document.getElementById("searchInput");
             filter = input.value.toUpperCase();
-            table = document.getElementById("vaccinationTable");
+            table = document.getElementById("vaksinasiTable");
             tr = table.getElementsByTagName("tr");
 
             for (i = 1; i < tr.length; i++) {
