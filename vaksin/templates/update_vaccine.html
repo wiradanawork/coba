@@ -6,22 +6,22 @@
     <title>Update Vaccine</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
 
-    <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-        <h1 class="text-2xl font-bold mb-6 text-center">Update Vaccine</h1>
+    <div class="w-full max-w-xl bg-white rounded-md shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6">Update Vaccine</h1>
 
         <form method="post" class="space-y-4">
             {% csrf_token %}
             {{ form.as_p }}
 
-            <div class="flex items-center justify-between">
+            <div class="flex justify-between items-center mt-6">
                 <button type="submit" 
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+                    class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
                     Update
                 </button>
                 <a href="{% url 'vaksin:list_vaksin' %}" 
-                    class="text-gray-600 hover:text-gray-800 underline">
+                    class="text-gray-600 hover:text-gray-900">
                     Cancel
                 </a>
             </div>
