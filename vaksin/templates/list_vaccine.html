@@ -5,54 +5,57 @@
     <title>List Vaccine</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-8">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
 
-    <div class="max-w-6xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">List Vaccine</h1>
-
-        <div class="flex justify-between items-center mb-4">
-            <a href="{% url 'vaksin:create_vaksin' %}">
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-                    Add New Vaccine
-                </button>
+    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-6xl">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">List Vaccine</h1>
+            <a href="{% url 'vaksin:create_vaksin' %}" class="bg-gray-900 text-white px-4 py-2 rounded-md hover:bg-gray-800 transition">
+                + Add New Vaccine
             </a>
-            <input type="text" id="searchInput" onkeyup="searchTable()" placeholder="Cari nama vaksin..."
-                class="border border-gray-300 rounded-lg px-4 py-2 w-80 focus:ring-2 focus:ring-blue-300" />
+        </div>
+
+        <div class="flex mb-4">
+            <input type="text" id="searchInput" placeholder="Search Vaccine Name"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="searchTable()" class="bg-gray-900 text-white px-4 py-2 rounded-r-md hover:bg-gray-800 transition">
+                🔍
+            </button>
         </div>
 
         <div class="overflow-x-auto">
-            <table id="vaksinTable" class="w-full table-auto border-collapse">
+            <table id="vaksinTable" class="min-w-full bg-white border border-gray-300">
                 <thead>
-                    <tr class="bg-blue-100">
-                        <th class="border px-4 py-2">No</th>
-                        <th class="border px-4 py-2">ID Vaksin</th>
-                        <th class="border px-4 py-2">Nama Vaksin</th>
-                        <th class="border px-4 py-2">Harga</th>
-                        <th class="border px-4 py-2">Stok</th>
-                        <th class="border px-4 py-2">Action</th>
+                    <tr class="bg-gray-100">
+                        <th class="py-2 px-4 border-b">No</th>
+                        <th class="py-2 px-4 border-b">ID Vaksin</th>
+                        <th class="py-2 px-4 border-b">Nama Vaksin</th>
+                        <th class="py-2 px-4 border-b">Harga</th>
+                        <th class="py-2 px-4 border-b">Stok</th>
+                        <th class="py-2 px-4 border-b">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for vaksin in vaksin_list %}
-                    <tr class="hover:bg-gray-100">
-                        <td class="border px-4 py-2">{{ forloop.counter }}</td>
-                        <td class="border px-4 py-2">{{ vaksin.kode }}</td>
-                        <td class="border px-4 py-2">{{ vaksin.nama }}</td>
-                        <td class="border px-4 py-2">Rp {{ vaksin.harga }}</td>
-                        <td class="border px-4 py-2">{{ vaksin.stok }}</td>
-                        <td class="border px-4 py-2 flex flex-wrap justify-center gap-2">
-                            <button onclick="location.href='{% url 'vaksin:update_stok_vaksin' vaksin.kode %}'"
-                                class="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-3 rounded text-sm">
+                    <tr class="text-center">
+                        <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
+                        <td class="py-2 px-4 border-b">{{ vaksin.kode }}</td>
+                        <td class="py-2 px-4 border-b">{{ vaksin.nama }}</td>
+                        <td class="py-2 px-4 border-b">Rp {{ vaksin.harga }}</td>
+                        <td class="py-2 px-4 border-b">{{ vaksin.stok }}</td>
+                        <td class="py-2 px-4 border-b space-x-2">
+                            <a href="{% url 'vaksin:update_stok_vaksin' vaksin.kode %}" 
+                                class="bg-gray-300 text-black px-2 py-1 rounded-md text-sm hover:bg-gray-400">
                                 Update Stok
-                            </button>
-                            <button onclick="location.href='{% url 'vaksin:update_vaksin' vaksin.kode %}'"
-                                class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm">
+                            </a>
+                            <a href="{% url 'vaksin:update_vaksin' vaksin.kode %}" 
+                               class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm hover:bg-gray-800">
                                 Update
-                            </button>
+                            </a>
                             <form action="{% url 'vaksin:delete_vaksin' vaksin.kode %}" method="post" class="inline" onsubmit="return confirmDelete('{{ vaksin.nama }}', '{{ vaksin.kode }}')">
                                 {% csrf_token %}
                                 <button type="submit"
-                                    class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">
+                                    class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600">
                                     Delete
                                 </button>
                             </form>
@@ -60,7 +63,9 @@
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="6" class="border px-4 py-2 text-center">Belum ada data vaksin.</td>
+                        <td colspan="6" class="py-4 text-center text-gray-500">
+                            Belum ada data vaksin.
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -70,27 +75,22 @@
 
     <script>
         function searchTable() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("searchInput");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("vaksinTable");
-            tr = table.getElementsByTagName("tr");
+            var input = document.getElementById("searchInput");
+            var filter = input.value.toUpperCase();
+            var table = document.getElementById("vaksinTable");
+            var tr = table.getElementsByTagName("tr");
 
-            for (i = 1; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[2];
+            for (var i = 1; i < tr.length; i++) {
+                var td = tr[i].getElementsByTagName("td")[2];
                 if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
+                    var txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = (txtValue.toUpperCase().indexOf(filter) > -1) ? "" : "none";
                 }
             }
         }
 
         function confirmDelete(nama, kode) {
-            return confirm(`Delete Vaccine\n\nApakah kamu yakin untuk menghapus Vaksin ${nama} dengan ${kode}?`);
+            return confirm(`Delete Vaccine\n\nApakah kamu yakin untuk menghapus Vaksin ${nama} dengan kode ${kode}?`);
         }
     </script>
 

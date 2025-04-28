@@ -56,9 +56,9 @@ def delete_vaksin(request, kode):
 
 # dummy data vaksinasi
 vaksinasi_list = [
-    {"id": "1", "kunjungan": "Kunjungan 1", "tanggal": "2025-01-01", "vaksin": "Vaksin A"},
-    {"id": "2", "kunjungan": "Kunjungan 2", "tanggal": "2025-01-05", "vaksin": "Vaksin B"},
-    {"id": "3", "kunjungan": "Kunjungan 3", "tanggal": "2025-01-10", "vaksin": "Vaksin C"},
+    {"id": "1", "kunjungan": "Kunjungan_1", "tanggal": "Rabu, 5 Januari 2025", "vaksin": "Vaksin A"},
+    {"id": "2", "kunjungan": "Kunjungan_2", "tanggal": "Jumat, 21 Februari 2025", "vaksin": "Vaksin B"},
+    {"id": "3", "kunjungan": "Kunjungan_3", "tanggal": "Selasa, 15 Maret 2025", "vaksin": "Vaksin C"},
 ]
 
 def list_vaksinasi(request):
