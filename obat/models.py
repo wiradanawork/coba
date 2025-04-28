@@ -9,9 +9,9 @@ class Obat(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.kode:
-            last_vaksin = Obat.objects.all().order_by('kode').last()
-            if last_vaksin:
-                last_code = last_vaksin.kode
+            last_obat = Obat.objects.all().order_by('kode').last()
+            if last_obat:
+                last_code = last_obat.kode
                 next_code = f"MED{int(last_code[3:]) + 1:03d}"
             else:
                 next_code = "MED001"
