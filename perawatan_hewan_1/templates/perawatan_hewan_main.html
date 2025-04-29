@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Treatment Management System</title>
     <script src="https://cdn.tailwindcss.com/"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         /* Mencegah tampilan panah besar */
         body {
@@ -32,7 +33,7 @@
         }
     </style>
 </head>
-{% include 'navbar/navbar_front_desk.html' %}
+{% include 'navbar/navbar_dokter.html' %}
 <body>
     <div id="app" x-data="{ 
         activeTab: 'list',
@@ -230,6 +231,7 @@
         <!-- Delete Confirmation Modal -->
         <div 
             x-show="showDeleteModal" 
+            x-cloak
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
             <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
@@ -254,6 +256,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Alpine.js - Make sure the script is included -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Initialize any Alpine.js data here if needed
+        });
+    </script>
 </body>
 </html>
- 
