@@ -31,3 +31,5 @@ urlpatterns = [
     path('perawatan-hewan/', include('perawatan_hewan.urls')),
     path('kunjungan/', include('kunjungan.urls')),
 ]
+
+

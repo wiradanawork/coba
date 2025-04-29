@@ -1,0 +1,18 @@
+<nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap justify-between items-center py-3">
+            <a class="text-xl font-bold" href="/">Pet Clinic</a>
+            <div class="flex flex-wrap items-center space-x-3 md:space-x-4">
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:profile' %}">Dashboard</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'jenis_hewan:index' %}">Daftar Jenis Hewan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan_hewan:index' %}">Perawatan Hewan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'kunjungan:rekam_medis' %}">Kelola Rekam Medis</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'obat:index' %}">Manajemen Obat</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan:index' %}">Manajemen Jenis Perawatan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan_obat:index' %}">Manajemen Pemberian Obat</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'vaksinasi:index' %}">Manajemen Vaksinasi Hewan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>

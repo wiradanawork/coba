@@ -1,0 +1,15 @@
+<nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center py-3">
+            <a class="text-xl font-bold" href="/">Pet Clinic</a>
+            <div class="flex flex-wrap items-center space-x-4">
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:profile' %}">Dashboard</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'jenis_hewan:index' %}">Kelola Jenis Hewan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'klien:hewan' %}">Kelola Hewan Peliharaan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'kunjungan:index' %}">Kelola Kunjungan</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'klien:index' %}">Daftar Klien</a>
+                <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+</nav>
