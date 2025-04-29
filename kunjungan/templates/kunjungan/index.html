@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}List Kunjungan{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">List Kunjungan</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if can_modify %}
+        <a href="{% url 'kunjungan:create_kunjungan' %}" class="btn btn-primary mb-3">
+            <i class="bi bi-plus-circle"></i> Create New Kunjungan
+        </a>
+    {% endif %}
+    
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>No</th>
+                <th>ID Kunjungan</th>
+                <th>Klien</th>
+                <th>Nama Hewan</th>
+                <th>Metode Kunjungan</th>
+                <th>Waktu Mulai Penanganan</th>
+                <th>Waktu Akhir Penanganan</th>
+                <th>Rekam Medis</th>
+                {% if can_modify %}
+                    <th>Action</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for kunjungan in kunjungan_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ kunjungan.id_kunjungan }}</td>
+                    <td>{{ kunjungan.no_identitas_klien }}</td>
+                    <td>{{ kunjungan.nama_hewan }}</td>
+                    <td>
+                        {% if kunjungan.tipe_kunjungan == 'janji_temu' %}
+                            Janji Temu
+                        {% elif kunjungan.tipe_kunjungan == 'walk_in' %}
+                            Walk-In
+                        {% elif kunjungan.tipe_kunjungan == 'darurat' %}
+                            Darurat
+                        {% endif %}
+                    </td>
+                    <td>{{ kunjungan.timestamp_awal|date:"d-m-Y H:i:s" }}</td>
+                    <td>
+                        {% if kunjungan.timestamp_akhir %}
+                            {{ kunjungan.timestamp_akhir|date:"d-m-Y H:i:s" }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if kunjungan.suhu %}
+                            <a href="{% url 'kunjungan:rekam_medis' %}" class="btn btn-sm btn-info">Lihat Rekam Medis</a>
+                        {% else %}
+                            {% if user_role == 'dokter' %}
+                                <a href="{% url 'kunjungan:create_rekam_medis' kunjungan.id_kunjungan %}" class="btn btn-sm btn-warning">Buat Rekam Medis</a>
+                            {% else %}
+                                <span class="badge bg-secondary">Belum Ada</span>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                    {% if can_modify %}
+                        <td>
+                            <a href="{% url 'kunjungan:update_kunjungan' kunjungan.id_kunjungan %}" class="btn btn-sm btn-primary">Update</a>
+                            <a href="{% url 'kunjungan:delete_kunjungan' kunjungan.id_kunjungan %}" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="{% if can_modify %}9{% else %}8{% endif %}" class="text-center">No visits found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

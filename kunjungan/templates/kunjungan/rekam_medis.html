@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Rekam Medis{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Rekam Medis</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <table class="table table-striped table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>No</th>
+                <th>ID Kunjungan</th>
+                <th>Nama Hewan</th>
+                <th>Suhu Tubuh</th>
+                <th>Berat Badan</th>
+                <th>Jenis Perawatan</th>
+                <th>Tanggal Kunjungan</th>
+                {% if can_modify %}
+                    <th>Action</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for rekam_medis in kunjungan_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ rekam_medis.id_kunjungan }}</td>
+                    <td>{{ rekam_medis.nama_hewan }}</td>
+                    <td>{{ rekam_medis.suhu }}°C</td>
+                    <td>{{ rekam_medis.berat_badan }} kg</td>
+                    <td>
+                        {% if rekam_medis.kode_perawatan.kode_perawatan %}
+                            {{ rekam_medis.kode_perawatan.kode_perawatan }} - {{ rekam_medis.kode_perawatan.nama_perawatan }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ rekam_medis.timestamp_awal|date:"d-m-Y H:i:s" }}</td>
+                    {% if can_modify %}
+                        <td>
+                            <a href="{% url 'kunjungan:update_rekam_medis' rekam_medis.id_kunjungan %}" class="btn btn-sm btn-primary">Update</a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="{% if can_modify %}8{% else %}7{% endif %}" class="text-center">No medical records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

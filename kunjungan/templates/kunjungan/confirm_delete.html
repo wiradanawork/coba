@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Kunjungan{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card p-4 shadow">
+        <h2 class="text-danger mb-4">Delete Kunjungan</h2>
+        
+        <p class="lead">
+            Apakah kamu yakin untuk menghapus KUNJUNGAN dengan ID <strong class="text-danger">{{ kunjungan.id_kunjungan }}</strong>?
+        </p>
+        
+        <div class="alert alert-warning">
+            <h5>Detail Kunjungan:</h5>
+            <ul class="mb-0">
+                <li><strong>ID Kunjungan:</strong> {{ kunjungan.id_kunjungan }}</li>
+                <li><strong>Nama Hewan:</strong> {{ kunjungan.nama_hewan }}</li>
+                <li><strong>Pemilik:</strong> {{ kunjungan.no_identitas_klien }}</li>
+                <li><strong>Waktu Kunjungan:</strong> {{ kunjungan.timestamp_awal|date:"d-m-Y H:i:s" }}</li>
+            </ul>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{% url 'kunjungan:index' %}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Confirm Deletion</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

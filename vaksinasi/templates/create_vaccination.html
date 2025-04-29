@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Vaccination</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+
+    <div class="w-full max-w-xl bg-white rounded-md shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-6">Create New Vaccination</h1>
+
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <div class="flex flex-col space-y-2">
+                <label for="kunjungan" class="font-medium text-gray-700">Kunjungan</label>
+                <select id="kunjungan" name="kunjungan" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <option value="kunjungan1">Kunjungan 1</option>
+                    <option value="kunjungan2">Kunjungan 2</option>
+                    <option value="kunjungan3">Kunjungan 3</option>
+                    <option value="kunjungan4">Kunjungan 4</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col space-y-2">
+                <label for="vaksin" class="font-medium text-gray-700">Vaksin</label>
+                <select id="vaksin" name="vaksin" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">
+                    <option value="vaksinA">Vaksin A</option>
+                    <option value="vaksinB">Vaksin B</option>
+                    <option value="vaksinC">Vaksin C</option>
+                    <option value="vaksinD">Vaksin D</option>
+                </select>
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+                <button type="submit" class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+                    Create
+                </button>
+                <a href="{% url 'vaksinasi:list_vaksinasi' %}" class="text-gray-600 hover:text-gray-900">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

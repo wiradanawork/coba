@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from .models import *
 from .forms import *
+from django.template import loader
+from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponseNotFound
 
 def list_vaksin(request):
     vaksin_list = Vaksin.objects.all()
@@ -49,4 +53,3 @@ def delete_vaksin(request, kode):
     vaksin = get_object_or_404(Vaksin, kode=kode)
     vaksin.delete()
     return redirect('vaksin:list_vaksin')
-
