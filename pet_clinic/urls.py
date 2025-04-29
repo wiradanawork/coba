@@ -22,6 +22,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('navbar/', include('navbar.urls')),
     path('vaksin/', include('vaksin.urls')),
+    path('hewan/', include('hewan.urls')),
     path('vaksinasi/', include('vaksinasi.urls')),
     path('klien/', include('klien.urls')),
     path('obat/', include('obat.urls')),
