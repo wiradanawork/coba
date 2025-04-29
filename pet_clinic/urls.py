@@ -27,7 +27,7 @@ urlpatterns = [
     path('obat/', include('obat.urls')),
     path('perawatan/', include('perawatan.urls')),
     path('prescription/', include('perawatan_obat.urls')),
-    # path('perawatan-hewan/', include('perawatan_hewan.urls')),
+    path('perawatan_hewan_1/', include('perawatan_hewan_1.urls')),
     path('kunjungan/', include('kunjungan.urls')),
 ]
 

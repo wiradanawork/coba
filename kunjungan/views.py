@@ -230,3 +230,6 @@ def update_rekam_medis(request, id_kunjungan):
     }
     
     return render(request, 'kunjungan/rekam_medis_form.html', context)
+
+def kunjungan(request):
+    return render(request,"kunjungan.html")
