@@ -45,19 +45,21 @@
                         <td class="py-2 px-4 border-b rupiah-format" data-amount='{{ medicine.harga }}'=>Rp</td>
                         <td class="py-2 px-4 border-b">{{ medicine.stok }}</td>
                         <td class="py-2 px-4 border-b">{{ medicine.dosis }}</td>
-                        <td class="py-2 px-4 border-b space-x-2">
-                            <a href="{% url 'obat:update_stok_obat' medicine.kode %}" 
-                               class="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm hover:bg-gray-300">
-                                Update Stock
-                            </a>
-                            <a href="{% url 'obat:update_obat' medicine.kode %}" 
-                               class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm hover:bg-gray-800">
-                                Update
-                            </a>
-                            <button onclick="openModal('{{ medicine.nama }}', '{{ medicine.kode }}')"
-                                class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600">
-                                Delete
-                            </button>
+                        <td class="py-2 px-4 border-b">
+                            <div class="flex flex-wrap gap-2 justify-center">
+                                <a href="{% url 'obat:update_stok_obat' medicine.kode %}" 
+                                   class="bg-gray-200 text-gray-700 px-2 py-1 rounded-md text-sm hover:bg-gray-300 whitespace-nowrap">
+                                    Update Stock
+                                </a>
+                                <a href="{% url 'obat:update_obat' medicine.kode %}" 
+                                   class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm hover:bg-gray-800 whitespace-nowrap">
+                                    Update
+                                </a>
+                                <button onclick="openModal('{{ medicine.nama }}', '{{ medicine.kode }}')"
+                                    class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600 whitespace-nowrap">
+                                    Delete
+                                </button>
+                            </div>
                         </td>
                     </tr>
                     {% empty %}
