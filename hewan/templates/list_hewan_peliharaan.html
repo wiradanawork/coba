@@ -5,54 +5,60 @@
     <title>List Hewan Peliharaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
-<div class="max-w-full w-full p-6">
-    <h2 class="text-2xl font-bold mb-4 text-gray-900">List Hewan Peliharaan</h2>
-    <a href="{% url 'pemilik:create' %}" class="inline-block mb-4 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-700 transition">Create New Pet</a>
-    <div class="overflow-x-auto">
-        <table class="w-full text-sm text-center text-gray-700 items-center">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3">No</th>
-                    <th scope="col" class="px-6 py-3">Jenis Hewan</th>
-                    <th scope="col" class="px-6 py-3">Nama Hewan</th>
-                    <th scope="col" class="px-6 py-3">Tanggal Lahir</th>
-                    <th scope="col" class="px-6 py-3">Foto</th>
-                    <th scope="col" class="px-6 py-3">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if all_hewan %}
-                    {% for hewan in all_hewan %}
-                    <tr class="{% cycle 'bg-white' 'bg-gray-50' %}">
-                        <td class="px-6 py-4 whitespace-nowrap">{{ forloop.counter }}</td>
-                        <td class="px-6 py-4">{{ hewan.jenis_hewan }}</td>
-                        <td class="px-6 py-4">{{ hewan.nama_hewan }}</td>
-                        <td class="px-6 py-4">{{ hewan.tanggal_lahir }}</td>
-                        <td class="px-6 py-4">
-                            {% if hewan.foto %}
-                                <img src="{{ hewan.foto.url }}" alt="Foto Hewan" class="w-16 h-16 object-cover rounded-full">
-                            {% else %}
-                                No Image
-                            {% endif %}
-                        </td>
-                        <td class="px-6 py-4 flex space-x-4 justify-center items-center">
-                            <a href="{% url 'pemilik:edit' hewan.id %}" class="inline-block px-3 py-1 bg-gray-900 text-center text-white text-sm font-medium rounded hover:bg-gray-500 w-20">Edit</a>
-                            <form action="{% url 'pemilik:delete' hewan.id %}" method="post" class="inline text-center">
-                                {% csrf_token %}
-                                <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded hover:bg-red-600 w-20">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="6" class="px-6 py-4 text-center text-gray-600">Tidak ada hewan yang terdaftar.</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
+<body class="bg-gray-100">
+    {% include 'navbar/navbar_front_desk.html' %}
+    <div class="min-h-screen flex items-center justify-center p-8">
+        <div class="max-w-full w-full p-6">
+            <h2 class="text-2xl font-bold mb-4 text-gray-900">List Hewan Peliharaan</h2>
+            <a href="{% url 'hewan:create_hewan' %}" class="inline-block mb-4 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-700 transition">Create New Pet</a>
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-center text-gray-700 items-center">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">No</th>
+                            <th scope="col" class="px-6 py-3">Jenis Hewan</th>
+                            <th scope="col" class="px-6 py-3">Nama Hewan</th>
+                            <th scope="col" class="px-6 py-3">Tanggal Lahir</th>
+                            <th scope="col" class="px-6 py-3">Foto</th>
+                            <th scope="col" class="px-6 py-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if hewan_list %}
+                            {% for hewan in hewan_list %}
+                            <tr class="{% cycle 'bg-white' 'bg-gray-50' %}">
+                                <td class="px-6 py-4 whitespace-nowrap">{{ forloop.counter }}</td>
+                                <td class="px-6 py-4">{{ hewan.jenis }}</td>
+                                <td class="px-6 py-4">{{ hewan.nama }}</td>
+                                <td class="px-6 py-4">{{ hewan.tanggal_lahir }}</td>
+                                <td class="px-6 py-4">
+                                    {% if hewan.url_foto %}
+                                        <img src="{{ hewan.url_foto }}" alt="Foto Hewan" class="w-16 h-16 object-cover rounded-full">
+                                    {% else %}
+                                        No Image
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 flex space-x-4 justify-center items-center">
+                                    <a href="{% url 'hewan:edit_hewan_fdo' hewan.nama %}" 
+                                    class="inline-block px-3 py-1 bg-gray-900 text-center text-white text-sm font-medium rounded hover:bg-gray-500 w-20">
+                                        Edit
+                                    </a>
+                                    <form action="{% url 'hewan:delete_hewan' hewan.nama %}" method="post" class="inline text-center">
+                                        {% csrf_token %}
+                                        <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm font-medium rounded hover:bg-red-600 w-20">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="px-6 py-4 text-center text-gray-600">Tidak ada hewan yang terdaftar.</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</div>
 </body>
 </html>

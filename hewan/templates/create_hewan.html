@@ -2,13 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>List Jenis Hewan</title>
+    <title>List Hewan Peliharaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
-    <div class="w-full max-w-lg rounded-lg shadow-lg p-6 text-left bg-white">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-20">
+    {% include 'navbar/navbar_front_desk.html' %}
+
+    <div class="w-full max-w-lg rounded-lg shadow-lg p-6 text-left bg-white mt-8">
         <h1 class="text-3xl font-bold mb-6 text-gray-900">Create New Pet</h1>
-        
+
         <form action="{% url 'hewan:create_hewan' %}" method="post" class="w-full">
             {% csrf_token %}
             
