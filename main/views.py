@@ -14,23 +14,23 @@ def register(request):
     return HttpResponse(template.render())
 
 def register_ph(request): 
-    template = loader.get_template('register_ph.html')
+    template = loader.get_template('login_register/register_ph.html')
     return HttpResponse(template.render())
 
 def register_dh(request): 
-    template = loader.get_template('register_dh.html')
+    template = loader.get_template('login_register/register_dh.html')
     return HttpResponse(template.render())
 
 def register_fdo(request): 
-    template = loader.get_template('register_fdo.html')
+    template = loader.get_template('login_register/register_fdo.html')
     return HttpResponse(template.render())
 
 def register_individu(request): 
-    template = loader.get_template('register_individu.html')
+    template = loader.get_template('login_register/register_individu.html')
     return HttpResponse(template.render())
 
 def register_perusahaan(request): 
-    template = loader.get_template('register_perusahaan.html')
+    template = loader.get_template('login_register/register_perusahaan.html')
     return HttpResponse(template.render())
 
 def login(request): 
