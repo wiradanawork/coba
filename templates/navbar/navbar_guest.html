@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Clinic - Guest Navbar</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style>
+    /* Animasi dropdown */
+    .dropdown-menu {
+      opacity: 0;
+      transform: translateY(-10px);
+      visibility: hidden;
+      transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    }
+    
+    .dropdown-menu.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+    
+    /* Animasi menu mobile */
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out;
+    }
+    
+    .mobile-menu.active {
+      max-height: 300px;
+    }
+    
+    .menu-item {
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition-delay: calc(var(--index) * 0.1s);
+    }
+    
+    .mobile-menu.active .menu-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 p-4">
+  <div class="mt-8 border-t-2 border-gray-200 pt-8">
+    <h2 class="text-xl font-bold mb-4">Guest Navbar:</h2>
+    <div class="border border-gray-300 rounded-lg overflow-hidden">
+      <nav class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white shadow-lg border-b border-blue-700">
+        <div class="container mx-auto px-4">
+          <div class="flex justify-between items-center py-4">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2">
+              <svg class="w-8 h-8 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zm8 3a2 2 0 11-4 0 2 2 0 014 0zm-8 4a4 4 0 100-8 4 4 0 000 8zm-4-3a3 3 0 100-6 3 3 0 000 6z"></path>
+              </svg>
+              <a class="text-2xl font-bold text-white hover:text-blue-200 transition duration-300" href="#">
+                Pet Clinic
+              </a>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-2">
+              <a class="px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300" href="#">
+                Login
+              </a>
+              <div class="relative">
+                <button id="registrasiBtn" class="px-4 py-2 rounded-md bg-blue-600 hover:bg-blue-500 transition duration-300 flex items-center">
+                  Registrasi
+                  <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div id="registrasiDropdown" class="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-10">
+                  <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                    Registrasi Awal
+                  </a>
+                  <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                    Dokter Hewan
+                  </a>
+                  <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                    Paramedis Hewan
+                  </a>
+                  <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                    Front Desk Officer
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Mobile menu button -->
+            <div class="md:hidden">
+              <button id="mobileMenuToggle" class="text-white hover:text-blue-200 focus:outline-none">
+                <svg id="menuIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Mobile Navigation Menu -->
+          <div id="mobileMenu" class="mobile-menu md:hidden">
+            <div class="py-2 space-y-2">
+              <a class="menu-item block px-4 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#" style="--index: 0">
+                Login
+              </a>
+              
+              <!-- Mobile Registration Section -->
+              <div class="menu-item px-4 py-2" style="--index: 1">
+                <button id="mobileRegistrasiBtn" class="w-full text-left text-white bg-blue-600 hover:bg-blue-500 transition duration-300 rounded px-4 py-2 flex justify-between items-center">
+                  Registrasi
+                  <svg id="mobileDropdownIcon" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </button>
+                <div id="mobileRegistrasiDropdown" class="hidden mt-2 pl-2 space-y-1">
+                  <a class="block px-4 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#">
+                    Registrasi Awal
+                  </a>
+                  <a class="block px-4 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#">
+                    Dokter Hewan
+                  </a>
+                  <a class="block px-4 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#">
+                    Paramedis Hewan
+                  </a>
+                  <a class="block px-4 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#">
+                    Front Desk Officer
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <!-- Contoh konten -->
+      <div class="bg-white p-4">
+        <p class="text-gray-600">Ini adalah contoh tampilan navbar untuk pengguna Guest.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Desktop dropdown
+      const registrasiBtn = document.getElementById('registrasiBtn');
+      const registrasiDropdown = document.getElementById('registrasiDropdown');
+      let isDropdownOpen = false;
+      
+      // Mobile menu
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('menuIcon');
+      const closeIcon = document.getElementById('closeIcon');
+      
+      // Mobile dropdown
+      const mobileRegistrasiBtn = document.getElementById('mobileRegistrasiBtn');
+      const mobileRegistrasiDropdown = document.getElementById('mobileRegistrasiDropdown');
+      const mobileDropdownIcon = document.getElementById('mobileDropdownIcon');
+      
+      // Desktop dropdown functionality
+      registrasiBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isDropdownOpen = !isDropdownOpen;
+        
+        if (isDropdownOpen) {
+          registrasiDropdown.classList.add('active');
+        } else {
+          registrasiDropdown.classList.remove('active');
+        }
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', function() {
+        if (isDropdownOpen) {
+          registrasiDropdown.classList.remove('active');
+          isDropdownOpen = false;
+        }
+      });
+      
+      // Prevent clicks inside dropdown from closing it
+      registrasiDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+      
+      // Mobile menu functionality
+      mobileMenuToggle.addEventListener('click', function() {
+        mobileMenu.classList.toggle('active');
+        menuIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      });
+      
+      // Mobile dropdown functionality
+      mobileRegistrasiBtn.addEventListener('click', function() {
+        mobileRegistrasiDropdown.classList.toggle('hidden');
+        mobileDropdownIcon.classList.toggle('rotate-180');
+      });
+    });
+  </script>
+</body>
+</html>

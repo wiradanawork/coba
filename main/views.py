@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth import logout
 
 def start_screen(request): 
     template = loader.get_template('start_screen.html')
@@ -35,6 +36,10 @@ def register_perusahaan(request):
 def login(request): 
     template = loader.get_template('login_register/login.html')
     return HttpResponse(template.render())
+
+def logout(request):
+    logout(request)
+    return redirect('start_screen.html')
 
 def show_main(request): 
     template = loader.get_template('start_screen.html')
@@ -170,3 +175,8 @@ def update_password(request, no_identitas):
         'pengguna': pengguna
     }
     return HttpResponse(template.render(context, request))
+
+def logout(request):
+    # Here you would clear session data
+    # For this example we'll just redirect to the main page
+    return HttpResponseRedirect(reverse('main:show_main'))
