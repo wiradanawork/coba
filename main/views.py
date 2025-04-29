@@ -61,7 +61,7 @@ def register_individu(request):
         except Exception as e:
             messages.error(request, f"Gagal registrasi: {str(e)}")
 
-    template = loader.get_template('register_individu.html')
+    template = loader.get_template('login_register/register_individu.html')
     return HttpResponse(template.render({}, request))
 
 def register_perusahaan(request):
@@ -327,6 +327,9 @@ def login(request):
     
     template = loader.get_template('login.html')
     return HttpResponse(template.render({}, request))
+
+daftar_sertifikat = [{"no": "1", "nomor_sertifikat": "123/ABC", "nama_sertifikat": "Sertifikat Dokter Hewan"}, {"no": "2", "nomor_sertifikat": "456/ABC", "nama_sertifikat": "Sertifikat Dokter Tumbuhan"}, {"no": "3", "nomor_sertifikat": "123/FGH", "nama_sertifikat": "Sertifikat Dokter Gigi"}]
+daftar_jadwal = [{"no": "1", "hari": "Kamis", "jam": "09:00"}, {"no": "2", "hari": "Kamis", "jam": "15:00"}, {"no": "3", "hari": "Jumat", "jam": "09:00"}]
 
 pengguna_list = [
     {"class": "perusahaan", "no_identitas": "db27130e-e39e-4aff-a28d-a105ced258f6", "email": "perusahaanberusaha@gmail.com", "nama": "Perusahaan Berusaha", "tanggal_registrasi" : "11 April 2025", "alamat" : "Jalan Nanas, Bogor", "nomor_telepon" : "02155795555"},
