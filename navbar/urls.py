@@ -1,8 +1,8 @@
 from django.urls import path
-from navbar.views import show_navbar
+from . import views
 
 app_name = 'navbar'
 
 urlpatterns = [
-    path('', show_navbar, name='show_navbar'),
+    path('', views.render_navbar, name='navbar'),
 ]

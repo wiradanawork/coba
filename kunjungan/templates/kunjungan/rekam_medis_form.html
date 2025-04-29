@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Rekam Medis{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">{{ action }} Rekam Medis</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="alert alert-info">
+        <h5>Detail Kunjungan:</h5>
+        <ul class="mb-0">
+            <li><strong>ID Kunjungan:</strong> {{ kunjungan.id_kunjungan }}</li>
+            <li><strong>Nama Hewan:</strong> {{ kunjungan.nama_hewan }}</li>
+            <li><strong>Pemilik:</strong> {{ kunjungan.no_identitas_klien }}</li>
+            <li><strong>Waktu Kunjungan:</strong> {{ kunjungan.timestamp_awal|date:"d-m-Y H:i:s" }}</li>
+        </ul>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="id_suhu" class="form-label">Suhu Tubuh (°C)</label>
+                {{ form.suhu }}
+                <small class="form-text text-muted">{{ form.suhu.help_text }}</small>
+            </div>
+            
+            <div class="col-md-6 mb-3">
+                <label for="id_berat_badan" class="form-label">Berat Badan (kg)</label>
+                {{ form.berat_badan }}
+                <small class="form-text text-muted">{{ form.berat_badan.help_text }}</small>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="id_jenis_perawatan" class="form-label">Jenis Perawatan</label>
+            {{ form.jenis_perawatan }}
+        </div>
+        
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{% url 'kunjungan:rekam_medis' %}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">{{ action }}</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

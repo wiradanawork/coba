@@ -1,10 +1,13 @@
 from django.shortcuts import render
 
-def show_navbar(request):
-    # Get user role from session
-    user_role = request.session.get('role', 'guest')
+def get_user_role(request):
+    # Check if user is logged in
+    if not request.session.get('user_email'):
+        return 'guest'
     
-    context = {
-        'role': user_role,
-    }
-    return render(request, 'navbar.html', context)
+    # Get user role from session if available
+    return request.session.get('user_role', 'guest')
+
+def render_navbar(request):
+    user_role = get_user_role(request)
+    return render(request, 'navbar.html', {'user_role': user_role})

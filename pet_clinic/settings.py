@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'main',
+    'navbar',
+    'perawatan_hewan',
+    'kunjungan',
     'vaksin',
     'obat',
     'perawatan',
@@ -70,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'navbar.context_processors.navbar_context', 
             ],
         },
     },

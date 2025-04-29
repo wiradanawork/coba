@@ -1,98 +1,154 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">Pet Clinic</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                {% if role == 'guest' %}
-                <!-- Guest (Belum Login) -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:login' %}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:register' %}">Registrasi</a>
-                </li>
-                {% elif role == 'klien' %}
-                <!-- Klien (Login) -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'klien:kelola_hewan' %}">Kelola Hewan Peliharaan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
-                </li>
-                {% elif role == 'front_desk' %}
-                <!-- Front-Desk Officer (Login) -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'jenis_hewan:list' %}">Kelola Jenis Hewan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'klien:kelola_hewan' %}">Kelola Hewan Peliharaan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'kunjungan:list' %}">Kelola Kunjungan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'klien:daftar_klien' %}">Daftar Klien</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
-                </li>
-                {% elif role == 'dokter_hewan' %}
-                <!-- Dokter Hewan (Login) -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'jenis_hewan:list' %}">Daftar Jenis Hewan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'perawatan_hewan:list' %}">Perawatan Hewan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'rekam_medis:list' %}">Kelola Rekam Medis</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'obat:list' %}">Manajemen Obat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'perawatan:list' %}">Manajemen Jenis Perawatan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'perawatan_obat:list' %}">Manajemen Pemberian Obat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'vaksinasi:list' %}">Manajemen Vaksinasi Hewan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
-                </li>
-                {% elif role == 'perawat_hewan' %}
-                <!-- Perawat Hewan (Login) -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'obat:list' %}">Manajemen Obat</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'perawatan:list' %}">Manajemen Jenis Perawatan</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'vaksin:list' %}">Manajemen Vaksin</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
-                </li>
-                {% endif %}
-            </ul>
+{% if user_role == 'guest' %}
+    <!-- Navbar for Guest (Not logged in) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Pet Clinic</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:register' %}">Registrasi</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+{% elif user_role == 'klien' %}
+    <!-- Navbar for Klien (Client) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Pet Clinic</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'klien:hewan' %}">Kelola Hewan Peliharaan</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'front_desk' %}
+    <!-- Navbar for Front-Desk Officer -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Pet Clinic</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'jenis_hewan:index' %}">Kelola Jenis Hewan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'klien:hewan' %}">Kelola Hewan Peliharaan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'kunjungan:index' %}">Kelola Kunjungan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'klien:index' %}">Daftar Klien</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'dokter' %}
+    <!-- Navbar for Dokter Hewan -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Pet Clinic</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'jenis_hewan:index' %}">Daftar Jenis Hewan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perawatan_hewan:index' %}">Perawatan Hewan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'kunjungan:rekam_medis' %}">Kelola Rekam Medis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'obat:index' %}">Manajemen Obat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perawatan:index' %}">Manajemen Jenis Perawatan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perawatan_obat:index' %}">Manajemen Pemberian Obat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'vaksinasi:index' %}">Manajemen Vaksinasi Hewan</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'perawat' %}
+    <!-- Navbar for Perawat Hewan -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Pet Clinic</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:profile' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'obat:index' %}">Manajemen Obat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'perawatan:index' %}">Manajemen Jenis Perawatan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'vaksin:index' %}">Manajemen Vaksin</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endif %}

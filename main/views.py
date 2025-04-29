@@ -160,3 +160,8 @@ def update_password(request, email):
         'pengguna': pengguna
     }
     return HttpResponse(template.render(context, request))
+
+def logout(request):
+    # Here you would clear session data
+    # For this example we'll just redirect to the main page
+    return HttpResponseRedirect(reverse('main:show_main'))
