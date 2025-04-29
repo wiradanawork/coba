@@ -1,0 +1,81 @@
+{% if user_role == 'guest' %}
+    <!-- Navbar for Guest (Not logged in) -->
+    <nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-3">
+                <a class="text-xl font-bold" href="/">Pet Clinic</a>
+                <div class="flex space-x-4">
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:login' %}">Login</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:register' %}">Registrasi</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'klien' %}
+    <!-- Navbar for Klien (Client) -->
+    <nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-3">
+                <a class="text-xl font-bold" href="/">Pet Clinic</a>
+                <div class="flex space-x-4">
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:profile' %}">Dashboard</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'klien:hewan' %}">Kelola Hewan Peliharaan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'front_desk' %}
+    <!-- Navbar for Front-Desk Officer -->
+    <nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-3">
+                <a class="text-xl font-bold" href="/">Pet Clinic</a>
+                <div class="flex flex-wrap items-center space-x-4">
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:profile' %}">Dashboard</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'jenis_hewan:index' %}">Kelola Jenis Hewan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'klien:hewan' %}">Kelola Hewan Peliharaan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'kunjungan:index' %}">Kelola Kunjungan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'klien:index' %}">Daftar Klien</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'dokter' %}
+    <!-- Navbar for Dokter Hewan -->
+    <nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-between items-center py-3">
+                <a class="text-xl font-bold" href="/">Pet Clinic</a>
+                <div class="flex flex-wrap items-center space-x-3 md:space-x-4">
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:profile' %}">Dashboard</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'jenis_hewan:index' %}">Daftar Jenis Hewan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan_hewan:index' %}">Perawatan Hewan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'kunjungan:rekam_medis' %}">Kelola Rekam Medis</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'obat:index' %}">Manajemen Obat</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan:index' %}">Manajemen Jenis Perawatan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan_obat:index' %}">Manajemen Pemberian Obat</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'vaksinasi:index' %}">Manajemen Vaksinasi Hewan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% elif user_role == 'perawat' %}
+    <!-- Navbar for Perawat Hewan -->
+    <nav class="bg-gray-800 text-white shadow-md border border-gray-600 rounded-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-3">
+                <a class="text-xl font-bold" href="/">Pet Clinic</a>
+                <div class="flex items-center space-x-4">
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:profile' %}">Dashboard</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'obat:index' %}">Manajemen Obat</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'perawatan:index' %}">Manajemen Jenis Perawatan</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'vaksin:index' %}">Manajemen Vaksin</a>
+                    <a class="hover:text-gray-300 px-3 py-1 border-gray-600 hover:border-gray-400 border-b-2" href="{% url 'main:logout' %}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endif %}

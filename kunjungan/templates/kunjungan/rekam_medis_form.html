@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Rekam Medis{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 max-w-3xl">
+    <h1 class="text-2xl font-bold mb-6">{{ action }} Rekam Medis</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% elif message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% else %}bg-blue-100 border border-blue-400 text-blue-700{% endif %} px-4 py-3 rounded relative mb-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div class="ml-3">
+                <h3 class="text-sm leading-5 font-medium text-blue-800">
+                    Detail Kunjungan:
+                </h3>
+                <div class="mt-2 text-sm leading-5 text-blue-700">
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>ID Kunjungan:</strong> {{ kunjungan.id_kunjungan }}</li>
+                        <li><strong>Nama Hewan:</strong> {{ kunjungan.nama_hewan }}</li>
+                        <li><strong>Pemilik:</strong> {{ kunjungan.no_identitas_klien }}</li>
+                        <li><strong>Waktu Kunjungan:</strong> {{ kunjungan.timestamp_awal|date:"d-m-Y H:i:s" }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="id_suhu" class="block text-gray-700 text-sm font-bold mb-2">Suhu Tubuh (°C)</label>
+                    <input type="number" step="0.1" min="35" max="42" name="suhu" id="id_suhu" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ form.suhu.value|default:'' }}" required>
+                    <p class="text-xs text-gray-500 mt-1">{{ form.suhu.help_text }}</p>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="id_berat_badan" class="block text-gray-700 text-sm font-bold mb-2">Berat Badan (kg)</label>
+                    <input type="number" step="0.01" min="0.1" max="100" name="berat_badan" id="id_berat_badan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ form.berat_badan.value|default:'' }}" required>
+                    <p class="text-xs text-gray-500 mt-1">{{ form.berat_badan.help_text }}</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <label for="id_jenis_perawatan" class="block text-gray-700 text-sm font-bold mb-2">Jenis Perawatan</label>
+                <select name="jenis_perawatan" id="id_jenis_perawatan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <option value="">Pilih jenis perawatan</option>
+                    {% for option in form.jenis_perawatan.field.queryset %}
+                        <option value="{{ option.id }}" {% if form.jenis_perawatan.value == option.id %}selected{% endif %}>
+                            {{ option.kode_perawatan }} - {{ option.nama_perawatan }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="flex items-center justify-between mt-8">
+                <a href="{% url 'kunjungan:rekam_medis' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Cancel
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    {{ action }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
