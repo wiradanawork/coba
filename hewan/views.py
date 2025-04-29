@@ -1,20 +1,125 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.http import HttpResponse
-from django.template import loader
 from hewan.models import Hewan, Jenis_hewan
-from main.models import Klien, Individu, Perusahaan
+from main.models import Klien
+
+# data dummy sementara
+list_jenis_hewan = [
+    {'id': 1, 'nama_jenis': 'Kucing'},
+    {'id': 2, 'nama_jenis': 'Anjing'},
+    {'id': 3, 'nama_jenis': 'Ikan'},
+    {'id': 4, 'nama_jenis': 'Kelinci'},
+    {'id': 5, 'nama_jenis': 'Burung'}
+]
+
+def list_jenis_hewan(request):
+    jenis_hewan_list = Jenis_hewan.objects.all()
+    return render(request, 'list_jenis_hewan.html', {
+        'jenis_hewan_list': jenis_hewan_list
+    })
+
+def create_jenis_hewan(request):
+    if request.method == 'POST':
+        nama_jenis = request.POST.get('nama_jenis')
+        try:
+            Jenis_hewan.objects.create(nama_jenis=nama_jenis)
+            messages.success(request, "Jenis hewan berhasil dibuat!")
+            return redirect('hewan:list_jenis_hewan')
+        except Exception as e:
+            messages.error(request, f"Gagal membuat jenis hewan: {e}")
+    return render(request, 'create_tipe_hewan.html')
+
+def edit_jenis_hewan(request, id):
+    jenis_hewan = get_object_or_404(Jenis_hewan, id=id)
+    if request.method == 'POST':
+        nama_jenis = request.POST.get('nama_jenis')
+        try:
+            jenis_hewan.nama_jenis = nama_jenis
+            jenis_hewan.save()
+            messages.success(request, "Jenis hewan berhasil diubah!")
+            return redirect('hewan:list_jenis_hewan')
+        except Exception as e:
+            messages.error(request, f"Gagal mengubah jenis hewan: {e}")
+    return render(request, 'edit_tipe_hewan.html', {
+        'jenis_hewan': jenis_hewan
+    })
+
+def delete_jenis_hewan(request, id):
+    jenis_hewan = next((j for j in list_jenis_hewan if j['id'] == id), None)
+
+    if not jenis_hewan:
+        messages.error(request, "Jenis hewan tidak ditemukan.")
+        return redirect('hewan:list_jenis_hewan')
+
+    if request.method == 'POST':
+        try:
+            list_jenis_hewan.remove(jenis_hewan)
+            messages.success(request, "Jenis hewan berhasil dihapus! (sementara)")
+            return redirect('hewan:list_jenis_hewan')
+        except Exception as e:
+            messages.error(request, f"Gagal menghapus jenis hewan: {e}")
+            return redirect('hewan:list_jenis_hewan')
+
+    return render(request, 'delete_jenis_hewan.html', {
+        'jenis_hewan': jenis_hewan
+    })
+
+
+# Dummy data untuk hewan_list
+list_hewan = [
+    {
+        'id': 1,
+        'nama': 'Shadow',
+        'jenis': 'Kucing',
+        'tanggal_lahir': '2022-02-19',
+        'url_foto': 'https://ristek.link/shadow',
+        'no_identitas_klien': 12345 
+    },
+    {
+        'id': 2,
+        'nama': 'Cosmo',
+        'jenis': 'Ikan',
+        'tanggal_lahir': '2022-02-20',
+        'url_foto': 'https://ristek.link/cosmo',
+        'no_identitas_klien': 12345 
+    },
+    {
+        'id': 3,
+        'nama': 'Dash',
+        'jenis': 'Kucing',
+        'tanggal_lahir': '2022-02-21',
+        'url_foto': 'https://ristek.link/dash',
+        'no_identitas_klien': 12345 
+    },
+    {
+        'id': 4,
+        'nama': 'Dolly',
+        'jenis': 'Kelinci',
+        'tanggal_lahir': '2022-02-22',
+        'url_foto': 'https://ristek.link/dolly',
+        'no_identitas_klien': 12345 
+    },
+    {
+        'id': 5,
+        'nama': 'Snowball',
+        'jenis': 'Kucing',
+        'tanggal_lahir': '2022-02-23',
+        'url_foto': 'https://ristek.link/snowball',
+        'no_identitas_klien': 12345 
+    },
+]
+
+def list_hewan_peliharaan(request):
+    # Untuk sementara karena masalah migrate
+    hewan_list = list_hewan
+    return render(request, 'list_hewan_peliharaan.html', {
+        'hewan_list': hewan_list
+    })
 
 def create_hewan(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
+    klien_list = Klien.objects.all()
+    jenis_hewan_list = Jenis_hewan.objects.all()
     
-    user_role = request.session.get('user_role', '')
-    if user_role not in ['front_desk', 'klien']:
-        messages.error(request, "Anda tidak memiliki akses untuk membuat hewan peliharaan.")
-        return redirect('main:login')
-
     if request.method == 'POST':
         nama_pet = request.POST.get('nama_pet')
         no_identitas_klien = request.POST.get('pemilik')
@@ -25,144 +130,95 @@ def create_hewan(request):
         try:
             if len(nama_pet) > 50 or (url_foto and len(url_foto) > 100):
                 raise ValueError("Panjang data melebihi batas.")
-            hewan = Hewan(
+            Hewan.objects.create(
                 nama=nama_pet,
                 no_identitas_klien_id=no_identitas_klien,
                 id_jenis_id=id_jenis,
                 tanggal_lahir=tanggal_lahir,
                 url_foto=url_foto
             )
-            hewan.save()
             messages.success(request, "Hewan peliharaan berhasil dibuat!")
             return redirect('hewan:list_hewan_peliharaan')
         except Exception as e:
-            messages.error(request, f"Gagal membuat hewan peliharaan: {str(e)}")
+            messages.error(request, f"Gagal membuat hewan peliharaan: {e}")
 
-    klien_list = Klien.objects.all()
-    jenis_hewan_list = Jenis_hewan.objects.all()
-    template = loader.get_template('create_hewan.html')
-    return HttpResponse(template.render({'klien_list': klien_list, 'jenis_hewan_list': jenis_hewan_list}, request))
+    return render(request, 'create_hewan.html', {
+        'klien_list': klien_list,
+        'jenis_hewan_list': jenis_hewan_list
+    })
 
-def create_jenis_hewan(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role != 'front_desk':
-        messages.error(request, "Anda tidak memiliki akses untuk membuat tipe hewan.")
-        return redirect('main:login')
-        
-    template = loader.get_template('create_tipe_hewan.html')
-    return HttpResponse(template.render())
+def edit_hewan_fdo(request, id):
+    hewan = next((h for h in list_hewan if h['id'] == id), None)
+    if not hewan:
+        messages.error(request, "Hewan tidak ditemukan.")
+        return redirect('hewan:list_hewan_peliharaan')
 
-def edit_hewan_fdo(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role != 'front_desk':
-        messages.error(request, "Anda tidak memiliki akses untuk mengedit hewan sebagai front desk.")
-        return redirect('main:login')
-        
-    template = loader.get_template('edit_hewan_fdo.html')
-    return HttpResponse(template.render())
+    if request.method == 'POST':
+        nama = request.POST.get('nama')
+        jenis = request.POST.get('jenis_hewan')
+        tanggal_lahir = request.POST.get('tanggal_lahir')
+        url_foto = request.POST.get('url_foto')
 
-def edit_hewan_klien(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role != 'klien':
-        messages.error(request, "Anda tidak memiliki akses untuk mengedit hewan sebagai klien.")
-        return redirect('main:login')
-        
-    template = loader.get_template('edit_hewan_klien.html')
-    return HttpResponse(template.render())
+        try:
+            if len(nama) > 50 or (url_foto and len(url_foto) > 100):
+                raise ValueError("Panjang data melebihi batas.")
+            hewan['nama'] = nama
+            hewan['jenis'] = jenis
+            hewan['tanggal_lahir'] = tanggal_lahir
+            hewan['url_foto'] = url_foto
+            messages.success(request, "Data hewan berhasil diubah! (sementara)")
+            return redirect('hewan:list_hewan_peliharaan')
+        except Exception as e:
+            messages.error(request, f"Gagal mengubah data hewan: {e}")
 
-def edit_jenis_hewan(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role != 'front_desk':
-        messages.error(request, "Anda tidak memiliki akses untuk mengedit tipe hewan.")
-        return redirect('main:login')
-        
-    template = loader.get_template('edit_tipe_hewan.html')
-    return HttpResponse(template.render())
+    return render(request, 'edit_hewan_fdo.html', {
+        'hewan': hewan
+    })
 
-def list_hewan_peliharaan(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role not in ['front_desk', 'klien']:
-        messages.error(request, "Anda tidak memiliki akses untuk melihat daftar hewan peliharaan.")
-        return redirect('main:login')
-        
-    template = loader.get_template('list_hewan_peliharaan.html')
-    return HttpResponse(template.render())
+def edit_hewan_klien(request, id):
+    hewan = next((h for h in list_hewan if h['id'] == id), None)
+    if not hewan:
+        messages.error(request, "Hewan tidak ditemukan.")
+        return redirect('hewan:list_hewan_peliharaan')
 
-def list_jenis_hewan(request):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role not in ['front_desk', 'dokter']:
-        messages.error(request, "Anda tidak memiliki akses untuk melihat daftar jenis hewan.")
-        return redirect('main:login')
-        
-    template = loader.get_template('list_jenis_hewan.html')
-    return HttpResponse(template.render())
+    if request.method == 'POST':
+        nama = request.POST.get('nama')
+        jenis = request.POST.get('jenis_hewan')
+        tanggal_lahir = request.POST.get('tanggal_lahir')
+        url_foto = request.POST.get('url_foto')
 
-def delete_hewan(request, nama, no_identitas_klien):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    user_id = request.session.get('user_id', '')
-    if user_role not in ['front_desk', 'klien']:
-        messages.error(request, "Anda tidak memiliki akses untuk menghapus hewan peliharaan.")
-        return redirect('main:login')
-    
-    try:
-        if user_role == 'klien' and str(no_identitas_klien) != user_id:
-            raise ValueError("Anda hanya dapat menghapus hewan peliharaan Anda sendiri.")
-        
-        hewan = Hewan.objects.get(nama=nama, no_identitas_klien=no_identitas_klien)
-        hewan.delete()
-        messages.success(request, "Hewan peliharaan berhasil dihapus!")
-    except Hewan.DoesNotExist:
-        messages.error(request, "Hewan peliharaan tidak ditemukan.")
-    except Exception as e:
-        messages.error(request, f"Gagal menghapus hewan peliharaan: {str(e)}")
-    
-    return redirect('hewan:list_hewan_peliharaan')
+        try:
+            if len(nama) > 50 or (url_foto and len(url_foto) > 100):
+                raise ValueError("Panjang data melebihi batas.")
+            hewan['nama'] = nama
+            hewan['jenis'] = jenis
+            hewan['tanggal_lahir'] = tanggal_lahir
+            hewan['url_foto'] = url_foto
+            messages.success(request, "Data hewan berhasil diubah! (sementara)")
+            return redirect('hewan:list_hewan_peliharaan')
+        except Exception as e:
+            messages.error(request, f"Gagal mengubah data hewan: {e}")
 
-def delete_jenis_hewan(request, id):
-    if not request.session.get('user_email'):
-        messages.error(request, "Anda harus login terlebih dahulu.")
-        return redirect('main:login')
-    
-    user_role = request.session.get('user_role', '')
-    if user_role != 'front_desk':
-        messages.error(request, "Anda tidak memiliki akses untuk menghapus jenis hewan.")
-        return redirect('main:login')
-    
-    try:
-        jenis_hewan = Jenis_hewan.objects.get(id_jenis=id)
-        jenis_hewan.delete()
-        messages.success(request, "Jenis hewan berhasil dihapus!")
-    except Jenis_hewan.DoesNotExist:
-        messages.error(request, "Jenis hewan tidak ditemukan.")
-    except Exception as e:
-        messages.error(request, f"Gagal menghapus jenis hewan: {str(e)}")
-    
-    return redirect('hewan:list_jenis_hewan')
+    return render(request, 'edit_hewan_fdo.html', {
+        'hewan': hewan
+    })
+
+def delete_hewan(request, id):
+    hewan = next((h for h in list_hewan if h['id'] == id), None)
+    if not hewan:
+        messages.error(request, "Hewan tidak ditemukan.")
+        return redirect('hewan:list_hewan_peliharaan')
+
+    if request.method == 'POST':
+        try:
+            list_hewan.remove(hewan)
+            messages.success(request, "Hewan berhasil dihapus! (sementara)")
+            return redirect('hewan:list_hewan_peliharaan')
+        except Exception as e:
+            messages.error(request, f"Gagal menghapus hewan: {e}")
+            return redirect('hewan:list_hewan_peliharaan')
+
+    # Tampilkan halaman konfirmasi
+    return render(request, 'delete_hewan.html', {
+        'hewan': hewan
+    })
