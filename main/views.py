@@ -13,7 +13,7 @@ def start_screen(request):
     return HttpResponse(template.render({}, request))
 
 def register(request):
-    template = loader.get_template('register.html')
+    template = loader.get_template('login_register/register.html')
     return HttpResponse(template.render({}, request))
 
 def register_individu(request):
@@ -105,7 +105,7 @@ def register_perusahaan(request):
         except Exception as e:
             messages.error(request, f"Gagal registrasi: {str(e)}")
 
-    template = loader.get_template('register_perusahaan.html')
+    template = loader.get_template('login_register/register_perusahaan.html')
     return HttpResponse(template.render({}, request))
 
 def register_front_desk(request):
@@ -146,7 +146,7 @@ def register_front_desk(request):
         except Exception as e:
             messages.error(request, f"Gagal registrasi: {str(e)}")
 
-    template = loader.get_template('register_front_desk.html')
+    template = loader.get_template('login_register/register_front_desk.html')
     return HttpResponse(template.render({}, request))
 
 def register_dokter_hewan(request):
@@ -222,7 +222,7 @@ def register_dokter_hewan(request):
         except Exception as e:
             messages.error(request, f"Gagal registrasi: {str(e)}")
 
-    template = loader.get_template('register_dokter_hewan.html')
+    template = loader.get_template('login_register/register_dokter_hewan.html')
     return HttpResponse(template.render({}, request))
 
 def register_perawat_hewan(request):
@@ -287,7 +287,7 @@ def register_perawat_hewan(request):
         except Exception as e:
             messages.error(request, f"Gagal registrasi: {str(e)}")
 
-    template = loader.get_template('register_perawat_hewan.html')
+    template = loader.get_template('login_register/register_perawat_hewan.html')
     return HttpResponse(template.render({}, request))
 
 def login(request):
@@ -325,7 +325,7 @@ def login(request):
         except Exception as e:
             messages.error(request, f"Login gagal: {str(e)}")
     
-    template = loader.get_template('login.html')
+    template = loader.get_template('login_register/login.html')
     return HttpResponse(template.render({}, request))
 
 daftar_sertifikat = [{"no": "1", "nomor_sertifikat": "123/ABC", "nama_sertifikat": "Sertifikat Dokter Hewan"}, {"no": "2", "nomor_sertifikat": "456/ABC", "nama_sertifikat": "Sertifikat Dokter Tumbuhan"}, {"no": "3", "nomor_sertifikat": "123/FGH", "nama_sertifikat": "Sertifikat Dokter Gigi"}]
