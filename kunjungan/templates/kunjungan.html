@@ -1,12 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kunjungan Management System</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         body {
             background-color: #f9fafb;
@@ -21,8 +20,14 @@
             width: 16px;
             height: 16px;
         }
+        
+        /* Hide modals by default */
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 </head>
+{% include 'navbar/navbar_front_desk.html' %}
 <body class="bg-gray-100">
     <div 
         x-data="{ 
@@ -162,7 +167,7 @@
         </div>
 
         <!-- Create Kunjungan Modal -->
-        <div x-show="activeTab === 'create'" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div x-show="activeTab === 'create'" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-md shadow-lg p-6 max-w-md w-full mx-4">
                 <h1 class="text-xl font-bold mb-6">Create Kunjungan</h1>
                 
@@ -269,7 +274,7 @@
         </div>
 
         <!-- Update Kunjungan Modal -->
-        <div x-show="activeTab === 'edit'" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div x-show="activeTab === 'edit'" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-md shadow-lg p-6 max-w-md w-full mx-4">
                 <h1 class="text-xl font-bold mb-6">Update Kunjungan</h1>
                 
@@ -361,7 +366,7 @@
         </div>
 
         <!-- Medical Record View Modal -->
-        <div x-show="showMedicalRecord" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div x-show="showMedicalRecord" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-md shadow-lg p-6 max-w-lg w-full mx-4">
                 <div class="flex justify-between items-center mb-6">
                     <h1 class="text-xl font-bold">Rekam Medis</h1>
@@ -404,7 +409,7 @@
         </div>
         
         <!-- Create Medical Record Modal -->
-        <div x-show="showCreateMedicalRecord" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div x-show="showCreateMedicalRecord" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-md shadow-lg p-6 max-w-lg w-full mx-4">
                 <h1 class="text-xl font-bold mb-6">Create Rekam Medis</h1>
                 
@@ -441,7 +446,7 @@
         </div>
         
         <!-- Update Medical Record Modal -->
-        <div x-show="showUpdateMedicalRecord" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div x-show="showUpdateMedicalRecord" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div class="bg-white rounded-md shadow-lg p-6 max-w-lg w-full mx-4">
                 <h1 class="text-xl font-bold mb-6">Update Rekam Medis</h1>
                 
@@ -480,6 +485,7 @@
         <!-- No Medical Record Modal -->
         <div 
             x-show="showNoMedicalRecordModal" 
+            x-cloak
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
             <div class="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
@@ -507,6 +513,7 @@
         <!-- Delete Confirmation Modal -->
         <div 
             x-show="showDeleteModal" 
+            x-cloak
             class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
             <div class="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
@@ -531,5 +538,12 @@
             </div>
         </div>
     </div>
+
+    <!-- Alpine.js - Make sure the script is included -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Initialize any Alpine.js data here if needed
+        });
+    </script>
 </body>
 </html>
