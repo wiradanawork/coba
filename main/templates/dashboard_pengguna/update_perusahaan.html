@@ -6,36 +6,37 @@
     <title>Update Profil Perusahaan</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+{% include 'navbar/navbar_klien.html' %}
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="flex items-center justify-center mt-24">
+        <div class="w-full max-w-xl bg-white rounded-md shadow-md p-6">
+            <h1 class="text-2xl font-bold mb-2">Update Profil Perusahaan</h1>
 
-    <div class="w-full max-w-xl bg-white rounded-md shadow-md p-6">
-        <h1 class="text-2xl font-bold mb-2">Update Profil Perusahaan</h1>
+            <form method="post" class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-gray-700">Nama Perusahaan</label>
+                    <input type="text" name="nama" value="{{ pengguna.nama }}" class="w-full border rounded-md px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700">Alamat</label>
+                    <input type="text" name="alamat" value="{{ pengguna.alamat }}" class="w-full border rounded-md px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-gray-700">Nomor Telepon</label>
+                    <input type="text" name="nomor_telepon" value="{{ pengguna.nomor_telepon }}" class="w-full border rounded-md px-3 py-2">
+                </div>
 
-        <form method="post" class="space-y-4">
-            {% csrf_token %}
-            <div>
-                <label class="block text-gray-700">Nama Perusahaan</label>
-                <input type="text" name="nama" value="{{ pengguna.nama }}" class="w-full border rounded-md px-3 py-2">
-            </div>
-            <div>
-                <label class="block text-gray-700">Alamat</label>
-                <input type="text" name="alamat" value="{{ pengguna.alamat }}" class="w-full border rounded-md px-3 py-2">
-            </div>
-            <div>
-                <label class="block text-gray-700">Nomor Telepon</label>
-                <input type="text" name="nomor_telepon" value="{{ pengguna.nomor_telepon }}" class="w-full border rounded-md px-3 py-2">
-            </div>
-
-            <div class="flex justify-between items-center mt-6">
-                <button type="submit" class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
-                    Update Profile
-                </button>
-                <a href="{% url 'main:profile' pengguna.no_identitas %}" class="text-gray-600 hover:text-gray-900">
-                    Cancel
-                </a>
-            </div>
-        </form>
+                <div class="flex justify-between items-center mt-6">
+                    <button type="submit" class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
+                        Update Profile
+                    </button>
+                    <a href="{% url 'main:profile' pengguna.no_identitas %}" class="text-gray-600 hover:text-gray-900">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-
 </body>
 </html>
