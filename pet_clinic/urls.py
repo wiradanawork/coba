@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('vaksin/', include('vaksin.urls')),
+    path('hewan/', include('hewan.urls')),
 ]
