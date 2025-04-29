@@ -2,90 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Client</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+{% include 'navbar/navbar_front_desk.html' %}
+<body class="bg-gray-100 min-h-screen p-8">
 
-    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-4xl">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">Detail Client</h1>
-        </div>
+    <div class="flex items-center justify-center mt-24">
+        <div class="bg-white p-6 rounded-md shadow-md w-full max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">Detail Client</h1>
+            </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-gray-700">
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Nomor Identitas</strong>
-                <span class="w-1/2 text-left">: {{ client.nomor_identitas }}</span>
-            </div>
-            <div class="flex items-center">
-                {% if client.jenis == 'Individu' %}
-                    <strong class="w-1/2 text-left">Nama Lengkap</strong>
-                    <span class="w-1/2 text-left">
-                        : {{ client.nama_depan|default:"" }} {{ client.nama_tengah|default:"" }} {{ client.nama_belakang|default:"" }}
-                    </span>
-                {% elif client.jenis == 'Perusahaan' %}
-                    <strong class="w-1/2 text-left">Nama Perusahaan</strong>
-                    <span class="w-1/2 text-left">
-                        : {{ client.nama_depan|default:"" }} {{ client.nama_tengah|default:"" }} {{ client.nama_belakang|default:"" }}
-                    </span>
-                {% endif %}
-            </div>            
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Alamat</strong>
-                <span class="w-1/2 text-left">: {{ client.alamat }}</span>
-            </div>
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Nomor Telepon</strong>
-                <span class="w-1/2 text-left">: {{ client.nomor_telepon }}</span>
-            </div>
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Email</strong>
-                <span class="w-1/2 text-left">: {{ client.email }}</span>
-            </div>
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Tanggal Registrasi</strong>
-                <span class="w-1/2 text-left">: {{ client.tanggal_registrasi }}</span>
-            </div>
-        </div>                     
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-gray-700">
+                <div class="flex items-center">
+                    <strong class="w-1/2 text-left">Nomor Identitas</strong>
+                    <span class="w-1/2 text-left">: {{ client.nomor_identitas }}</span>
+                </div>
+                <div class="flex items-center">
+                    {% if client.jenis == 'Individu' %}
+                        <strong class="w-1/2 text-left">Nama Lengkap</strong>
+                        <span class="w-1/2 text-left">
+                            : {{ client.nama_depan|default:"" }} {{ client.nama_tengah|default:"" }} {{ client.nama_belakang|default:"" }}
+                        </span>
+                    {% elif client.jenis == 'Perusahaan' %}
+                        <strong class="w-1/2 text-left">Nama Perusahaan</strong>
+                        <span class="w-1/2 text-left">
+                            : {{ client.nama_depan|default:"" }} {{ client.nama_tengah|default:"" }} {{ client.nama_belakang|default:"" }}
+                        </span>
+                    {% endif %}
+                </div>            
+                <div class="flex items-center">
+                    <strong class="w-1/2 text-left">Alamat</strong>
+                    <span class="w-1/2 text-left">: {{ client.alamat }}</span>
+                </div>
+                <div class="flex items-center">
+                    <strong class="w-1/2 text-left">Nomor Telepon</strong>
+                    <span class="w-1/2 text-left">: {{ client.nomor_telepon }}</span>
+                </div>
+                <div class="flex items-center">
+                    <strong class="w-1/2 text-left">Email</strong>
+                    <span class="w-1/2 text-left">: {{ client.email }}</span>
+                </div>
+                <div class="flex items-center">
+                    <strong class="w-1/2 text-left">Tanggal Registrasi</strong>
+                    <span class="w-1/2 text-left">: {{ client.tanggal_registrasi }}</span>
+                </div>
+            </div>                     
 
-        <div>
-            <h2 class="text-xl font-semibold mb-4">Daftar Hewan Peliharaan</h2>
-            <div class="overflow-x-auto">
-                <table class="min-w-full bg-white border border-gray-300">
-                    <thead>
-                        <tr class="bg-gray-100">
-                            <th class="py-2 px-4 border-b">No</th>
-                            <th class="py-2 px-4 border-b">Nama</th>
-                            <th class="py-2 px-4 border-b">Jenis</th>
-                            <th class="py-2 px-4 border-b">Tanggal Lahir</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for hewan in hewan_peliharaan %}
-                        <tr class="text-center hover:bg-gray-50">
-                            <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
-                            <td class="py-2 px-4 border-b">{{ hewan.nama }}</td>
-                            <td class="py-2 px-4 border-b">{{ hewan.jenis }}</td>
-                            <td class="py-2 px-4 border-b">{{ hewan.tanggal_lahir }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="py-4 text-center text-gray-500">
-                                Belum ada hewan peliharaan.
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Daftar Hewan Peliharaan</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="py-2 px-4 border-b">No</th>
+                                <th class="py-2 px-4 border-b">Nama</th>
+                                <th class="py-2 px-4 border-b">Jenis</th>
+                                <th class="py-2 px-4 border-b">Tanggal Lahir</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for hewan in hewan_peliharaan %}
+                            <tr class="text-center hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
+                                <td class="py-2 px-4 border-b">{{ hewan.nama }}</td>
+                                <td class="py-2 px-4 border-b">{{ hewan.jenis }}</td>
+                                <td class="py-2 px-4 border-b">{{ hewan.tanggal_lahir }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" class="py-4 text-center text-gray-500">
+                                    Belum ada hewan peliharaan.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
 
-        <div class="mt-6 text-right">
-            <a href="{% url 'klien:list_klien' %}">
-                <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-4 rounded-md transition">
-                    Kembali ke List Client
-                </button>
-            </a>
+            <div class="mt-6 text-right">
+                <a href="{% url 'klien:list_klien' %}">
+                    <button class="bg-gray-900 hover:bg-gray-800 text-white py-2 px-4 rounded-md transition">
+                        Kembali ke List Client
+                    </button>
+                </a>
+            </div>
         </div>
     </div>
 

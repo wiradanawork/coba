@@ -1,17 +1,11 @@
-{% block navbar %}
-    {% include 'navbar/navbar_front_desk.html' %}
-
-#kode kalian
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Treatment Management System</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.min.js" defer></script>
+    <script src="https://cdn.tailwindcss.com/"></script>
     <style>
         /* Mencegah tampilan panah besar */
         body {
@@ -38,6 +32,7 @@
         }
     </style>
 </head>
+{% include 'navbar/navbar_front_desk.html' %}
 <body>
     <div id="app" x-data="{ 
         activeTab: 'list',
@@ -261,5 +256,4 @@
     </div>
 </body>
 </html>
-
-{% endblock %} 
+ 
