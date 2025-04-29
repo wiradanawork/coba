@@ -40,7 +40,7 @@
                         <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
                         <td class="py-2 px-4 border-b">{{ treatment.kode_perawatan }}</td>
                         <td class="py-2 px-4 border-b">{{ treatment.nama_perawatan }}</td>
-                        <td class="py-2 px-4 border-b">{{ treatment.biaya_perawatan|floatformat:0 }}</td>
+                        <td class="py-2 px-4 border-b rupiah-format" data-amount="{{ treatment.biaya_perawatan }}">Rp</td>
                         <td class="py-2 px-4 border-b space-x-2">
                             <a href="{% url 'perawatan:update_perawatan' treatment.kode_perawatan %}" 
                                class="bg-gray-900 text-white px-2 py-1 rounded-md text-sm hover:bg-gray-800">
@@ -92,6 +92,13 @@
         function closeModal() {
             document.getElementById('deleteModal').classList.add('hidden');
         }
+
+        document.querySelectorAll('.rupiah-format').forEach(function (el) {
+            const amount = parseInt(el.dataset.amount);
+            if (!isNaN(amount)) {
+                el.innerHTML = 'Rp' + amount.toLocaleString('id-ID');
+            }
+        });
     </script>
 </body>
 </html>

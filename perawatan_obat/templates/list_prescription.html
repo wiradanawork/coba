@@ -34,7 +34,7 @@
                         <td class="py-2 px-4 border-b">{{ prescription.kode_perawatan.kode_perawatan }} - {{ prescription.kode_perawatan.nama_perawatan }}</td>
                         <td class="py-2 px-4 border-b">{{ prescription.kode_obat.kode }} - {{ prescription.kode_obat.nama }}</td>
                         <td class="py-2 px-4 border-b">{{ prescription.kuantitas_obat }}</td>
-                        <td class="py-2 px-4 border-b">{{ prescription.biaya_perawatan|floatformat:0 }}</td>
+                        <td class="py-2 px-4 border-b rupiah-format" data-amount="{{ prescription.biaya_perawatan }}">Rp</td>
                         <td class="py-2 px-4 border-b space-x-2">
                             <button onclick="openModal('{{ prescription.kode_perawatan.kode_perawatan }}', '{{ prescription.kode_obat.kode }}')" 
                                class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600">
@@ -82,6 +82,13 @@
         function closeModal() {
             document.getElementById('deleteModal').classList.add('hidden');
         }
+
+        document.querySelectorAll('.rupiah-format').forEach(function (el) {
+            const amount = parseInt(el.dataset.amount);
+            if (!isNaN(amount)) {
+                el.innerHTML = 'Rp' + amount.toLocaleString('id-ID');
+            }
+        });
     </script>
 </body>
 </html>

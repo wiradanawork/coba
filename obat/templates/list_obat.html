@@ -42,7 +42,7 @@
                         <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
                         <td class="py-2 px-4 border-b">{{ medicine.kode }}</td>
                         <td class="py-2 px-4 border-b">{{ medicine.nama }}</td>
-                        <td class="py-2 px-4 border-b">{{ medicine.harga|floatformat:0 }}</td>
+                        <td class="py-2 px-4 border-b rupiah-format" data-amount='{{ medicine.harga }}'=>Rp</td>
                         <td class="py-2 px-4 border-b">{{ medicine.stok }}</td>
                         <td class="py-2 px-4 border-b">{{ medicine.dosis }}</td>
                         <td class="py-2 px-4 border-b space-x-2">
@@ -100,6 +100,13 @@
         function closeModal() {
             document.getElementById('deleteModal').classList.add('hidden');
         }
+
+        document.querySelectorAll('.rupiah-format').forEach(function (el) {
+            const amount = parseInt(el.dataset.amount);
+            if (!isNaN(amount)) {
+                el.innerHTML = 'Rp' + amount.toLocaleString('id-ID');
+            }
+        });
     </script>
 </body>
 </html>
