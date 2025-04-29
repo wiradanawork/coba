@@ -4,7 +4,7 @@ from django.shortcuts import render
 # dummy data klien
 clients = [
     {"nomor_identitas": "247d2624-90ad-46e0-b854-3080830a237a", "email": "john.doe@example.com", "nama": "John Anderson Doe", "jenis": "Individu"},
-    {"nomor_identitas": "eadd3a47-85fd-43bc-9a89-7d2fe442f00d", "email": "jane.smith@example.com", "nama": "Jane Smith", "jenis": "Perusahaan"},
+    {"nomor_identitas": "eadd3a47-85fd-43bc-9a89-7d2fe442f00d", "email": "berusaha.usaha@example.com", "nama": "Perusahaan Berusaha", "jenis": "Perusahaan"},
     {"nomor_identitas": "15b38bed-f383-4c7c-959f-4cbfd2ef40da", "email": "alice.wonder@example.com", "nama": "Alice Wonder", "jenis": "Individu"},
 ]
 
@@ -24,10 +24,11 @@ def detail_klien(request, no_identitas):
         "nama_depan": nama_depan,
         "nama_tengah": nama_tengah,
         "nama_belakang": nama_belakang,
-        "alamat": "Jl. Mawar No. 123, Jakarta",  # Dummy
-        "nomor_telepon": "08123456789",           # Dummy
+        "alamat": "Jl. Mawar No. 123, Jakarta", 
+        "nomor_telepon": "08123456789",         
         "email": client["email"],
-        "tanggal_registrasi": "2024-01-01",        # Dummy
+        "tanggal_registrasi": "2024-01-01",
+        "jenis": client["jenis"],        
     }
 
     hewan_peliharaan = [
