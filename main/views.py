@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.urls import reverse
 from django.template import loader
 from main.models import User, Klien, Individu, Perusahaan, Pegawai, Front_desk, Tenaga_medis, Dokter_hewan, Perawat_hewan, Sertifikat_kompetensi, Jadwal_praktik
 from datetime import date
