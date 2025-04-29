@@ -3,6 +3,15 @@ from django.contrib import messages
 from hewan.models import Hewan, Jenis_hewan
 from main.models import Klien
 
+# data dummy sementara
+list_jenis_hewan = [
+    {'id': 1, 'nama_jenis': 'Kucing'},
+    {'id': 2, 'nama_jenis': 'Anjing'},
+    {'id': 3, 'nama_jenis': 'Ikan'},
+    {'id': 4, 'nama_jenis': 'Kelinci'},
+    {'id': 5, 'nama_jenis': 'Burung'}
+]
+
 def list_jenis_hewan(request):
     jenis_hewan_list = Jenis_hewan.objects.all()
     return render(request, 'list_jenis_hewan.html', {
@@ -36,12 +45,16 @@ def edit_jenis_hewan(request, id):
     })
 
 def delete_jenis_hewan(request, id):
-    jenis_hewan = get_object_or_404(Jenis_hewan, id=id)
+    jenis_hewan = next((j for j in list_jenis_hewan if j['id'] == id), None)
+
+    if not jenis_hewan:
+        messages.error(request, "Jenis hewan tidak ditemukan.")
+        return redirect('hewan:list_jenis_hewan')
 
     if request.method == 'POST':
         try:
-            jenis_hewan.delete()
-            messages.success(request, "Jenis hewan berhasil dihapus!")
+            list_jenis_hewan.remove(jenis_hewan)
+            messages.success(request, "Jenis hewan berhasil dihapus! (sementara)")
             return redirect('hewan:list_jenis_hewan')
         except Exception as e:
             messages.error(request, f"Gagal menghapus jenis hewan: {e}")
