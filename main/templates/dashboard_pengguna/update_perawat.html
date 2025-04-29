@@ -25,12 +25,26 @@
                 <label class="block text-gray-700">Tanggal Akhir Kerja</label>
                 <input type="text" name="tanggal_akhir_kerja" value="{{ pengguna.tanggal_akhir_kerja }}" class="w-full border rounded-md px-3 py-2">
             </div>
+          
+            <div class="mt-6">
+                <h2 class="text-lg font-semibold mb-2 text-gray-800">Sertifikat Kompetensi</h2>
+                {% for sertifikat in pengguna.daftar_sertifikat %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                    <div>
+                        <input type="text" name="nama_sertifikat_{{ sertifikat.no }}" value="{{ sertifikat.nama_sertifikat }}" class="w-full border rounded-md px-3 py-2">
+                    </div>
+                    <div>
+                        <input type="text" name="nomor_sertifikat_{{ sertifikat.no }}" value="{{ sertifikat.nomor_sertifikat }}" class="w-full border rounded-md px-3 py-2">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
 
             <div class="flex justify-between items-center mt-6">
                 <button type="submit" class="bg-gray-900 text-white px-6 py-2 rounded-md hover:bg-gray-800 transition">
                     Update Profile
                 </button>
-                <a href="{% url 'main:profile' pengguna.email %}" class="text-gray-600 hover:text-gray-900">
+                <a href="{% url 'main:profile' pengguna.no_identitas %}" class="text-gray-600 hover:text-gray-900">
                     Cancel
                 </a>
             </div>

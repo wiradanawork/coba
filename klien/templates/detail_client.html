@@ -18,17 +18,18 @@
                 <span class="w-1/2 text-left">: {{ client.nomor_identitas }}</span>
             </div>
             <div class="flex items-center">
-                <strong class="w-1/2 text-left">Nama Depan</strong>
-                <span class="w-1/2 text-left">: {{ client.nama_depan }}</span>
-            </div>
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Nama Tengah</strong>
-                <span class="w-1/2 text-left">: {{ client.nama_tengah }}</span>
-            </div>
-            <div class="flex items-center">
-                <strong class="w-1/2 text-left">Nama Belakang</strong>
-                <span class="w-1/2 text-left">: {{ client.nama_belakang }}</span>
-            </div>
+                {% if client.jenis == 'Individu' %}
+                    <strong class="w-1/2 text-left">Nama Lengkap</strong>
+                    <span class="w-1/2 text-left">
+                        : {{ client.nama_depan|default:"" }} {{ client.nama_tengah|default:"" }} {{ client.nama_belakang|default:"" }}
+                    </span>
+                {% elif client.jenis == 'Perusahaan' %}
+                    <strong class="w-1/2 text-left">Nama Perusahaan</strong>
+                    <span class="w-1/2 text-left">
+                        : {{ client.nama_depan|default:"" }} {{ client.nama_tengah|default:"" }} {{ client.nama_belakang|default:"" }}
+                    </span>
+                {% endif %}
+            </div>            
             <div class="flex items-center">
                 <strong class="w-1/2 text-left">Alamat</strong>
                 <span class="w-1/2 text-left">: {{ client.alamat }}</span>
