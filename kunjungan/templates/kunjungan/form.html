@@ -1,87 +1,102 @@
 {% extends 'base.html' %}
 
-{% block title %}List Kunjungan{% endblock %}
+{% block title %}{{ action }} Kunjungan{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">List Kunjungan</h1>
+<div class="container mx-auto px-4">
+    <h1 class="text-2xl font-bold mb-6">{{ action }} Kunjungan</h1>
     
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            <div class="{% if message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% elif message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% else %}bg-blue-100 border border-blue-400 text-blue-700{% endif %} px-4 py-3 rounded relative mb-4">
+                {{ message }}
+            </div>
         {% endfor %}
     {% endif %}
     
-    {% if can_modify %}
-        <a href="{% url 'kunjungan:create_kunjungan' %}" class="btn btn-primary mb-3">
-            <i class="bi bi-plus-circle"></i> Create New Kunjungan
-        </a>
-    {% endif %}
-    
-    <table class="table table-striped table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>No</th>
-                <th>ID Kunjungan</th>
-                <th>Klien</th>
-                <th>Nama Hewan</th>
-                <th>Metode Kunjungan</th>
-                <th>Waktu Mulai Penanganan</th>
-                <th>Waktu Akhir Penanganan</th>
-                <th>Rekam Medis</th>
-                {% if can_modify %}
-                    <th>Action</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for kunjungan in kunjungan_list %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ kunjungan.id_kunjungan }}</td>
-                    <td>{{ kunjungan.no_identitas_klien }}</td>
-                    <td>{{ kunjungan.nama_hewan }}</td>
-                    <td>
-                        {% if kunjungan.tipe_kunjungan == 'janji_temu' %}
-                            Janji Temu
-                        {% elif kunjungan.tipe_kunjungan == 'walk_in' %}
-                            Walk-In
-                        {% elif kunjungan.tipe_kunjungan == 'darurat' %}
-                            Darurat
-                        {% endif %}
-                    </td>
-                    <td>{{ kunjungan.timestamp_awal|date:"d-m-Y H:i:s" }}</td>
-                    <td>
-                        {% if kunjungan.timestamp_akhir %}
-                            {{ kunjungan.timestamp_akhir|date:"d-m-Y H:i:s" }}
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if kunjungan.suhu %}
-                            <a href="{% url 'kunjungan:rekam_medis' %}" class="btn btn-sm btn-info">Lihat Rekam Medis</a>
-                        {% else %}
-                            {% if user_role == 'dokter' %}
-                                <a href="{% url 'kunjungan:create_rekam_medis' kunjungan.id_kunjungan %}" class="btn btn-sm btn-warning">Buat Rekam Medis</a>
-                            {% else %}
-                                <span class="badge bg-secondary">Belum Ada</span>
-                            {% endif %}
-                        {% endif %}
-                    </td>
-                    {% if can_modify %}
-                        <td>
-                            <a href="{% url 'kunjungan:update_kunjungan' kunjungan.id_kunjungan %}" class="btn btn-sm btn-primary">Update</a>
-                            <a href="{% url 'kunjungan:delete_kunjungan' kunjungan.id_kunjungan %}" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                    {% endif %}
-                </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="{% if can_modify %}9{% else %}8{% endif %}" class="text-center">No visits found</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="id_no_identitas_klien" class="block text-gray-700 text-sm font-bold mb-2">Pemilik</label>
+                    <select name="no_identitas_klien" id="id_no_identitas_klien" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">Pilih pemilik</option>
+                        {% for klien in klien_list %}
+                            <option value="{{ klien.no_identitas }}" {% if kunjungan.no_identitas_klien.no_identitas == klien.no_identitas %}selected{% endif %}>
+                                {{ klien.no_identitas }} - {% if klien.nama_perusahaan %}{{ klien.nama_perusahaan }}{% else %}{{ klien.nama_depan }} {{ klien.nama_belakang }}{% endif %}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="id_nama_hewan" class="block text-gray-700 text-sm font-bold mb-2">Nama Hewan</label>
+                    <input type="text" name="nama_hewan" id="id_nama_hewan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ kunjungan.nama_hewan|default:'' }}" required>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="id_tipe_kunjungan" class="block text-gray-700 text-sm font-bold mb-2">Metode Kunjungan</label>
+                    <select name="tipe_kunjungan" id="id_tipe_kunjungan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="janji_temu" {% if kunjungan.tipe_kunjungan == 'janji_temu' %}selected{% endif %}>Janji Temu</option>
+                        <option value="walk_in" {% if kunjungan.tipe_kunjungan == 'walk_in' %}selected{% endif %}>Walk-In</option>
+                        <option value="darurat" {% if kunjungan.tipe_kunjungan == 'darurat' %}selected{% endif %}>Darurat</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="id_no_dokter_hewan" class="block text-gray-700 text-sm font-bold mb-2">Dokter Hewan</label>
+                    <select name="no_dokter_hewan" id="id_no_dokter_hewan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="">Pilih dokter</option>
+                        {% for dokter in dokter_list %}
+                            <option value="{{ dokter.no_dokter_hewan }}" {% if kunjungan.no_dokter_hewan.no_dokter_hewan == dokter.no_dokter_hewan %}selected{% endif %}>
+                                dr. {{ dokter.no_dokter_hewan }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="id_timestamp_awal" class="block text-gray-700 text-sm font-bold mb-2">Waktu Mulai Penanganan</label>
+                    <input type="datetime-local" name="timestamp_awal" id="id_timestamp_awal" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ kunjungan.timestamp_awal|date:'Y-m-d\TH:i'|default:'' }}" required>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="id_timestamp_akhir" class="block text-gray-700 text-sm font-bold mb-2">Waktu Akhir Penanganan</label>
+                    <input type="datetime-local" name="timestamp_akhir" id="id_timestamp_akhir" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ kunjungan.timestamp_akhir|date:'Y-m-d\TH:i'|default:'' }}">
+                    <p class="text-sm text-gray-500 mt-1">Biarkan kosong jika kunjungan masih berlangsung</p>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="mb-4">
+                    <label for="id_kode_vaksin" class="block text-gray-700 text-sm font-bold mb-2">Vaksin (opsional)</label>
+                    <select name="kode_vaksin" id="id_kode_vaksin" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="">Tidak ada vaksin</option>
+                        <!-- Vaksin options will be added dynamically -->
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="id_no_perawat_hewan" class="block text-gray-700 text-sm font-bold mb-2">No Perawat Hewan</label>
+                    <input type="text" name="no_perawat_hewan" id="id_no_perawat_hewan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" value="{{ kunjungan.no_perawat_hewan|default:'' }}" required>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between mt-6">
+                <a href="{% url 'kunjungan:index' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Cancel
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    {{ action }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

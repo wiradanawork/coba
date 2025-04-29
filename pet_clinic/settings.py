@@ -37,9 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'main',
-    'navbar',
     'perawatan_hewan',
     'kunjungan',
     'vaksin',

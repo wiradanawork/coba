@@ -3,45 +3,65 @@
 {% block title %}{{ action }} Treatment{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="mb-4">{{ action }} Treatment</h1>
+<div class="container mx-auto px-4">
+    <h1 class="text-2xl font-bold mb-6">{{ action }} Treatment</h1>
     
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            <div class="{% if message.tags == 'success' %}bg-green-100 border border-green-400 text-green-700{% elif message.tags == 'error' %}bg-red-100 border border-red-400 text-red-700{% else %}bg-blue-100 border border-blue-400 text-blue-700{% endif %} px-4 py-3 rounded relative mb-4">
+                {{ message }}
+            </div>
         {% endfor %}
     {% endif %}
     
-    <form method="post">
-        {% csrf_token %}
-        
-        <div class="form-group mb-3">
-            <label for="id_id_kunjungan">Kunjungan</label>
-            {{ form.id_kunjungan }}
-        </div>
-        
-        <div class="form-group mb-3">
-            <label for="id_kode_perawatan">Jenis Perawatan</label>
-            {{ form.kode_perawatan }}
-        </div>
-        
-        <div class="form-group mb-3">
-            <label for="id_catatan">Catatan Medis</label>
-            {{ form.catatan }}
-        </div>
-        
-        <div class="hidden">
-            {{ form.nama_hewan }}
-            {{ form.no_identitas_klien }}
-            {{ form.no_front_desk }}
-            {{ form.no_perawat_hewan }}
-            {{ form.no_dokter_hewan }}
-        </div>
-        
-        <div class="d-flex justify-content-between mt-4">
-            <a href="{% url 'perawatan_hewan:index' %}" class="btn btn-secondary">Cancel</a>
-            <button type="submit" class="btn btn-primary">{{ action }}</button>
-        </div>
-    </form>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-6">
+                <label for="id_id_kunjungan" class="block text-gray-700 text-sm font-bold mb-2">Kunjungan</label>
+                <select id="id_id_kunjungan" name="id_kunjungan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    {% for option in form.id_kunjungan.field.choices %}
+                        <option value="{{ option.0 }}" {% if form.id_kunjungan.value == option.0 %}selected{% endif %}>
+                            {{ option.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label for="id_kode_perawatan" class="block text-gray-700 text-sm font-bold mb-2">Jenis Perawatan</label>
+                <select id="id_kode_perawatan" name="kode_perawatan" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    {% for option in form.kode_perawatan.field.choices %}
+                        <option value="{{ option.0 }}" {% if form.kode_perawatan.value == option.0 %}selected{% endif %}>
+                            {{ option.1 }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-6">
+                <label for="id_catatan" class="block text-gray-700 text-sm font-bold mb-2">Catatan Medis</label>
+                <textarea id="id_catatan" name="catatan" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">{{ form.catatan.value|default:'' }}</textarea>
+            </div>
+            
+            <div class="hidden">
+                {{ form.nama_hewan }}
+                {{ form.no_identitas_klien }}
+                {{ form.no_front_desk }}
+                {{ form.no_perawat_hewan }}
+                {{ form.no_dokter_hewan }}
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <a href="{% url 'perawatan_hewan:index' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Cancel
+                </a>
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    {{ action }}
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}
