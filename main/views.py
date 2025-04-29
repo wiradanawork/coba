@@ -45,14 +45,15 @@ daftar_sertifikat = [{"no": "1", "nomor_sertifikat": "123/ABC", "nama_sertifikat
 daftar_jadwal = [{"no": "1", "hari": "Kamis", "jam": "09:00"}, {"no": "2", "hari": "Kamis", "jam": "15:00"}, {"no": "3", "hari": "Jumat", "jam": "09:00"}]
 
 pengguna_list = [
+    {"class": "perusahaan", "no_identitas": "db27130e-e39e-4aff-a28d-a105ced258f6", "email": "perusahaanberusaha@gmail.com", "nama": "Perusahaan Berusaha", "tanggal_registrasi" : "11 April 2025", "alamat" : "Jalan Nanas, Bogor", "nomor_telepon" : "02155795555"},
     {"class": "individu", "no_identitas": "e01432ba-ad17-423c-a48d-fad887ff33d8", "email": "klien1@gmail.com", "nama_depan": "Zahra", "nama_tengah": "", "nama_belakang": "Amalia", "tanggal_registrasi" : "28 April 2025", "alamat" : "Jalan Melati, Bogor", "nomor_telepon" : "081234567890"},
     {"class": "front_desk", "no_identitas": "a244b5b4-e519-4e60-95b6-5b85c90fb34a", "email": "putri@petclinic.com", "tanggal_mulai_kerja": "25 April 2025", "tanggal_akhir_kerja" : "-", "alamat" : "Jalan Mawar, Depok", "nomor_telepon" : "089876543210"},
     {"class": "dokter", "no_identitas": "d96b7e37-afdf-498b-9575-df862d4c94d3", "no_izin_praktik": "DEF-12345", "email": "rafi@petclinic.com", "tanggal_diterima" : "23 Januari 2025", "tanggal_akhir_kerja" : "-", "alamat" : "Jalan Tulip, Jakarta Selatan", "nomor_telepon" : "0888666655544", "daftar_sertifikat": daftar_sertifikat, "daftar_jadwal_praktik": daftar_jadwal},
     {"class": "perawat", "no_identitas": "a08f3546-0d4f-49a3-baef-b92dca58043f", "no_izin_praktik": "SIP-12345", "email": "dhiya@petclinic.com", "tanggal_diterima" : "23 Januari 2025", "tanggal_akhir_kerja" : "-", "alamat" : "Jalan Tulip, Jakarta Selatan", "nomor_telepon" : "0888666655544", "daftar_sertifikat": daftar_sertifikat},
 ]
 
-def profile(request, email):
-    pengguna = next((p for p in pengguna_list if p["email"] == email), None)
+def profile(request, no_identitas):
+    pengguna = next((p for p in pengguna_list if p["no_identitas"] == str(no_identitas)), None)
     
     if not pengguna:
         raise Http404("Pengguna tidak ditemukan.")
@@ -76,14 +77,13 @@ def profile(request, email):
     }
     return HttpResponse(template.render(context, request))
 
-def update_profile(request, email):
-    pengguna = next((p for p in pengguna_list if p["email"] == email), None)
+def update_profile(request, no_identitas):
+    pengguna = next((p for p in pengguna_list if p["no_identitas"] == str(no_identitas)), None)
 
     if not pengguna:
         raise Http404("Pengguna tidak ditemukan.")
 
     if request.method == "POST":
-        # Update data berdasarkan class pengguna
         if pengguna["class"] == "individu":
             pengguna["nama_depan"] = request.POST.get("nama_depan")
             pengguna["nama_tengah"] = request.POST.get("nama_tengah")
@@ -102,20 +102,30 @@ def update_profile(request, email):
             pengguna["tanggal_akhir_kerja"] = request.POST.get("tanggal_akhir_kerja")
 
         elif pengguna["class"] == "dokter":
+            pengguna["daftar_sertifikat"] = [
+                {"no": "1", "nomor_sertifikat": request.POST.get("sertifikat_1"), "nama_sertifikat": request.POST.get("Sertifikat Dokter Hewan")},
+                {"no": "2", "nomor_sertifikat": request.POST.get("sertifikat_2"), "nama_sertifikat": request.POST.get("Sertifikat Dokter Tumbuhan")},
+            ]
+            pengguna["daftar_jadwal_praktik"] = [
+                {"no": "1", "hari": request.POST.get("jadwal_hari_1"), "jam": request.POST.get("jadwal_jam_1")},
+                {"no": "2", "hari": request.POST.get("jadwal_hari_2"), "jam": request.POST.get("jadwal_jam_2")},
+            ]
             pengguna["alamat"] = request.POST.get("alamat")
             pengguna["nomor_telepon"] = request.POST.get("nomor_telepon")
             pengguna["tanggal_akhir_kerja"] = request.POST.get("tanggal_akhir_kerja")
 
         elif pengguna["class"] == "perawat":
+            pengguna["daftar_sertifikat"] = [
+                {"no": "1", "nomor_sertifikat": request.POST.get("sertifikat_1"), "nama_sertifikat": request.POST.get("Sertifikat Dokter Hewan")},
+                {"no": "2", "nomor_sertifikat": request.POST.get("sertifikat_2"), "nama_sertifikat": request.POST.get("Sertifikat Dokter Tumbuhan")},
+            ]
             pengguna["alamat"] = request.POST.get("alamat")
             pengguna["nomor_telepon"] = request.POST.get("nomor_telepon")
             pengguna["tanggal_akhir_kerja"] = request.POST.get("tanggal_akhir_kerja")
 
-        # Setelah update, redirect ke halaman profil
         return HttpResponseRedirect(reverse('main:profile', args=[pengguna["email"]]))
 
     else:
-        # Jika GET, tampilkan halaman update profile
         if pengguna["class"] == "individu":
             template_name = 'dashboard_pengguna/update_individu.html'
         elif pengguna["class"] == "perusahaan":
@@ -135,8 +145,8 @@ def update_profile(request, email):
         }
         return HttpResponse(template.render(context, request))
 
-def update_password(request, email):
-    pengguna = next((p for p in pengguna_list if p["email"] == email), None)
+def update_password(request, no_identitas):
+    pengguna = next((p for p in pengguna_list if p["no_identitas"] == str(no_identitas)), None)
 
     if not pengguna:
         raise Http404("Pengguna tidak ditemukan.")
