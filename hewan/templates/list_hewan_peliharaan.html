@@ -1,8 +1,11 @@
-{% extends 'base.html' %}
-
-{% block title %}List Hewan Peliharaan{% endblock %}
-
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Hewan Peliharaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
 <div class="max-w-full w-full p-6">
     <h2 class="text-2xl font-bold mb-4 text-gray-900">List Hewan Peliharaan</h2>
     <a href="{% url 'pemilik:create' %}" class="inline-block mb-4 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded hover:bg-gray-700 transition">Create New Pet</a>
@@ -51,4 +54,5 @@
         </table>
     </div>
 </div>
-{% endblock %}
+</body>
+</html>
