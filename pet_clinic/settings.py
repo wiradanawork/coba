@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
-    'perawatan_hewan',
+    # 'perawatan_hewan',
+    'perawatan_hewan_1',
     'kunjungan',
     'vaksin',
     'obat',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'perawatan_obat',
     'vaksinasi',
     'klien',
+    'hewan',
 ]
 
 MIDDLEWARE = [
@@ -71,7 +73,6 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'navbar.context_processors.navbar_context', 
             ],
         },
     },

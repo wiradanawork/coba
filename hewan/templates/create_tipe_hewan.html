@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html>
-    
+<html lang="en">
 <head>
-    <title>Create Tipe Hewan</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" 
-    rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>List Jenis Hewan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-6">
-    <div class="max-w-md w-full rounded-lg shadow-lg p-6 text-left">
-        <h1 class="text-3xl font-bold mb-4 text-gray-900">Create New Animal Type</h1>
-        <form class="max-w-sm">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-20">
+    {% include 'navbar/navbar_front_desk.html' %}
+
+    <div class="max-w-md w-full rounded-lg shadow-lg p-6 text-left mt-8">
+        <h1 class="text-3xl font-bold mb-4 text-gray-900">Create Animal Type</h1>
+        <form method="POST" class="max-w-sm">
+            {% csrf_token %}
             <div class="mb-5">
                 <label for="nama_jenis" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Jenis</label>
-                <input type="text" id="nama_jenis" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <input type="text" id="nama_jenis" name="nama_jenis" 
+                       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
 
             <div class="inline flex justify-end">
-                <button type="button" class=" border border-gray-900 text-black px-4 py-2 rounded hover:bg-gray-300 transition w-20 mr-4">Cancel</button>
+                <a href="{% url 'hewan:list_jenis_hewan' %}" class="border border-gray-900 text-black px-4 py-2 rounded hover:bg-gray-500 transition w-20 mr-4">Cancel</a>
                 <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-500 transition w-20">Create</button>
             </div>
         </form>
     </div>
 </body>
-
 </html>

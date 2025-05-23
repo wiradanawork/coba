@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hapus Hewan Peliharaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-20">
+    {% include 'navbar/navbar_front_desk.html' %}
+    <div class="container mx-auto px-4 max-w-2xl">
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Hapus Hewan Peliharaan</h2>
+            <p class="text-gray-700 mb-6">
+                Apakah kamu yakin ingin menghapus hewan bernama 
+                <strong class="text-red-600">{{ hewan.nama }}</strong> milik 
+                <strong class="text-red-600">{{ hewan.no_identitas_klien }}</strong>?
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <div class="flex justify-between mt-8">
+                    <a href="{% url 'hewan:list_hewan_peliharaan' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        Batal
+                    </a>
+                    <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        Ya, Hapus
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

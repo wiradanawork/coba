@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Hewan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+<div class="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-4 text-gray-900">Edit Hewan Peliharaan</h1>
+
+    <form method="POST" action="{% url 'hewan:edit_hewan_klien' hewan.id %}">
+        {% csrf_token %}
+
+        <div class="mb-4">
+            <label for="nama_pet" class="block text-sm font-medium text-gray-700">Nama Hewan</label>
+            <input type="text" id="nama_pet" name="nama_pet" value="{{ hewan.nama }}" required
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="tanggal_lahir" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+            <input type="date" id="tanggal_lahir" name="tanggal_lahir" value="{{ hewan.tanggal_lahir }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
+
+        <div class="mb-4">
+            <label for="url_foto" class="block text-sm font-medium text-gray-700">URL Foto</label>
+            <input type="url" id="url_foto" name="url_foto" value="{{ hewan.url_foto }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
+
+        <div class="flex justify-between mt-6">
+            <a href="{% url 'hewan:list_hewan_peliharaan' %}" class="text-gray-700 border px-4 py-2 rounded hover:bg-gray-200">Cancel</a>
+            <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-blue-700">Update</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

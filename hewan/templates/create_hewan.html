@@ -1,60 +1,70 @@
 <!DOCTYPE html>
-<html>
-    
+<html lang="en">
 <head>
-    <title>Create Hewan Peliharaan</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" 
-    rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>List Hewan Peliharaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-6">
-    <div class="max-w-md w-full rounded-lg shadow-lg p-6 text-left">
-        <h1 class="text-3xl font-bold mb-4 text-gray-900">Create New Pet</h1>
-        <form class="max-w-sm">
-            <div class="mb-5">
-                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pemilik</label>
-                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Senin</option>
-                    <option>Selasa</option>
-                    <option>Rabu</option>
-                    <option>Kamis</option>
-                    <option>Jumat</option>
-                    <option>Sabtu</option>
-                    <option>Minggu</option>
-                </select>
-            </div>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-20">
+    {% include 'navbar/navbar_front_desk.html' %}
 
-            <div class="mb-5">
-                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Hewan</label>
-                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Kucing</option>
-                    <option>Anjing</option>
-                    <option>Kelinci</option>
-                    <option>Ikan</option>
-                    <option>Burung</option>
-                </select>
-            </div>
+    <div class="w-full max-w-lg rounded-lg shadow-lg p-6 text-left bg-white mt-8">
+        <h1 class="text-3xl font-bold mb-6 text-gray-900">Create New Pet</h1>
 
-            <div class="mb-5">
+        <form action="{% url 'hewan:create_hewan' %}" method="post" class="w-full">
+            {% csrf_token %}
+            
+            <fieldset class="mb-5">
+                <legend class="sr-only">Informasi Pemilik</legend>
+                <label for="pemilik" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pemilik</label>
+                <select id="pemilik" name="pemilik" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Pilih pemilik hewan">
+                    <option value="" disabled selected>Pilih pemilik</option>
+                    {% for klien in klien_list %}
+                        <option value="{{ klien.no_identitas }}">
+                            {% if klien.individu %}
+                                {{ klien.individu.nama_depan }} {{ klien.individu.nama_belakang }}
+                            {% elif klien.perusahaan %}
+                                {{ klien.perusahaan.nama_perusahaan }}
+                            {% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset class="mb-5">
+                <legend class="sr-only">Informasi Jenis Hewan</legend>
+                <label for="jenis_hewan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Hewan</label>
+                <select id="jenis_hewan" name="jenis_hewan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Pilih jenis hewan">
+                    <option value="" disabled selected>Pilih jenis hewan</option>
+                    {% for jenis in jenis_hewan_list %}
+                        <option value="{{ jenis.id }}">{{ jenis.nama_jenis }}</option>
+                    {% endfor %}
+                </select>
+            </fieldset>
+
+            <fieldset class="mb-5">
+                <legend class="sr-only">Nama Hewan Peliharaan</legend>
                 <label for="nama_pet" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Hewan Peliharaan</label>
-                <input type="text" id="nama_pet" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
+                <input type="text" id="nama_pet" name="nama_pet" maxlength="50" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Nama hewan peliharaan">
+            </fieldset>
 
-            <div class="mb-5">
+            <fieldset class="mb-5">
+                <legend class="sr-only">Tanggal Lahir Hewan</legend>
                 <label for="tanggal_lahir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Lahir Hewan</label>
-                <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
-            </div>
+                <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Tanggal lahir hewan">
+            </fieldset>
 
-            <div class="mb-5">
-                <label for="url_foto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL Foto Hewan</label>
-                <input type="url" id="url_foto" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
+            <fieldset class="mb-5">
+                <legend class="sr-only">URL Foto Hewan (Opsional)</legend>
+                <label for="url_foto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL Foto Hewan (Opsional)</label>
+                <input type="url" id="url_foto" name="url_foto" maxlength="100" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="https://example.com/foto.jpg" aria-label="URL foto hewan">
+            </fieldset>
 
-            <div class="inline flex justify-end">
-                <button type="button" class=" border border-gray-900 text-black px-4 py-2 rounded hover:bg-gray-300 transition w-20 mr-4">Cancel</button>
-                <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-500 transition w-20">Create</button>
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'hewan:list_hewan_peliharaan' %}" class="border border-gray-900 text-black px-4 py-2 rounded hover:bg-gray-500 hover:text-white transition w-20 text-center" role="button">Cancel</a>
+                <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-700 transition w-20" aria-label="Buat hewan peliharaan">Create</button>
             </div>
         </form>
     </div>
 </body>
-
 </html>

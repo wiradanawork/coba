@@ -5,9 +5,9 @@ from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import logout
 
-def start_screen(request): 
+def start_screen(request):
     template = loader.get_template('start_screen.html')
-    return HttpResponse(template.render())
+    return HttpResponse(template.render({}, request))
 
 def register(request):
     template = loader.get_template('login_register/register.html')
@@ -24,6 +24,8 @@ def register_dh(request):
 def register_fdo(request): 
     template = loader.get_template('register_fdo.html')
     return HttpResponse(template.render())
+    template = loader.get_template('login_register/register_fdo.html')
+    return HttpResponse(template.render({}, request))
 
 def register_individu(request): 
     template = loader.get_template('register_individu.html')
@@ -36,10 +38,6 @@ def register_perusahaan(request):
 def login(request): 
     template = loader.get_template('login_register/login.html')
     return HttpResponse(template.render())
-
-def logout(request):
-    logout(request)
-    return redirect('start_screen.html')
 
 def show_main(request): 
     template = loader.get_template('start_screen.html')
