@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Hewan Peliharaan</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <title>List Hewan Peliharaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-6">
-    <div class="w-full max-w-lg rounded-lg shadow-lg p-6 text-left bg-white">
+<body class="bg-gray-100 min-h-screen flex flex-col items-center pt-20">
+    {% include 'navbar/navbar_front_desk.html' %}
+
+    <div class="w-full max-w-lg rounded-lg shadow-lg p-6 text-left bg-white mt-8">
         <h1 class="text-3xl font-bold mb-6 text-gray-900">Create New Pet</h1>
-        
+
         <form action="{% url 'hewan:create_hewan' %}" method="post" class="w-full">
             {% csrf_token %}
-            <div class="mb-5">
+            
+            <fieldset class="mb-5">
+                <legend class="sr-only">Informasi Pemilik</legend>
                 <label for="pemilik" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pemilik</label>
                 <select id="pemilik" name="pemilik" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Pilih pemilik hewan">
                     <option value="" disabled selected>Pilih pemilik</option>
@@ -26,9 +29,10 @@
                         </option>
                     {% endfor %}
                 </select>
-            </div>
+            </fieldset>
 
-            <div class="mb-5">
+            <fieldset class="mb-5">
+                <legend class="sr-only">Informasi Jenis Hewan</legend>
                 <label for="jenis_hewan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Hewan</label>
                 <select id="jenis_hewan" name="jenis_hewan" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Pilih jenis hewan">
                     <option value="" disabled selected>Pilih jenis hewan</option>
@@ -36,22 +40,25 @@
                         <option value="{{ jenis.id }}">{{ jenis.nama_jenis }}</option>
                     {% endfor %}
                 </select>
-            </div>
+            </fieldset>
 
-            <div class="mb-5">
+            <fieldset class="mb-5">
+                <legend class="sr-only">Nama Hewan Peliharaan</legend>
                 <label for="nama_pet" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Hewan Peliharaan</label>
                 <input type="text" id="nama_pet" name="nama_pet" maxlength="50" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Nama hewan peliharaan">
-            </div>
+            </fieldset>
 
-            <div class="mb-5">
+            <fieldset class="mb-5">
+                <legend class="sr-only">Tanggal Lahir Hewan</legend>
                 <label for="tanggal_lahir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Lahir Hewan</label>
                 <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required aria-label="Tanggal lahir hewan">
-            </div>
+            </fieldset>
 
-            <div class="mb-5">
+            <fieldset class="mb-5">
+                <legend class="sr-only">URL Foto Hewan (Opsional)</legend>
                 <label for="url_foto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL Foto Hewan (Opsional)</label>
                 <input type="url" id="url_foto" name="url_foto" maxlength="100" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="https://example.com/foto.jpg" aria-label="URL foto hewan">
-            </div>
+            </fieldset>
 
             <div class="flex justify-end space-x-4">
                 <a href="{% url 'hewan:list_hewan_peliharaan' %}" class="border border-gray-900 text-black px-4 py-2 rounded hover:bg-gray-500 hover:text-white transition w-20 text-center" role="button">Cancel</a>

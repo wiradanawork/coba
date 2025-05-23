@@ -1,51 +1,40 @@
 <!DOCTYPE html>
-<html>
-    
+<html lang="en">
 <head>
-    <title>Update Hewan Peliharaan</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" 
-    rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>Edit Hewan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-6">
-    <div class="max-w-md w-full rounded-lg shadow-lg p-6 text-left">
-        <h1 class="text-3xl font-bold mb-4 text-gray-900">Update Pet</h1>
-        <form class="max-w-sm">
-            <div>
-                <input type="text" id="disabled-input" aria-label="disabled input" class="mb-5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500" value="Disabled input" disabled>
-            </div>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+<div class="max-w-md w-full bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-4 text-gray-900">Edit Hewan Peliharaan</h1>
 
-            <div class="mb-5">
-                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Jenis Hewan</label>
-                <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option>Kucing</option>
-                    <option>Anjing</option>
-                    <option>Kelinci</option>
-                    <option>Ikan</option>
-                    <option>Burung</option>
-                </select>
-            </div>
+    <form method="POST" action="{% url 'hewan:edit_hewan_klien' hewan.id %}">
+        {% csrf_token %}
 
-            <div class="mb-5">
-                <label for="nama_pet" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nama Hewan Peliharaan</label>
-                <input type="text" id="nama_pet" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
+        <div class="mb-4">
+            <label for="nama_pet" class="block text-sm font-medium text-gray-700">Nama Hewan</label>
+            <input type="text" id="nama_pet" name="nama_pet" value="{{ hewan.nama }}" required
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
 
-            <div class="mb-5">
-                <label for="tanggal_lahir" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Lahir Hewan</label>
-                <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-xs-light" required />
-            </div>
+        <div class="mb-4">
+            <label for="tanggal_lahir" class="block text-sm font-medium text-gray-700">Tanggal Lahir</label>
+            <input type="date" id="tanggal_lahir" name="tanggal_lahir" value="{{ hewan.tanggal_lahir }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
 
-            <div class="mb-5">
-                <label for="url_foto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">URL Foto Hewan</label>
-                <input type="url" id="url_foto" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-            </div>
+        <div class="mb-4">
+            <label for="url_foto" class="block text-sm font-medium text-gray-700">URL Foto</label>
+            <input type="url" id="url_foto" name="url_foto" value="{{ hewan.url_foto }}"
+                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
 
-            <div class="inline flex justify-end">
-                <button type="button" class=" border border-gray-900 text-black px-4 py-2 rounded hover:bg-gray-300 transition w-20 mr-4">Cancel</button>
-                <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-500 transition w-20">Update</button>
-            </div>
-        </form>
-    </div>
+        <div class="flex justify-between mt-6">
+            <a href="{% url 'hewan:list_hewan_peliharaan' %}" class="text-gray-700 border px-4 py-2 rounded hover:bg-gray-200">Cancel</a>
+            <button type="submit" class="bg-gray-900 text-white px-4 py-2 rounded hover:bg-blue-700">Update</button>
+        </div>
+    </form>
+</div>
 </body>
-
 </html>
