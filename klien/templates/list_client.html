@@ -2,58 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List Client</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-8">
+{% include 'navbar/navbar_front_desk.html' %}
+<body class="bg-gray-100 min-h-screen p-8">
 
-    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-6xl">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">List Client</h1>
-        </div>
+    <div class="flex items-center justify-center mt-12 w-full">
+        <div class="bg-white p-6 rounded-md shadow-md w-full max-w-6xl">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold">List Client</h1>
+            </div>
 
-        <div class="flex mb-4">
-            <input type="text" id="searchInput" placeholder="Cari nama klien..." 
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="searchTable()" class="bg-gray-900 text-white px-4 py-2 rounded-r-md hover:bg-gray-800 transition">
-                🔍
-            </button>
-        </div>
+            <div class="flex mb-4">
+                <input type="text" id="searchInput" placeholder="Cari nama klien..." 
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button onclick="searchTable()" class="bg-gray-900 text-white px-4 py-2 rounded-r-md hover:bg-gray-800 transition">
+                    🔍
+                </button>
+            </div>
 
-        <div class="overflow-x-auto">
-            <table id="clientTable" class="min-w-full bg-white border border-gray-300">
-                <thead>
-                    <tr class="bg-gray-100">
-                        <th class="py-2 px-4 border-b">No</th>
-                        <th class="py-2 px-4 border-b">Email</th>
-                        <th class="py-2 px-4 border-b">Nama</th>
-                        <th class="py-2 px-4 border-b">Jenis</th>
-                        <th class="py-2 px-4 border-b">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for client in clients %}
-                    <tr class="text-center">
-                        <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
-                        <td class="py-2 px-4 border-b">{{ client.email }}</td>
-                        <td class="py-2 px-4 border-b">{{ client.nama }}</td>
-                        <td class="py-2 px-4 border-b">{{ client.jenis }}</td>
-                        <td class="py-2 px-4 border-b space-x-2">
-                            <a href="{% url 'klien:detail_klien' client.nomor_identitas %}" 
-                               class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-800 transition">
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="5" class="py-4 text-center text-gray-500">
-                            Belum ada data klien.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table id="clientTable" class="min-w-full bg-white border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="py-2 px-4 border-b">No</th>
+                            <th class="py-2 px-4 border-b">Email</th>
+                            <th class="py-2 px-4 border-b">Nama</th>
+                            <th class="py-2 px-4 border-b">Jenis</th>
+                            <th class="py-2 px-4 border-b">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                        <tr class="text-center hover:bg-gray-50">
+                            <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
+                            <td class="py-2 px-4 border-b">{{ client.email }}</td>
+                            <td class="py-2 px-4 border-b">{{ client.nama }}</td>
+                            <td class="py-2 px-4 border-b">{{ client.jenis }}</td>
+                            <td class="py-2 px-4 border-b space-x-2">
+                                <a href="{% url 'klien:detail_klien' client.nomor_identitas %}" 
+                                   class="bg-gray-900 text-white px-3 py-1 rounded-md text-sm hover:bg-gray-800 transition">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="py-4 text-center text-gray-500">
+                                Belum ada data klien.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

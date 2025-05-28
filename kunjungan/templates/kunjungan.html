@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kunjungan Management System</title>
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <style>
+        body {
+            background-color: #f9fafb;
+        }
+        /* Reset styles untuk mencegah tampilan panah ke bawah */
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        /* Override untuk dropdown arrows yang diperlukan */
+        .dropdown-arrow {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Hide modals by default */
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
+</head>
+{% include 'navbar/navbar_front_desk.html' %}
+<body class="bg-gray-100">
+    <div 
+        x-data="{ 
+            activeTab: 'list',
+            showDeleteModal: false,
+            showNoMedicalRecordModal: false,
+            showMedicalRecord: false,
+            showCreateMedicalRecord: false,
+            showUpdateMedicalRecord: false,
+            selectedKunjungan: null
+        }"
+        class="min-h-screen"
+    >
+        <!-- List Kunjungan Page -->
+        <div x-show="activeTab === 'list'" class="container mx-auto px-4 py-6">
+            <div class="mb-6">
+                <h1 class="text-xl font-bold">List Kunjungan</h1>
+            </div>
+            
+            <div class="flex justify-end mb-4">
+                <button 
+                    @click="activeTab = 'create'" 
+                    class="bg-gray-900 hover:bg-black text-white font-medium py-2 px-4 rounded-md flex items-center"
+                >
+                    <span class="mr-1">+</span> Create New Kunjungan
+                </button>
+            </div>
+            
+            <div class="bg-white rounded-md shadow overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Kunjungan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Klien</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Hewan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Metode Kunjungan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Mulai Penanganan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Waktu Akhir Penanganan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rekam Medis</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">KJN001</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">FDD123</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Snowy</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Janji Temu</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03-04-2025 14:30:13</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03-04-2025 16:30:16</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button 
+                                    @click="showMedicalRecord = true" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md"
+                                >
+                                    Lihat Rekam Medis
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 space-x-1">
+                                <button 
+                                    @click="activeTab = 'edit'" 
+                                    class="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1 rounded-md"
+                                >
+                                    Update
+                                </button>
+                                <button 
+                                    @click="showDeleteModal = true; selectedKunjungan = 'KJN001'" 
+                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">KJN002</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">KH123</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Blacky</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Walk-In</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03-05-2025 12:30:27</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">03-05-2025 13:30:19</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button 
+                                    @click="showNoMedicalRecordModal = true" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md"
+                                >
+                                    Lihat Rekam Medis
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 space-x-1">
+                                <button 
+                                    @click="activeTab = 'edit'" 
+                                    class="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1 rounded-md"
+                                >
+                                    Update
+                                </button>
+                                <button 
+                                    @click="showDeleteModal = true; selectedKunjungan = 'KJN002'" 
+                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">KJN003</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PKE123</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Hamsteung</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Darurat</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">01-09-2025 16:30:51</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">01-09-2025 18:00:33</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <button 
+                                    @click="showNoMedicalRecordModal = true" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1 rounded-md"
+                                >
+                                    Lihat Rekam Medis
+                                </button>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 space-x-1">
+                                <button 
+                                    @click="activeTab = 'edit'" 
+                                    class="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1 rounded-md"
+                                >
+                                    Update
+                                </button>
+                                <button 
+                                    @click="showDeleteModal = true; selectedKunjungan = 'KJN003'" 
+                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Create Kunjungan Modal -->
+        <div x-show="activeTab === 'create'" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-md shadow-lg p-6 max-w-md w-full mx-4">
+                <h1 class="text-xl font-bold mb-6">Create Kunjungan</h1>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">ID Klien</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-white border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option selected disabled>Pilih ID Klien</option>
+                            <option>FDD123</option>
+                            <option>KH123</option>
+                            <option>PKE123</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Nama Hewan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-white border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option selected disabled>Pilih Nama Hewan</option>
+                            <option>Snowy</option>
+                            <option>Blacky</option>
+                            <option>Hamsteung</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Dokter Hewan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-white border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option selected disabled>Pilih Dokter Hewan</option>
+                            <option>Dr. Ricki</option>
+                            <option>Dr. Safira</option>
+                            <option>Dr. Nainu</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Perawat Hewan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-white border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option selected disabled>Pilih Perawat Hewan</option>
+                            <option>Tina</option>
+                            <option>Tini</option>
+                            <option>Tono</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Metode Kunjungan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-white border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option selected disabled>Pilih metode kunjungan</option>
+                            <option>Janji Temu</option>
+                            <option>Walk-In</option>
+                            <option>Darurat</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Waktu Mulai Penanganan</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" placeholder="DD-MM-YYYY HH:MM" />
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">Waktu Selesai Penanganan</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" placeholder="DD-MM-YYYY HH:MM" />
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        @click="activeTab = 'list'" 
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        @click="activeTab = 'list'"
+                        class="bg-gray-900 hover:bg-black text-white font-medium py-2 px-4 rounded-md"
+                    >
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Kunjungan Modal -->
+        <div x-show="activeTab === 'edit'" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-md shadow-lg p-6 max-w-md w-full mx-4">
+                <h1 class="text-xl font-bold mb-6">Update Kunjungan</h1>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">ID Klien</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-gray-200 border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight">
+                            <option>FDD123</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Nama Hewan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-gray-200 border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight">
+                            <option>Snowy</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Dokter Hewan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-gray-200 border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight">
+                            <option>Dr. Ricki</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Perawat Hewan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-gray-200 border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight">
+                            <option>Tina</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Metode Kunjungan</label>
+                    <div class="relative">
+                        <select class="block appearance-none w-full bg-gray-200 border border-gray-300 py-2 px-4 pr-8 rounded-md leading-tight">
+                            <option>Janji Temu</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                            <span class="dropdown-arrow">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Waktu Mulai Penanganan</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" value="03-04-2025 14:30:13" />
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">Waktu Selesai Penanganan</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" value="03-04-2025 16:30:16" />
+                </div>
+
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        @click="activeTab = 'list'" 
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        @click="activeTab = 'list'"
+                        class="bg-gray-900 hover:bg-black text-white font-medium py-2 px-4 rounded-md"
+                    >
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medical Record View Modal -->
+        <div x-show="showMedicalRecord" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-md shadow-lg p-6 max-w-lg w-full mx-4">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-xl font-bold">Rekam Medis</h1>
+                    <button 
+                        @click="showUpdateMedicalRecord = true; showMedicalRecord = false" 
+                        class="bg-gray-900 hover:bg-black text-white font-medium py-1 px-3 rounded-md"
+                    >
+                        Update
+                    </button>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-gray-600">Suhu Tubuh</p>
+                            <p class="font-medium">36.8°C</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Berat Badan</p>
+                            <p class="font-medium">12.3 kg</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <p class="text-gray-600">Catatan Medis</p>
+                    <p class="font-medium">Hewan dalam kondisi sehat, diberikan vaksin rabies dosis standar, tidak ada reaksi alergi setelah penyuntikan.</p>
+                </div>
+                
+                <div class="border-t border-gray-200 mt-6 pt-4">
+                    <button 
+                        @click="showMedicalRecord = false" 
+                        class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-md float-right"
+                    >
+                        OK
+                    </button>
+                    <div class="clear-both"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Create Medical Record Modal -->
+        <div x-show="showCreateMedicalRecord" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-md shadow-lg p-6 max-w-lg w-full mx-4">
+                <h1 class="text-xl font-bold mb-6">Create Rekam Medis</h1>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Suhu Tubuh</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" placeholder="Suhu Tubuh Pasien (°C)" />
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Berat Badan</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" placeholder="Berat Badan Pasien (kg)" />
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">Catatan</label>
+                    <textarea class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" rows="3" placeholder="Catatan Medis"></textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        @click="showCreateMedicalRecord = false; showNoMedicalRecordModal = true" 
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        @click="showCreateMedicalRecord = false; showMedicalRecord = true"
+                        class="bg-gray-900 hover:bg-black text-white font-medium py-2 px-4 rounded-md"
+                    >
+                        Create
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Update Medical Record Modal -->
+        <div x-show="showUpdateMedicalRecord" x-cloak class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-md shadow-lg p-6 max-w-lg w-full mx-4">
+                <h1 class="text-xl font-bold mb-6">Update Rekam Medis</h1>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Suhu Tubuh</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" value="36.8" />
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-gray-700 mb-2">Berat Badan</label>
+                    <input type="text" class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" value="12.3" />
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 mb-2">Catatan</label>
+                    <textarea class="w-full bg-white border border-gray-300 rounded-md py-2 px-4" rows="3">Hewan dalam kondisi sehat, diberikan vaksin rabies dosis standar, tidak ada reaksi alergi setelah penyuntikan.</textarea>
+                </div>
+                
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        @click="showUpdateMedicalRecord = false; showMedicalRecord = true" 
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        @click="showUpdateMedicalRecord = false; showMedicalRecord = true"
+                        class="bg-gray-900 hover:bg-black text-white font-medium py-2 px-4 rounded-md"
+                    >
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Medical Record Modal -->
+        <div 
+            x-show="showNoMedicalRecordModal" 
+            x-cloak
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+            <div class="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
+                <h2 class="text-xl text-red-600 font-bold mb-2">Rekam Medis tidak Tersedia</h2>
+                <p class="mb-6">
+                    Maaf, sepertinya belum ada data rekam medis yang dibuat untuk kunjungan ini.
+                </p>
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        @click="showNoMedicalRecordModal = false; showCreateMedicalRecord = true" 
+                        class="bg-gray-900 hover:bg-black text-white font-medium py-2 px-4 rounded-md"
+                    >
+                        Create
+                    </button>
+                    <button 
+                        @click="showNoMedicalRecordModal = false" 
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md"
+                    >
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div 
+            x-show="showDeleteModal" 
+            x-cloak
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+            <div class="bg-white p-6 rounded-md shadow-lg max-w-md w-full">
+                <h2 class="text-xl text-red-600 font-bold mb-2">Delete Kunjungan</h2>
+                <p class="mb-6">
+                    Apakah kamu yakin untuk menghapus KUNJUNGAN dengan ID <span class="font-semibold text-red-600" x-text="selectedKunjungan"></span>?
+                </p>
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        @click="showDeleteModal = false" 
+                        class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium py-2 px-4 rounded-md"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        @click="showDeleteModal = false; activeTab = 'list'"
+                        class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md"
+                    >
+                        Confirm Deletion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alpine.js - Make sure the script is included -->
+    <script>
+        document.addEventListener('alpine:init', () => {
+            // Initialize any Alpine.js data here if needed
+        });
+    </script>
+</body>
+</html>

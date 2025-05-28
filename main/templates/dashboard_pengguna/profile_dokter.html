@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil Dokter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+{% include 'navbar/navbar_dokter.html' %}
+<body class="bg-gray-100 min-h-screen p-8">
+    <div class="flex items-center justify-center mt-24">
+        <div class="bg-white p-6 rounded-md shadow-md w-full max-w-4xl">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Profil Dokter</h1>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 text-gray-700">
+                <div class="flex">
+                    <strong class="w-1/3">Nomor Identitas</strong>
+                    <span class="w-2/3">: {{ pengguna.no_identitas }}</span>
+                </div>
+                <div class="flex">
+                    <strong class="w-1/3">Nomor Izin Praktik</strong>
+                    <span class="w-2/3">: {{ pengguna.no_izin_praktik }}</span>
+                </div>
+                <div class="flex">
+                    <strong class="w-1/3">Email</strong>
+                    <span class="w-2/3">: {{ pengguna.email }}</span>
+                </div>
+                <div class="flex">
+                    <strong class="w-1/3">Tanggal Diterima</strong>
+                    <span class="w-2/3">: {{ pengguna.tanggal_diterima }}</span>
+                </div>
+                <div class="flex">
+                    <strong class="w-1/3">Tanggal Akhir Kerja</strong>
+                    <span class="w-2/3">: {{ pengguna.tanggal_akhir_kerja }}</span>
+                </div>
+                <div class="flex">
+                    <strong class="w-1/3">Alamat</strong>
+                    <span class="w-2/3">: {{ pengguna.alamat }}</span>
+                </div>
+                <div class="flex">
+                    <strong class="w-1/3">Nomor Telepon</strong>
+                    <span class="w-2/3">: {{ pengguna.nomor_telepon }}</span>
+                </div>
+            </div>
+
+            <!-- Tabel Sertifikat -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Daftar Sertifikat</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="py-2 px-4 border-b">No</th>
+                                <th class="py-2 px-4 border-b">Nomor Sertifikat</th>
+                                <th class="py-2 px-4 border-b">Nama Sertifikat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sertifikat in pengguna.daftar_sertifikat %}
+                            <tr class="text-center hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b">{{ sertifikat.no }}</td>
+                                <td class="py-2 px-4 border-b">{{ sertifikat.nomor_sertifikat }}</td>
+                                <td class="py-2 px-4 border-b">{{ sertifikat.nama_sertifikat }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="py-4 text-center text-gray-500">Belum ada sertifikat.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabel Jadwal Praktik -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">Jadwal Jadwal Praktik</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="py-2 px-4 border-b">No</th>
+                                <th class="py-2 px-4 border-b">Hari</th>
+                                <th class="py-2 px-4 border-b">Jam</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for jadwal in pengguna.daftar_jadwal_praktik %}
+                            <tr class="text-center hover:bg-gray-50">
+                                <td class="py-2 px-4 border-b">{{ jadwal.no }}</td>
+                                <td class="py-2 px-4 border-b">{{ jadwal.hari }}</td>
+                                <td class="py-2 px-4 border-b">{{ jadwal.jam }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="py-4 text-center text-gray-500">Belum ada jadwal praktik.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tombol -->
+            <div class="flex justify-end space-x-4">
+                <a href="{% url 'main:update_password' pengguna.no_identitas %}">
+                    <button class="bg-red-500 text-white px-4 py-2 rounded-md text-sm hover:bg-red-600">
+                        Update Password
+                    </button>
+                </a>
+                <a href="{% url 'main:update_profile' pengguna.no_identitas %}">
+                    <button class="bg-gray-900 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800">
+                        Update Profile
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

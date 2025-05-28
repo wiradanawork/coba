@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Daftar Perawatan Hewan</h2>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if role == 'dokter_hewan' %}
+    <div class="mb-3">
+        <a href="{% url 'perawatan_hewan:create' %}" class="btn btn-primary">Create</a>
+    </div>
+    {% endif %}
+    
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID Kunjungan</th>
+                <th>ID Klien</th>
+                <th>Nama Hewan</th>
+                <th>Perawat Hewan</th>
+                <th>Dokter Hewan</th>
+                <th>Front Desk Officer</th>
+                <th>Jenis Perawatan</th>
+                <th>Catatan Medis</th>
+                {% if show_actions %}
+                <th>Action</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for perawatan in perawatan_list %}
+            <tr>
+                <td>{{ perawatan.id_kunjungan }}</td>
+                <td>{{ perawatan.no_identitas_klien }}</td>
+                <td>{{ perawatan.nama_hewan }}</td>
+                <td>{{ perawatan.no_perawat_hewan.email_user|title }}</td>
+                <td>dr. {{ perawatan.no_dokter_hewan.email_user|title }}</td>
+                <td>{{ perawatan.no_front_desk.email_user|title }}</td>
+                <td>{{ perawatan.kode_perawatan.kode_perawatan }} - {{ perawatan.kode_perawatan.nama_perawatan }}</td>
+                <td>{{ perawatan.catatan|default:"-" }}</td>
+                {% if show_actions %}
+                <td>
+                    <a href="{% url 'perawatan_hewan:update' perawatan.id_kunjungan perawatan.kode_perawatan.kode_perawatan %}" class="btn btn-sm btn-warning">Update</a>
+                    <a href="{% url 'perawatan_hewan:delete' perawatan.id_kunjungan perawatan.kode_perawatan.kode_perawatan %}" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="{% if show_actions %}9{% else %}8{% endif %}">Tidak ada data perawatan</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Pagination -->
+    {% if perawatan_list.has_other_pages %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if perawatan_list.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ perawatan_list.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            {% for num in perawatan_list.paginator.page_range %}
+                {% if perawatan_list.number == num %}
+                <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if perawatan_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ perawatan_list.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style>
+    /* Padding untuk body agar konten tidak tersembunyi di belakang navbar */
+    body {
+      padding-top: 70px; /* Sesuaikan dengan tinggi navbar */
+    }
+    
+    /* Animasi dropdown */
+    .dropdown-menu {
+      opacity: 0;
+      transform: translateY(-10px);
+      visibility: hidden;
+      transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    }
+    
+    .dropdown-menu.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+    
+    /* Animasi menu mobile */
+    .mobile-menu {
+      position: fixed;
+      top: 70px;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to right, #2563eb, #312e81);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out;
+      z-index: 40;
+    }
+    
+    .mobile-menu.active {
+      max-height: 500px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .menu-item {
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition-delay: calc(var(--index) * 0.1s);
+    }
+    
+    .mobile-menu.active .menu-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <!-- Navbar Fixed di Atas -->
+  <nav class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white shadow-lg border-b border-blue-700 fixed top-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <svg class="w-8 h-8 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zm8 3a2 2 0 11-4 0 2 2 0 014 0zm-8 4a4 4 0 100-8 4 4 0 000 8zm-4-3a3 3 0 100-6 3 3 0 000 6z"></path>
+          </svg>
+          <a class="text-2xl font-bold text-white hover:text-blue-200 transition duration-300" href="#">
+            Pet Clinic
+          </a>
+        </div>
+        
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button id="mobileMenuToggle" class="text-white hover:text-blue-200 focus:outline-none">
+            <svg id="menuIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+            <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-2">
+          <a class="px-3 py-2 rounded-md hover:bg-blue-700 transition duration-300" href="#">
+            Dashboard
+          </a>
+          <a class="px-3 py-2 rounded-md hover:bg-blue-700 transition duration-300" href="#">
+            Manajemen Obat
+          </a>
+          <a class="px-3 py-2 rounded-md hover:bg-blue-700 transition duration-300" href="#">
+            Manajemen Jenis Perawatan
+          </a>
+          <a class="px-3 py-2 rounded-md hover:bg-blue-700 transition duration-300" href="#">
+            Manajemen Vaksin
+          </a>
+          <div class="relative">
+            <button id="akunBtn" class="px-3 py-2 rounded-md hover:bg-blue-700 transition duration-300 flex items-center">
+              Akun
+              <svg id="akunArrow" class="w-4 h-4 ml-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div id="akunDropdown" class="dropdown-menu absolute bg-blue-800 rounded-md shadow-lg mt-1 py-2 w-48 z-10">
+              <a class="block px-4 py-2 hover:bg-blue-700 transition duration-300" href="#">
+                Update Profile
+              </a>
+              <a class="block px-4 py-2 hover:bg-blue-700 transition duration-300" href="#">
+                Update Password
+              </a>
+            </div>
+          </div>
+          <a class="px-3 py-2 rounded-md bg-red-600 hover:bg-red-700 transition duration-300 ml-2" href="#">
+            Logout
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Mobile Navigation Menu -->
+  <div id="mobileMenu" class="mobile-menu md:hidden">
+    <div class="py-3 px-4 space-y-3 border-t border-blue-700">
+      <a class="menu-item block px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#" style="--index: 0">
+        Dashboard
+      </a>
+      <a class="menu-item block px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#" style="--index: 1">
+        Manajemen Obat
+      </a>
+      <a class="menu-item block px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#" style="--index: 2">
+        Manajemen Jenis Perawatan
+      </a>
+      <a class="menu-item block px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#" style="--index: 3">
+        Manajemen Vaksin
+      </a>
+      
+      <!-- Mobile Account Dropdown -->
+      <div class="menu-item" style="--index: 4">
+        <button id="mobileAkunBtn" class="w-full text-left px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded flex justify-between items-center">
+          Akun
+          <svg id="mobileAkunArrow" class="w-4 h-4 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div id="mobileAkunDropdown" class="hidden mt-2 ml-3 space-y-1">
+          <a class="block px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#">
+            Update Profile
+          </a>
+          <a class="block px-3 py-2 text-white hover:bg-blue-700 transition duration-300 rounded" href="#">
+            Update Password
+          </a>
+        </div>
+      </div>
+      
+      <a class="menu-item block px-3 py-2 bg-red-600 hover:bg-red-700 transition duration-300 rounded" href="#" style="--index: 5">
+        Logout
+      </a>
+    </div>
+  </div>
+  
+  <!-- Konten Halaman -->
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Desktop dropdown elements
+      const akunBtn = document.getElementById('akunBtn');
+      const akunDropdown = document.getElementById('akunDropdown');
+      const akunArrow = document.getElementById('akunArrow');
+      let isDropdownOpen = false;
+      
+      // Mobile menu elements
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuIcon = document.getElementById('menuIcon');
+      const closeIcon = document.getElementById('closeIcon');
+      
+      // Mobile dropdown elements
+      const mobileAkunBtn = document.getElementById('mobileAkunBtn');
+      const mobileAkunDropdown = document.getElementById('mobileAkunDropdown');
+      const mobileAkunArrow = document.getElementById('mobileAkunArrow');
+      
+      // Desktop dropdown functionality
+      akunBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        isDropdownOpen = !isDropdownOpen;
+        
+        if (isDropdownOpen) {
+          akunDropdown.classList.add('active');
+          akunArrow.classList.add('rotate-180');
+        } else {
+          akunDropdown.classList.remove('active');
+          akunArrow.classList.remove('rotate-180');
+        }
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', function() {
+        if (isDropdownOpen) {
+          akunDropdown.classList.remove('active');
+          akunArrow.classList.remove('rotate-180');
+          isDropdownOpen = false;
+        }
+      });
+      
+      // Prevent clicks inside dropdown from closing it
+      akunDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+      
+      // Mobile menu functionality
+      mobileMenuToggle.addEventListener('click', function() {
+        mobileMenu.classList.toggle('active');
+        menuIcon.classList.toggle('hidden');
+        closeIcon.classList.toggle('hidden');
+      });
+      
+      // Mobile dropdown functionality
+      mobileAkunBtn.addEventListener('click', function() {
+        mobileAkunDropdown.classList.toggle('hidden');
+        mobileAkunArrow.classList.toggle('rotate-180');
+      });
+    });
+  </script>
+</body>
+</html>

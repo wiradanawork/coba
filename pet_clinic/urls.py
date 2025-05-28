@@ -21,9 +21,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
     path('vaksin/', include('vaksin.urls')),
+    path('hewan/', include('hewan.urls')),
     path('vaksinasi/', include('vaksinasi.urls')),
     path('klien/', include('klien.urls')),
     path('obat/', include('obat.urls')),
     path('perawatan/', include('perawatan.urls')),
     path('prescription/', include('perawatan_obat.urls')),
+    path('perawatan_hewan_1/', include('perawatan_hewan_1.urls')),
+    path('kunjungan/', include('kunjungan.urls')),
 ]
+
+

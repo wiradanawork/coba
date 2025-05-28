@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+  <style>
+    /* Tambahan untuk animasi dropdown */
+    .dropdown-menu {
+      opacity: 0;
+      transform: translateY(-10px);
+      visibility: hidden;
+      transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    }
+    
+    .dropdown-menu.active {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 pt-20">
+  <nav class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white shadow-lg border-b border-blue-700 fixed top-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <div class="flex items-center space-x-2">
+          <svg class="w-8 h-8 text-blue-300" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 9a3 3 0 100-6 3 3 0 000 6zm8 3a2 2 0 11-4 0 2 2 0 014 0zm-8 4a4 4 0 100-8 4 4 0 000 8zm-4-3a3 3 0 100-6 3 3 0 000 6z"></path>
+          </svg>
+          <a class="text-2xl font-bold text-white hover:text-blue-200 transition duration-300" href="#">
+          </a>
+        </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center space-x-2">
+          <a class="px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300" href="#">
+            Dashboard
+          </a>
+          
+          <!-- Manajemen Dropdown -->
+          <div class="relative">
+            <button id="manajemenBtn" class="px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 flex items-center">
+              Manajemen 
+              <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            
+            <div id="manajemenDropdown" class="dropdown-menu absolute right-0 mt-2 py-2 w-64 bg-white rounded-md shadow-xl z-50">
+              <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                Daftar Jenis Hewan
+              </a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                Perawatan Hewan
+              </a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                Kelola Rekam Medis
+              </a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                Manajemen Obat
+              </a>
+            </div>
+          </div>
+          
+          <!-- Akun Dropdown -->
+          <div class="relative">
+            <button id="akunBtn" class="px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300 flex items-center">
+              Akun 
+              <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            
+            <div id="akunDropdown" class="dropdown-menu absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-50">
+              <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                Update Profile
+              </a>
+              <a class="block px-4 py-2 text-gray-800 hover:bg-blue-100 transition duration-300" href="#">
+                Update Password
+              </a>
+            </div>
+          </div>
+          
+          <a class="px-4 py-2 rounded-md bg-red-600 hover:bg-red-700 transition duration-300" href="#">
+            Logout
+          </a>
+        </div>
+        
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+          <button id="mobileMenuBtn" class="text-white hover:text-blue-200 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    // Dropdown functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const manajemenBtn = document.getElementById('manajemenBtn');
+      const manajemenDropdown = document.getElementById('manajemenDropdown');
+      const akunBtn = document.getElementById('akunBtn');
+      const akunDropdown = document.getElementById('akunDropdown');
+      
+      // Track open dropdowns
+      let openDropdown = null;
+      
+      // Manajemen dropdown
+      manajemenBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        if (openDropdown === manajemenDropdown) {
+          // Close if already open
+          manajemenDropdown.classList.remove('active');
+          openDropdown = null;
+        } else {
+          // Close any open dropdown
+          if (openDropdown) {
+            openDropdown.classList.remove('active');
+          }
+          
+          // Open this dropdown
+          manajemenDropdown.classList.add('active');
+          openDropdown = manajemenDropdown;
+        }
+      });
+      
+      // Akun dropdown
+      akunBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        if (openDropdown === akunDropdown) {
+          // Close if already open
+          akunDropdown.classList.remove('active');
+          openDropdown = null;
+        } else {
+          // Close any open dropdown
+          if (openDropdown) {
+            openDropdown.classList.remove('active');
+          }
+          
+          // Open this dropdown
+          akunDropdown.classList.add('active');
+          openDropdown = akunDropdown;
+        }
+      });
+      
+      // Close dropdowns when clicking elsewhere
+      document.addEventListener('click', function() {
+        if (openDropdown) {
+          openDropdown.classList.remove('active');
+          openDropdown = null;
+        }
+      });
+      
+      // Prevent clicks inside dropdown from closing it
+      const dropdowns = document.querySelectorAll('.dropdown-menu');
+      dropdowns.forEach(function(dropdown) {
+        dropdown.addEventListener('click', function(e) {
+          e.stopPropagation();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
