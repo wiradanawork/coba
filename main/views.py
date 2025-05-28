@@ -315,7 +315,6 @@ def register_perusahaan(request):
 
 def login(request):
     if request.method == "POST":
-        print(request)
         email = request.POST['email']
         password = request.POST['password']
 
@@ -394,7 +393,7 @@ pengguna_list = [
 def profile(request, no_identitas):
     # Ensure the UUID is valid
     try:
-        no_identitas = uuid(str(no_identitas))
+        no_identitas = uuid.UUID(str(no_identitas))
     except ValueError:
         raise Http404("Invalid ID format.")
     
@@ -455,9 +454,9 @@ def profile(request, no_identitas):
                     'nama_depan': user_info[2],
                     'nama_tengah': user_info[3],
                     'nama_belakang': user_info[4],
-                    'tanggal_registrasi': user_info[6],
-                    'alamat': user_info[7],
-                    'nomor_telepon': user_info[8]
+                    'tanggal_registrasi': user_info[5],
+                    'alamat': user_info[6],
+                    'nomor_telepon': user_info[7]
                 }
             else:
                 pengguna = {
@@ -581,7 +580,6 @@ def profile(request, no_identitas):
             'pengguna': pengguna
         }
 
-        print(user_info)
         template = loader.get_template(template_name)
         return HttpResponse(template.render(context, request))
 
