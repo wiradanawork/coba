@@ -1,52 +1,137 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from .models import *
-from .forms import *
+from django.db import connection
 
-# Create your views here.
 def list_obat(request):
-    obat_list = Obat.objects.all()
-    return render(request, 'list_obat.html', {'medicines': obat_list})
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT kode, nama, harga, stok, dosis
+            FROM OBAT;
+        """)
+        obat_get = cursor.fetchall()
+        obat = []
+        for obat_i in obat_get:
+            obat_list = {
+                'kode':obat_i[0],
+                'nama': obat_i[1],
+                'harga': obat_i[2],
+                'stok': obat_i[3],
+                'dosis': obat_i[4]
+            }
+            obat.append(obat_list)
+    return render(request, 'list_obat.html', {'medicines': obat})
 
 def create_obat(request):
     if request.method == 'POST':
-        form = ObatForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('obat:list_obat')
-    else:
-        form = ObatForm()
+        biaya_perawatan
 
-    return render(request, 'create_obat.html', {'form': form})
+        kode = f"MED{new_counter_value+1:03d}"
+        nama = request.POST.get('nama')
+        harga = request.POST.get('harga')
+        stok = request.POST.get('stok')
+        dosis = request.POST.get('dosis')
+
+        if not kode or not nama or not harga or not stok or not dosis:
+            return HttpResponseBadRequest("Missing required fields")
+        
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute("""
+                    INSERT INTO obat (kode, nama, harga, stok, dosis)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, [kode, nama, harga, stok, dosis])
+
+                cursor.execute("""
+                    UPDATE counter
+                    SET value = %s
+                    WHERE name = 'kode_obat'
+                """, [new_counter_value + 1])
+
+                return redirect('obat:list_obat')
+            except Exception as e:
+                return HttpResponseBadRequest(f"Error: {e}")
+
+    return render(request, 'create_obat.html')
 
 def update_obat(request, kode):
-    obat = get_object_or_404(Obat, kode=kode)
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM obat WHERE kode = %s", [kode])
+        obat_get = cursor.fetchone()
+
+    if not obat_get:
+        return HttpResponseBadRequest("Obat not found")
+    
+    obat = {
+        'kode':obat_get[0],
+        'nama': obat_get[1],
+        'harga': obat_get[2],
+        'stok': obat_get[3],
+        'dosis': obat_get[4]
+    }
 
     if request.method == 'POST':
-        form = UpdateObatForm(request.POST, instance=obat)
-        if form.is_valid():
-            form.save()
-            return redirect('obat:list_obat')
-    else:
-        form = UpdateObatForm(instance=obat)
+        nama = request.POST.get('nama', obat_get[1])
+        harga = request.POST.get('harga', obat_get[2])
+        stok = request.POST.get('stok', obat_get[3])
+        dosis = request.POST.get('dosis', obat_get[4])
 
-    return render(request, 'update_obat.html', {'form': form, 'obat': obat})
+        if not nama or not harga or not stok or not dosis:
+            return HttpResponseBadRequest("Missing required fields")
+
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute("""
+                    UPDATE obat
+                    SET nama = %s, harga = %s, stok = %s, dosis = %s
+                    WHERE kode = %s
+                """, [nama, harga, stok, dosis, kode])
+                return redirect('obat:list_obat')
+            except Exception as e:
+                return HttpResponseBadRequest(f"Error: {e}")
+
+    return render(request, 'update_obat.html', {'obat': obat})
 
 def update_stok_obat(request, kode):
-    obat = get_object_or_404(Obat, kode=kode)
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM obat WHERE kode = %s", [kode])
+        obat_get = cursor.fetchone()
+
+    if not obat_get:
+        return HttpResponseBadRequest("Obat not found")
+    
+    obat = {
+        'kode':obat_get[0],
+        'nama': obat_get[1],
+        'harga': obat_get[2],
+        'stok': obat_get[3],
+        'dosis': obat_get[4]
+    }
 
     if request.method == 'POST':
-        form = UpdateStokObatForm(request.POST, instance=obat)
-        if form.is_valid():
-            form.save()
-            return redirect('obat:list_obat')
-    else:
-        form = UpdateStokObatForm(instance=obat)
+        stok = request.POST.get('stok', obat_get[3])
 
-    return render(request, 'update_obat_stock.html', {'form': form, 'obat': obat})
+        if not stok:
+            return HttpResponseBadRequest("Missing stock value")
+
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute("""
+                    UPDATE obat
+                    SET stok = %s
+                    WHERE kode = %s
+                """, [stok, kode])
+                return redirect('obat:list_obat')
+            except Exception as e:
+                return HttpResponseBadRequest(f"Error: {e}")
+
+    return render(request, 'update_obat_stock.html', {'obat': obat})
 
 @require_POST
 def delete_obat(request, kode):
-    obat = get_object_or_404(Obat, kode=kode)
-    obat.delete()
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            DELETE FROM OBAT
+            WHERE kode = %s
+        """, [kode])
     return redirect('obat:list_obat')

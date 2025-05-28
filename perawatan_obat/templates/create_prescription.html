@@ -11,22 +11,41 @@
     <div class="bg-white p-6 rounded-md shadow-md w-full max-w-xl">
         <h1 class="text-2xl font-bold mb-6">Create New Prescription</h1>
 
+        {% if error_message %}
+        <div class="bg-red-100 text-red-700 p-4 mb-6 rounded-md">
+            {{ error_message }}
+        </div>
+        {% endif %}
+        
         <form method="post" class="space-y-4">
             {% csrf_token %}
             
+            <!-- Dropdown for 'kode_perawatan' -->
             <div class="flex flex-col space-y-2">
                 <label for="kode_perawatan" class="font-medium text-gray-700">Jenis Perawatan</label>
-                {{ form.kode_perawatan }}
+                <select name="kode_perawatan" id="kode_perawatan" class="p-2 border border-gray-300 rounded-md" required>
+                    <option value="" disabled selected>Select Perawatan</option>
+                    {% for kode_perawatan, nama_perawatan in perawatan_choices %}
+                        <option value="{{ kode_perawatan }}">{{ kode_perawatan }} - {{ nama_perawatan }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
+            <!-- Dropdown for 'kode_obat' -->
             <div class="flex flex-col space-y-2">
                 <label for="kode_obat" class="font-medium text-gray-700">Obat</label>
-                {{ form.kode_obat }}
+                <select name="kode_obat" id="kode_obat" class="p-2 border border-gray-300 rounded-md" required>
+                    <option value="" disabled selected>Select Obat</option>
+                    {% for kode_obat, nama in obat_choices %}
+                        <option value="{{ kode_obat }}">{{ kode_obat }} - {{ nama }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
+            <!-- Kuantitas Obat Input -->
             <div class="flex flex-col space-y-2">
                 <label for="kuantitas_obat" class="font-medium text-gray-700">Kuantitas Obat</label>
-                {{ form.kuantitas_obat }}
+                <input type="number" name="kuantitas_obat" id="kuantitas_obat" class="p-2 border border-gray-300 rounded-md" required />
             </div>
 
             <div class="flex justify-between items-center mt-6">
