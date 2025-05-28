@@ -329,24 +329,25 @@ def login(request):
             if user == None:
                 messages.error(request, "Email or Password is incorrect")
                 return render(request, "login_register/login.html")
+            
+            request.session['email'] = email
 
             cursor.execute("""
-                SELECT 'individu' AS role FROM individu WHERE no_identitas_klien = (SELECT no_identitas FROM klien WHERE email = %s)
-                UNION ALL
-                SELECT 'perusahaan' AS role FROM perusahaan WHERE no_identitas_klien = (SELECT no_identitas FROM klien WHERE email = %s)
-                UNION ALL
-                SELECT 'front_desk' AS role FROM front_desk WHERE no_front_desk = (SELECT no_pegawai FROM pegawai WHERE email_user = %s)
-                UNION ALL
-                SELECT 'tenaga_medis' AS role FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s)
-                UNION ALL
-                SELECT 'dokter_hewan' AS role FROM dokter_hewan WHERE no_dokter_hewan = (SELECT no_tenaga_medis FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s))
-                UNION ALL
-                SELECT 'perawat_hewan' AS role FROM perawat_hewan WHERE no_perawat_hewan = (SELECT no_tenaga_medis FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s))
-            """, [email, email, email, email, email, email])
-            roles = cursor.fetchone()
-            return profile(request, roles)
+                SELECT no_identitas FROM klien WHERE email = %s
+            """, [email])
+            no_identitas = cursor.fetchone()
+            # if not no_identitas:
+            #     cursor.execute("""
+            #         SELECT no_pegawai FROM pegawai WHERE email = %s
+            #     """, [email])
+            #     no_identitas = cursor.fetchone()
+
+            if not no_identitas:
+                messages.error(request, "User profile not found")
+                return render(request, "login_register/login.html")
+            return redirect('main:profile', no_identitas=no_identitas[0])
     
-    else:    
+    else:
         return render(request, "login_register/login.html")
 
 def show_main(request): 
@@ -365,30 +366,224 @@ pengguna_list = [
     {"class": "perawat", "no_identitas": "a08f3546-0d4f-49a3-baef-b92dca58043f", "no_izin_praktik": "SIP-12345", "email": "dhiya@petclinic.com", "tanggal_diterima" : "23 Januari 2025", "tanggal_akhir_kerja" : "-", "alamat" : "Jalan Tulip, Jakarta Selatan", "nomor_telepon" : "0888666655544", "daftar_sertifikat": daftar_sertifikat},
 ]
 
+# def profile(request, no_identitas):
+#     pengguna = next((p for p in pengguna_list if p["no_identitas"] == str(no_identitas)), None)
+    
+#     if not pengguna:
+#         raise Http404("Pengguna tidak ditemukan.")
+    
+#     # Pilih template berdasarkan class pengguna
+#     if pengguna["class"] == "individu" or pengguna["class"] == "perusahaan":
+#         template_name = 'dashboard_pengguna/profile_klien.html'
+#     elif pengguna["class"] == "front_desk":
+#         template_name = 'dashboard_pengguna/profile_fdo.html'
+#     elif pengguna["class"] == "dokter":
+#         template_name = 'dashboard_pengguna/profile_dokter.html'
+#     elif pengguna["class"] == "perawat":
+#         template_name = 'dashboard_pengguna/profile_perawat.html'
+#     else:
+#         raise Http404("Tipe pengguna tidak dikenali.")
+    
+#     # Load template dan kirim data pengguna
+#     template = loader.get_template(template_name)
+#     context = {
+#         'pengguna': pengguna
+#     }
+#     return HttpResponse(template.render(context, request))
+
 def profile(request, no_identitas):
-    pengguna = next((p for p in pengguna_list if p["no_identitas"] == str(no_identitas)), None)
+    # Ensure the UUID is valid
+    try:
+        no_identitas = uuid(str(no_identitas))
+    except ValueError:
+        raise Http404("Invalid ID format.")
     
-    if not pengguna:
-        raise Http404("Pengguna tidak ditemukan.")
-    
-    # Pilih template berdasarkan class pengguna
-    if pengguna["class"] == "individu" or pengguna["class"] == "perusahaan":
-        template_name = 'dashboard_pengguna/profile_klien.html'
-    elif pengguna["class"] == "front_desk":
-        template_name = 'dashboard_pengguna/profile_fdo.html'
-    elif pengguna["class"] == "dokter":
-        template_name = 'dashboard_pengguna/profile_dokter.html'
-    elif pengguna["class"] == "perawat":
-        template_name = 'dashboard_pengguna/profile_perawat.html'
-    else:
-        raise Http404("Tipe pengguna tidak dikenali.")
-    
-    # Load template dan kirim data pengguna
-    template = loader.get_template(template_name)
-    context = {
-        'pengguna': pengguna
-    }
-    return HttpResponse(template.render(context, request))
+    email = request.session.get('email')
+
+    if not email:
+        raise Http404("User not logged in.")
+
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT 'individu' AS role FROM individu WHERE no_identitas_klien = %s
+            UNION ALL
+            SELECT 'perusahaan' AS role FROM perusahaan WHERE no_identitas_klien = %s
+            UNION ALL
+            SELECT 'front_desk' AS role FROM front_desk WHERE no_front_desk = (SELECT no_pegawai FROM pegawai WHERE email_user = %s)
+            UNION ALL
+            SELECT 'tenaga_medis' AS role FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s)
+            UNION ALL
+            SELECT 'dokter_hewan' AS role FROM dokter_hewan WHERE no_dokter_hewan = (SELECT no_tenaga_medis FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s))
+            UNION ALL
+            SELECT 'perawat_hewan' AS role FROM perawat_hewan WHERE no_perawat_hewan = (SELECT no_tenaga_medis FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s))
+        """, [no_identitas, no_identitas, email, email, email, email])
+        
+        roles = cursor.fetchall()
+
+        if not roles:
+            raise Http404("Role not found for this user.")
+
+        role = roles[0][0]
+
+        if role == "individu" or role == "perusahaan":
+            cursor.execute("""
+                SELECT k.no_identitas, k.email, i.nama_depan, i.nama_tengah, i.nama_belakang, k.tanggal_registrasi, s.alamat, s.nomor_telepon
+                FROM klien k
+                JOIN users s ON s.email = k.email
+                LEFT JOIN individu i ON k.no_identitas = i.no_identitas_klien
+                WHERE k.no_identitas = %s
+            """, [no_identitas])
+            user_info = cursor.fetchone()
+
+            if user_info is None:
+                cursor.execute("""
+                    SELECT k.no_identitas, k.email, p.nama_perusahaan AS nama, k.tanggal_registrasi, s.alamat, s.nomor_telepon
+                    FROM klien k
+                    JOIN users s ON s.email = k.email
+                    LEFT JOIN perusahaan p ON k.no_identitas = p.no_identitas_klien
+                    WHERE k.no_identitas = %s
+                """, [no_identitas])
+                user_info = cursor.fetchone()
+
+            if user_info is None:
+                raise Http404("User profile not found.")
+
+            if role == "individu":
+                pengguna = {
+                    'no_identitas': user_info[0],
+                    'email': user_info[1],
+                    'nama_depan': user_info[2],
+                    'nama_tengah': user_info[3],
+                    'nama_belakang': user_info[4],
+                    'tanggal_registrasi': user_info[6],
+                    'alamat': user_info[7],
+                    'nomor_telepon': user_info[8]
+                }
+            else:
+                pengguna = {
+                    'no_identitas': user_info[0],
+                    'email': user_info[1],
+                    'nama': user_info[2],
+                    'tanggal_registrasi': user_info[3],
+                    'alamat': user_info[4],
+                    'nomor_telepon': user_info[5]
+                }
+
+            template_name = 'dashboard_pengguna/profile_klien.html'
+
+        elif role == "front_desk":
+            cursor.execute("""
+                SELECT p.no_pegawai, p.email_user, p.tanggal_mulai_kerja, p.tanggal_akhir_kerja, s.alamat, s.nomor_telepon
+                FROM front_desk f
+                JOIN users s ON s.email = k.email
+                JOIN pegawai p ON f.no_front_desk = p.no_pegawai
+                WHERE p.no_pegawai = %s
+            """, [no_identitas])
+            user_info = cursor.fetchone()
+
+            if user_info is None:
+                raise Http404("Front Desk profile not found.")
+
+            template_name = 'dashboard_pengguna/profile_fdo.html'
+            pengguna = {
+                'no_identitas': user_info[0],
+                'email': user_info[1],
+                'tanggal_mulai_kerja': user_info[2],
+                'tanggal_mulai_akhir': user_info[3],
+                'alamat': user_info[4],
+                'nomor_telepon': user_info[5]
+            }
+
+        elif role == "dokter_hewan":
+            cursor.execute("""
+                SELECT p.no_pegawai, p.email_user, p.nama, d.no_izin_praktik, d.tanggal_diterima, d.tanggal_akhir_kerja, p.alamat, p.nomor_telepon
+                FROM pegawai p
+                JOIN dokter_hewan d ON p.no_pegawai = d.no_dokter_hewan
+                WHERE p.no_pegawai = %s
+            """, [no_identitas])
+            
+            user_info = cursor.fetchone()
+
+            if user_info is None:
+                raise Http404("Dokter Hewan profile not found.")
+
+            cursor.execute("""
+                SELECT s.no_sertifikat, s.nama_sertifikat
+                FROM sertifikat_kompetensi s
+                WHERE s.no_tenaga_medis = %s
+            """, [no_identitas])
+            
+            sertifikat_info = cursor.fetchall()
+
+            cursor.execute("""
+                SELECT j.no_jadwal, j.hari, j.jam
+                FROM jadwal_praktik j
+                WHERE j.no_pegawai = %s
+            """, [no_identitas])
+            
+            jadwal_praktik_info = cursor.fetchall()
+
+            pengguna = {
+                'no_identitas': user_info[0],
+                'email': user_info[1],
+                'nama': user_info[2],
+                'no_izin_praktik': user_info[3],
+                'tanggal_diterima': user_info[4],
+                'tanggal_akhir_kerja': user_info[5],
+                'alamat': user_info[6],
+                'nomor_telepon': user_info[7],
+                'daftar_sertifikat': sertifikat_info,
+                'daftar_jadwal_praktik': jadwal_praktik_info
+            }
+
+
+            template_name = 'dashboard_pengguna/profile_dokter.html'
+
+        elif role == "perawat_hewan":
+            cursor.execute("""
+                SELECT p.no_pegawai, p.email_user, p.nama, ph.no_izin_praktik, ph.tanggal_diterima, ph.tanggal_akhir_kerja, p.alamat, p.nomor_telepon
+                FROM pegawai p
+                JOIN perawat_hewan ph ON p.no_pegawai = ph.no_perawat_hewan
+                WHERE p.no_pegawai = %s
+            """, [no_identitas])
+            
+            user_info = cursor.fetchone()
+
+            if user_info is None:
+                raise Http404("Perawat Hewan profile not found.")
+
+            cursor.execute("""
+                SELECT s.no_sertifikat, s.nama_sertifikat
+                FROM sertifikat_kompetensi s
+                WHERE s.no_tenaga_medis = %s
+            """, [no_identitas])
+            
+            sertifikat_info = cursor.fetchall()
+
+            pengguna = {
+                'no_identitas': user_info[0],
+                'email': user_info[1],
+                'nama': user_info[2],
+                'no_izin_praktik': user_info[3],
+                'tanggal_diterima': user_info[4],
+                'tanggal_akhir_kerja': user_info[5],
+                'alamat': user_info[6],
+                'nomor_telepon': user_info[7],
+                'daftar_sertifikat': sertifikat_info
+            }
+
+            template_name = 'dashboard_pengguna/profile_perawat.html'
+
+        else:
+            raise Http404("Role not recognized.")
+
+        context = {
+            'pengguna': pengguna
+        }
+
+        print(user_info)
+        template = loader.get_template(template_name)
+        return HttpResponse(template.render(context, request))
 
 def update_profile(request, no_identitas):
     pengguna = next((p for p in pengguna_list if p["no_identitas"] == str(no_identitas)), None)
@@ -485,6 +680,9 @@ def update_password(request, no_identitas):
     return HttpResponse(template.render(context, request))
 
 def logout(request):
-    # Here you would clear session data
-    # For this example we'll just redirect to the main page
+    if 'email' in request.session:
+        del request.session['email']
+        messages.success(request, "Logout berhasil")
+    else:
+        messages.warning(request, "Tidak ada user yang login")
     return HttpResponseRedirect(reverse('main:show_main'))
