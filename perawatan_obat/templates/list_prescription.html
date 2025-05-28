@@ -33,12 +33,12 @@
                         {% for prescription in prescriptions %}
                         <tr class="text-center">
                             <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
-                            <td class="py-2 px-4 border-b">{{ prescription.kode_perawatan.kode_perawatan }} - {{ prescription.kode_perawatan.nama_perawatan }}</td>
-                            <td class="py-2 px-4 border-b">{{ prescription.kode_obat.kode }} - {{ prescription.kode_obat.nama }}</td>
-                            <td class="py-2 px-4 border-b">{{ prescription.kuantitas_obat }}</td>
-                            <td class="py-2 px-4 border-b rupiah-format" data-amount="{{ prescription.biaya_perawatan }}">Rp</td>
+                            <td class="py-2 px-4 border-b">{{ prescription.0 }} - {{ prescription.3 }}</td>
+                            <td class="py-2 px-4 border-b">{{ prescription.1 }} - {{ prescription.4 }}</td>
+                            <td class="py-2 px-4 border-b">{{ prescription.2 }}</td>
+                            <td class="py-2 px-4 border-b rupiah-format" data-amount="{{ prescription.5 }}">Rp</td>
                             <td class="py-2 px-4 border-b space-x-2">
-                                <button onclick="openModal('{{ prescription.kode_perawatan.kode_perawatan }}', '{{ prescription.kode_obat.kode }}')" 
+                                <button onclick="openModal('{{ prescription.0 }}', '{{ prescription.1 }}')" 
                                 class="bg-red-500 text-white px-2 py-1 rounded-md text-sm hover:bg-red-600">
                                     Delete
                                 </button>
@@ -77,7 +77,7 @@
         function openModal(kodePerawatan, kodeObat, url) {
             document.getElementById('treatmentCode').textContent = kodePerawatan;
             document.getElementById('medicineCode').textContent = kodeObat;
-            document.getElementById('deleteForm').action = '/prescription/delete-prescription/' + kodePerawatan + '/';
+            document.getElementById('deleteForm').action = '/prescription/delete-prescription/' + kodePerawatan + '/'+ kodeObat + '/';
             document.getElementById('deleteModal').classList.remove('hidden');
         }
 
