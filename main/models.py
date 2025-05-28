@@ -11,6 +11,7 @@ class User(models.Model):
     nomor_telepon = models.CharField(max_length=15)
     
     class Meta:
+        managed= False
         db_table = 'users'
 
 class Klien(models.Model):
@@ -19,6 +20,7 @@ class Klien(models.Model):
     email = models.ForeignKey(User, on_delete=models.CASCADE, db_column='email')
     
     class Meta:
+        managed= False
         db_table = 'klien'
 
 class Individu(models.Model):
@@ -28,6 +30,7 @@ class Individu(models.Model):
     nama_belakang = models.CharField(max_length=50)
     
     class Meta:
+        managed= False
         db_table = 'individu'
 
 class Perusahaan(models.Model):
@@ -35,6 +38,7 @@ class Perusahaan(models.Model):
     nama_perusahaan = models.CharField(max_length=100)
     
     class Meta:
+        managed= False
         db_table = 'perusahaan'
 
 class Pegawai(models.Model):
@@ -44,12 +48,14 @@ class Pegawai(models.Model):
     email_user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='email_user')
     
     class Meta:
+        managed= False
         db_table = 'pegawai'
 
 class Front_desk(models.Model):
     no_front_desk = models.UUIDField(primary_key=True)
     
     class Meta:
+        managed= False
         db_table = 'front_desk'
 
 class Tenaga_medis(models.Model):
@@ -58,18 +64,21 @@ class Tenaga_medis(models.Model):
     no_pegawai = models.ForeignKey(Pegawai, on_delete=models.CASCADE, db_column='no_pegawai')
     
     class Meta:
+        managed= False
         db_table = 'tenaga_medis'
 
 class Dokter_hewan(models.Model):
     no_dokter_hewan = models.UUIDField(primary_key=True)
     
     class Meta:
+        managed= False
         db_table = 'dokter_hewan'
 
 class Perawat_hewan(models.Model):
     no_perawat_hewan = models.UUIDField(primary_key=True)
     
     class Meta:
+        managed= False
         db_table = 'perawat_hewan'
 
 class Sertifikat_kompetensi(models.Model):
@@ -78,6 +87,7 @@ class Sertifikat_kompetensi(models.Model):
     nama_sertifikat = models.CharField(max_length=100)
     
     class Meta:
+        managed= False
         db_table = 'sertifikat_kompetensi'
 
 class Jadwal_praktik(models.Model):
@@ -86,6 +96,7 @@ class Jadwal_praktik(models.Model):
     jam = models.CharField(max_length=11)
     
     class Meta:
+        managed= False
         db_table = 'jadwal_praktik'
         constraints = [
             models.UniqueConstraint(fields=['no_dokter_hewan', 'hari', 'jam'], name='jadwal_praktik_pk')
