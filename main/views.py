@@ -14,26 +14,208 @@ def register(request):
     return HttpResponse(template.render())
 
 def register_ph(request): 
-    template = loader.get_template('register_ph.html')
-    return HttpResponse(template.render())
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        alamat = request.POST.get("alamat")
+        nomor_telepon = request.POST.get("nomor_telepon")
+        tanggal_diterima = request.POST.get("tanggal_diterima")
+        no_izin_praktik = request.POST.get("nomor_izin_praktik")
 
-def register_dh(request): 
-    template = loader.get_template('register_dh.html')
-    return HttpResponse(template.render())
+        try:
+            with transaction.atomic():
+                Users.objects.create(
+                    email=email,
+                    password=password,
+                    alamat=alamat,
+                    nomor_telepon=nomor_telepon
+                )
 
-def register_fdo(request): 
-    template = loader.get_template('register_fdo.html')
-    return HttpResponse(template.render())
-    template = loader.get_template('login_register/register_fdo.html')
-    return HttpResponse(template.render({}, request))
+                no_pegawai = uuid.uuid4()
+                Pegawai.objects.create(
+                    no_pegawai=no_pegawai,
+                    tanggal_mulai_kerja=tanggal_diterima,
+                    email_user=email
+                )
 
-def register_individu(request): 
-    template = loader.get_template('register_individu.html')
-    return HttpResponse(template.render())
+                no_tenaga_medis = uuid.uuid4()
+                TenagaMedis.objects.create(
+                    no_tenaga_medis=no_tenaga_medis,
+                    no_izin_praktik=no_izin_praktik,
+                    no_pegawai_id=no_pegawai 
+                )
 
-def register_perusahaan(request): 
-    template = loader.get_template('register_perusahaan.html')
-    return HttpResponse(template.render())
+                PerawatHewan.objects.create(
+                    no_perawat_hewan=no_tenaga_medis
+                )
+
+                messages.success(request, "Registrasi perawat hewan berhasil!")
+                return redirect('login')
+
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+
+    return render(request, 'register_ph.html')
+
+def register_dh(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        alamat = request.POST.get("alamat")
+        nomor_telepon = request.POST.get("nomor_telepon")
+        tanggal_diterima = request.POST.get("tanggal_diterima")
+        no_izin_praktik = request.POST.get("nomor_izin_praktik")
+
+        try:
+            with transaction.atomic():
+                user = Users.objects.create(
+                    email=email,
+                    password=password,
+                    alamat=alamat,
+                    nomor_telepon=nomor_telepon
+                )
+
+                no_pegawai = uuid.uuid4()
+                pegawai = Pegawai.objects.create(
+                    no_pegawai=no_pegawai,
+                    tanggal_mulai_kerja=tanggal_diterima,
+                    email_user=email
+                )
+
+                no_tenaga_medis = uuid.uuid4()
+                tenaga_medis = TenagaMedis.objects.create(
+                    no_tenaga_medis=no_tenaga_medis,
+                    no_izin_praktik=no_izin_praktik,
+                    no_pegawai=pegawai
+                )
+
+                DokterHewan.objects.create(
+                    no_dokter_hewan=no_tenaga_medis
+                )
+
+                messages.success(request, "Registrasi dokter hewan berhasil!")
+                return redirect('login')
+
+        except Exception as e:
+            messages.error(request, f"Gagal mendaftar: {e}")
+            return render(request, 'register_dh.html')
+
+    return render(request, 'register_dh.html')
+
+def register_fdo(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        nomor_telepon = request.POST.get("nomor_telepon")
+        tanggal_diterima = request.POST.get("tanggal_diterima")
+        alamat = request.POST.get("alamat")
+
+        try:
+            with transaction.atomic():
+                Users.objects.create(
+                    email=email,
+                    password=password,
+                    alamat=alamat,
+                    nomor_telepon=nomor_telepon
+                )
+
+                no_pegawai = uuid.uuid4()
+                Pegawai.objects.create(
+                    no_pegawai=no_pegawai,
+                    tanggal_mulai_kerja=tanggal_diterima,
+                    email_user=email
+                )
+
+                FrontDesk.objects.create(
+                    no_front_desk=no_pegawai
+                )
+
+                messages.success(request, "Registrasi Front-Desk Officer berhasil!")
+                return redirect("login")
+
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan: {e}")
+
+    return render(request, "register_fdo.html")
+
+
+def register_individu(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        nomor_telepon = request.POST.get("nomor_telepon")
+        alamat = request.POST.get("alamat")
+        nama_depan = request.POST.get("nama_depan")
+        nama_tengah = request.POST.get("nama_tengah")
+        nama_belakang = request.POST.get("nama_belakang")
+
+        try:
+            with transaction.atomic():
+                Users.objects.create(
+                    email=email,
+                    password=password,
+                    alamat=alamat,
+                    nomor_telepon=nomor_telepon
+                )
+
+                no_identitas = uuid.uuid4()
+                Klien.objects.create(
+                    no_identitas=no_identitas,
+                    tanggal_registrasi=date.today(),
+                    email=email
+                )
+
+                Individu.objects.create(
+                    no_identitas_klien=no_identitas,
+                    nama_depan=nama_depan,
+                    nama_tengah=nama_tengah,
+                    nama_belakang=nama_belakang
+                )
+
+                messages.success(request, "Registrasi klien individu berhasil!")
+                return redirect("login")
+
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan: {e}")
+
+    return render(request, "register_individu.html")
+
+def register_perusahaan(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        nomor_telepon = request.POST.get("nomor_telepon")
+        alamat = request.POST.get("alamat")
+        nama_perusahaan = request.POST.get("nama_perusahaan")
+
+        try:
+            with transaction.atomic():
+                Users.objects.create(
+                    email=email,
+                    password=password,
+                    alamat=alamat,
+                    nomor_telepon=nomor_telepon
+                )
+
+                no_identitas = uuid.uuid4()
+                Klien.objects.create(
+                    no_identitas=no_identitas,
+                    tanggal_registrasi=date.today(),
+                    email=email
+                )
+
+                Perusahaan.objects.create(
+                    no_identitas_klien=no_identitas,
+                    nama_perusahaan=nama_perusahaan
+                )
+
+                messages.success(request, "Registrasi perusahaan berhasil!")
+                return redirect("login")
+
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan saat registrasi: {e}")
+
+    return render(request, "register_perusahaan.html")
 
 def login(request): 
     template = loader.get_template('login_register/login.html')
