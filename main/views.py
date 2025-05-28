@@ -1,9 +1,12 @@
+from datetime import date
+import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import loader
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.db import connection
 
 def start_screen(request):
     template = loader.get_template('start_screen.html')
@@ -35,9 +38,41 @@ def register_perusahaan(request):
     template = loader.get_template('register_perusahaan.html')
     return HttpResponse(template.render())
 
-def login(request): 
-    template = loader.get_template('login_register/login.html')
-    return HttpResponse(template.render())
+def login(request):
+    if request.method == "POST":
+        print(request)
+        email = request.POST['email']
+        password = request.POST['password']
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT * FROM users
+                WHERE email = %s AND password = %s
+            """, [email, password])
+            user = cursor.fetchone()
+
+            if user == None:
+                messages.error(request, "Email or Password is incorrect")
+                return render(request, "login_register/login.html")
+
+            cursor.execute("""
+                SELECT 'individu' AS role FROM individu WHERE no_identitas_klien = (SELECT no_identitas FROM klien WHERE email = %s)
+                UNION ALL
+                SELECT 'perusahaan' AS role FROM perusahaan WHERE no_identitas_klien = (SELECT no_identitas FROM klien WHERE email = %s)
+                UNION ALL
+                SELECT 'front_desk' AS role FROM front_desk WHERE no_front_desk = (SELECT no_pegawai FROM pegawai WHERE email_user = %s)
+                UNION ALL
+                SELECT 'tenaga_medis' AS role FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s)
+                UNION ALL
+                SELECT 'dokter_hewan' AS role FROM dokter_hewan WHERE no_dokter_hewan = (SELECT no_tenaga_medis FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s))
+                UNION ALL
+                SELECT 'perawat_hewan' AS role FROM perawat_hewan WHERE no_perawat_hewan = (SELECT no_tenaga_medis FROM tenaga_medis WHERE no_tenaga_medis = (SELECT no_pegawai FROM pegawai WHERE email_user = %s))
+            """, [email, email, email, email, email, email])
+            roles = cursor.fetchone()
+            return profile(request, roles)
+    
+    else:    
+        return render(request, "login_register/login.html")
 
 def show_main(request): 
     template = loader.get_template('start_screen.html')
