@@ -6,8 +6,9 @@ from django.template import loader
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth import logout
-from django.db import connection
-from django.contrib.auth.hashers import make_password
+from django import forms
+from django.contrib.auth.hashers import make_password, check_password
+from django.db import connection, transaction, IntegrityError, DatabaseError
 import uuid
 from datetime import date
 
@@ -19,252 +20,298 @@ def register(request):
     template = loader.get_template('login_register/register.html')
     return HttpResponse(template.render())
 
+class PHRegisterForm(forms.Form):
+    email = forms.EmailField(required=True, max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput, required=True, max_length=100)
+    alamat = forms.CharField(max_length=255, required=True)
+    nomor_telepon = forms.CharField(max_length=15, required=True)
+    tanggal_diterima = forms.DateField(required=True)
+    no_izin_praktik = forms.CharField(max_length=20, required=True)
+    no_sertifikat_kompetensi = forms.CharField(max_length=10, required=True, label="Nomor Sertifikat")
+    nama_sertifikat = forms.CharField(max_length=100, required=True, label="Nama Sertifikat")
+
+class DHRegisterForm(forms.Form):
+    email = forms.EmailField(required=True, max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput, required=True, max_length=100)
+    alamat = forms.CharField(max_length=255, required=True)
+    nomor_telepon = forms.CharField(max_length=15, required=True)
+    tanggal_diterima = forms.DateField(required=True)
+    no_izin_praktik = forms.CharField(max_length=20, required=True)
+    no_sertifikat_kompetensi = forms.CharField(max_length=10, required=True, label="Nomor Sertifikat")
+    nama_sertifikat = forms.CharField(max_length=100, required=True, label="Nama Sertifikat")
+
+class FDORegisterForm(forms.Form):
+    email = forms.EmailField(required=True, max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput, required=True, max_length=100)
+    alamat = forms.CharField(max_length=255, required=True)
+    nomor_telepon = forms.CharField(max_length=15, required=True)
+    tanggal_diterima = forms.DateField(required=True)
+
+class IndividuRegisterForm(forms.Form):
+    email = forms.EmailField(required=True, max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput, required=True, max_length=100)
+    alamat = forms.CharField(max_length=255, required=True)
+    nomor_telepon = forms.CharField(max_length=15, required=True)
+    nama_depan = forms.CharField(max_length=50, required=True)
+    nama_tengah = forms.CharField(max_length=50, required=False)
+    nama_belakang = forms.CharField(max_length=50, required=False)
+
+class PerusahaanRegisterForm(forms.Form):
+    email = forms.EmailField(required=True, max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput, required=True, max_length=100)
+    alamat = forms.CharField(max_length=255, required=True)
+    nomor_telepon = forms.CharField(max_length=15, required=True)
+    nama_perusahaan = forms.CharField(max_length=255, required=True)
+
 def register_ph(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        alamat = request.POST.get("alamat")
-        nomor_telepon = request.POST.get("nomor_telepon")
-        tanggal_diterima = request.POST.get("tanggal_diterima")
-        no_izin_praktik = request.POST.get("nomor_izin_praktik")
+        form = PHRegisterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            alamat = form.cleaned_data["alamat"]
+            nomor_telepon = form.cleaned_data["nomor_telepon"]
+            tanggal_diterima = form.cleaned_data["tanggal_diterima"]
+            no_izin_praktik = form.cleaned_data["no_izin_praktik"]
+            no_sertifikat_kompetensi = form.cleaned_data["no_sertifikat_kompetensi"]
+            nama_sertifikat = form.cleaned_data["nama_sertifikat"]
 
-        try:
-            with transaction.atomic():
-                no_pegawai = str(uuid.uuid4())
-                no_tenaga_medis = str(uuid.uuid4())
+            try:
+                with transaction.atomic():
+                    no_pegawai = str(uuid.uuid4())
+                    no_tenaga_medis = str(uuid.uuid4())
 
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        INSERT INTO users (email, password, alamat, nomor_telepon)
-                        VALUES (%s, %s, %s, %s)
-                        """,
-                        [email, make_password(password), alamat, nomor_telepon]
-                    )
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO users (email, password, alamat, nomor_telepon)
+                            VALUES (%s, %s, %s, %s)
+                        """, [email, make_password(password), alamat, nomor_telepon])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO pegawai (no_pegawai, tanggal_mulai_kerja, email_user)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_pegawai, tanggal_diterima, email]
-                    )
+                        cursor.execute("""
+                            INSERT INTO pegawai (no_pegawai, tanggal_mulai_kerja, email_user)
+                            VALUES (%s, %s, %s)
+                        """, [no_pegawai, tanggal_diterima, email])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO tenaga_medis (no_tenaga_medis, no_izin_praktik, no_pegawai)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_tenaga_medis, no_izin_praktik, no_pegawai]
-                    )
+                        cursor.execute("""
+                            INSERT INTO tenaga_medis (no_tenaga_medis, no_izin_praktik, no_pegawai)
+                            VALUES (%s, %s, %s)
+                        """, [no_tenaga_medis, no_izin_praktik, no_pegawai])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO perawat_hewan (no_perawat_hewan)
-                        VALUES (%s)
-                        """,
-                        [no_tenaga_medis]
-                    )
+                        cursor.execute("""
+                            INSERT INTO perawat_hewan (no_perawat_hewan)
+                            VALUES (%s)
+                        """, [no_tenaga_medis])
 
-                messages.success(request, "Registrasi perawat hewan berhasil!")
-                return redirect('login')
+                        cursor.execute("""
+                            INSERT INTO sertifikat_kompetensi (no_sertifikat_kompetensi, no_tenaga_medis, nama_sertifikat)
+                            VALUES (%s, %s, %s)
+                        """, [no_sertifikat_kompetensi, no_tenaga_medis, nama_sertifikat])
 
-        except Exception as e:
-            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+                    messages.success(request, "Registrasi perawat hewan berhasil!")
+                    return redirect('main:login')
 
-    return render(request, 'login_register/register_ph.html')
+            except IntegrityError:
+                messages.error(request, "Email atau nomor sertifikat sudah terdaftar.")
+            except DatabaseError as e:
+                messages.error(request, f"Terjadi kesalahan: {str(e)}")
+        else:
+            messages.error(request, "Data tidak valid. Silakan periksa input Anda.")
+    else:
+        form = PHRegisterForm()
+
+    return render(request, 'login_register/register_ph.html', {'form': form})
 
 def register_dh(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        alamat = request.POST.get("alamat")
-        nomor_telepon = request.POST.get("nomor_telepon")
-        tanggal_diterima = request.POST.get("tanggal_diterima")
-        no_izin_praktik = request.POST.get("nomor_izin_praktik")
+        form = DHRegisterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            alamat = form.cleaned_data["alamat"]
+            nomor_telepon = form.cleaned_data["nomor_telepon"]
+            tanggal_diterima = form.cleaned_data["tanggal_diterima"]
+            no_izin_praktik = form.cleaned_data["no_izin_praktik"]
+            no_sertifikat_kompetensi = form.cleaned_data["no_sertifikat_kompetensi"]
+            nama_sertifikat = form.cleaned_data["nama_sertifikat"]
 
-        try:
-            with transaction.atomic():
-                no_pegawai = str(uuid.uuid4())
-                no_tenaga_medis = str(uuid.uuid4())
+            try:
+                with transaction.atomic():
+                    no_pegawai = str(uuid.uuid4())
+                    no_tenaga_medis = str(uuid.uuid4())
 
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        INSERT INTO users (email, password, alamat, nomor_telepon)
-                        VALUES (%s, %s, %s, %s)
-                        """,
-                        [email, make_password(password), alamat, nomor_telepon]
-                    )
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO users (email, password, alamat, nomor_telepon)
+                            VALUES (%s, %s, %s, %s)
+                        """, [email, make_password(password), alamat, nomor_telepon])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO pegawai (no_pegawai, tanggal_mulai_kerja, email_user)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_pegawai, tanggal_diterima, email]
-                    )
+                        cursor.execute("""
+                            INSERT INTO pegawai (no_pegawai, tanggal_mulai_kerja, email_user)
+                            VALUES (%s, %s, %s)
+                        """, [no_pegawai, tanggal_diterima, email])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO tenaga_medis (no_tenaga_medis, no_izin_praktik, no_pegawai)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_tenaga_medis, no_izin_praktik, no_pegawai]
-                    )
+                        cursor.execute("""
+                            INSERT INTO tenaga_medis (no_tenaga_medis, no_izin_praktik, no_pegawai)
+                            VALUES (%s, %s, %s)
+                        """, [no_tenaga_medis, no_izin_praktik, no_pegawai])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO dokter_hewan (no_dokter_hewan)
-                        VALUES (%s)
-                        """,
-                        [no_tenaga_medis]
-                    )
+                        cursor.execute("""
+                            INSERT INTO dokter_hewan (no_dokter_hewan)
+                            VALUES (%s)
+                        """, [no_tenaga_medis])
 
-                messages.success(request, "Registrasi dokter hewan berhasil!")
-                return redirect('login')
+                        cursor.execute("""
+                            INSERT INTO sertifikat_kompetensi (no_sertifikat_kompetensi, no_tenaga_medis, nama_sertifikat)
+                            VALUES (%s, %s, %s)
+                        """, [no_sertifikat_kompetensi, no_tenaga_medis, nama_sertifikat])
 
-        except Exception as e:
-            messages.error(request, f"Gagal mendaftar: {str(e)}")
+                    messages.success(request, "Registrasi dokter hewan berhasil!")
+                    return redirect('main:login')
 
-    return render(request, 'login_register/register_dh.html')
+            except IntegrityError:
+                messages.error(request, "Email atau nomor sertifikat sudah terdaftar.")
+            except DatabaseError as e:
+                messages.error(request, f"Terjadi kesalahan: {str(e)}")
+        else:
+            messages.error(request, "Data tidak valid. Silakan periksa input Anda.")
+    else:
+        form = DHRegisterForm()
+
+    return render(request, 'login_register/register_dh.html', {'form': form})
 
 def register_fdo(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        nomor_telepon = request.POST.get("nomor_telepon")
-        tanggal_diterima = request.POST.get("tanggal_diterima")
-        alamat = request.POST.get("alamat")
+        form = FDORegisterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            alamat = form.cleaned_data["alamat"]
+            nomor_telepon = form.cleaned_data["nomor_telepon"]
+            tanggal_diterima = form.cleaned_data["tanggal_diterima"]
 
-        try:
-            with transaction.atomic():
-                no_pegawai = str(uuid.uuid4())
+            try:
+                with transaction.atomic():
+                    no_pegawai = str(uuid.uuid4())
 
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        INSERT INTO users (email, password, alamat, nomor_telepon)
-                        VALUES (%s, %s, %s, %s)
-                        """,
-                        [email, make_password(password), alamat, nomor_telepon]
-                    )
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO users (email, password, alamat, nomor_telepon)
+                            VALUES (%s, %s, %s, %s)
+                        """, [email, make_password(password), alamat, nomor_telepon])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO pegawai (no_pegawai, tanggal_mulai_kerja, email_user)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_pegawai, tanggal_diterima, email]
-                    )
+                        cursor.execute("""
+                            INSERT INTO pegawai (no_pegawai, tanggal_mulai_kerja, email_user)
+                            VALUES (%s, %s, %s)
+                        """, [no_pegawai, tanggal_diterima, email])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO front_desk (no_front_desk)
-                        VALUES (%s)
-                        """,
-                        [no_pegawai]
-                    )
+                        cursor.execute("""
+                            INSERT INTO front_desk (no_front_desk)
+                            VALUES (%s)
+                        """, [no_pegawai])
 
-                messages.success(request, "Registrasi Front-Desk Officer berhasil!")
-                return redirect("login")
+                    messages.success(request, "Registrasi front-desk officer berhasil!")
+                    return redirect('main:login')
 
-        except Exception as e:
-            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+            except IntegrityError:
+                messages.error(request, "Email sudah terdaftar.")
+            except DatabaseError as e:
+                messages.error(request, f"Terjadi kesalahan: {str(e)}")
+        else:
+            messages.error(request, "Data tidak valid. Silakan periksa input Anda.")
+    else:
+        form = FDORegisterForm()
 
-    return render(request, "login_register/register_fdo.html")
+    return render(request, 'login_register/register_fdo.html', {'form': form})
 
 def register_individu(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        nomor_telepon = request.POST.get("nomor_telepon")
-        alamat = request.POST.get("alamat")
-        nama_depan = request.POST.get("nama_depan")
-        nama_tengah = request.POST.get("nama_tengah")
-        nama_belakang = request.POST.get("nama_belakang")
+        form = IndividuRegisterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            alamat = form.cleaned_data["alamat"]
+            nomor_telepon = form.cleaned_data["nomor_telepon"]
+            nama_depan = form.cleaned_data["nama_depan"]
+            nama_tengah = form.cleaned_data["nama_tengah"] or ""
+            nama_belakang = form.cleaned_data["nama_belakang"] or ""
 
-        try:
-            with transaction.atomic():
-                no_identitas = str(uuid.uuid4())
+            try:
+                with transaction.atomic():
+                    no_identitas = str(uuid.uuid4())
 
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        INSERT INTO users (email, password, alamat, nomor_telepon)
-                        VALUES (%s, %s, %s, %s)
-                        """,
-                        [email, make_password(password), alamat, nomor_telepon]
-                    )
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO users (email, password, alamat, nomor_telepon)
+                            VALUES (%s, %s, %s, %s)
+                        """, [email, make_password(password), alamat, nomor_telepon])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO klien (no_identitas, tanggal_registrasi, email)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_identitas, date.today(), email]
-                    )
+                        cursor.execute("""
+                            INSERT INTO klien (no_identitas, tanggal_registrasi, email)
+                            VALUES (%s, %s, %s)
+                        """, [no_identitas, date.today(), email])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO individu (no_identitas_klien, nama_depan, nama_tengah, nama_belakang)
-                        VALUES (%s, %s, %s, %s)
-                        """,
-                        [no_identitas, nama_depan, nama_tengah, nama_belakang]
-                    )
+                        cursor.execute("""
+                            INSERT INTO individu (no_identitas_klien, nama_depan, nama_tengah, nama_belakang)
+                            VALUES (%s, %s, %s, %s)
+                        """, [no_identitas, nama_depan, nama_tengah, nama_belakang])
 
-                messages.success(request, "Registrasi klien individu berhasil!")
-                return redirect("login")
+                    messages.success(request, "Registrasi klien individu berhasil!")
+                    return redirect('main:login')
 
-        except Exception as e:
-            messages.error(request, f"Terjadi kesalahan: {str(e)}")
+            except IntegrityError:
+                messages.error(request, "Email sudah terdaftar.")
+            except DatabaseError as e:
+                messages.error(request, f"Terjadi kesalahan: {str(e)}")
+        else:
+            messages.error(request, "Data tidak valid. Silakan periksa input Anda.")
+    else:
+        form = IndividuRegisterForm()
 
-    return render(request, "login_register/register_individu.html")
+    return render(request, 'login_register/register_individu.html', {'form': form})
 
 def register_perusahaan(request):
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        nomor_telepon = request.POST.get("nomor_telepon")
-        alamat = request.POST.get("alamat")
-        nama_perusahaan = request.POST.get("nama_perusahaan")
+        form = PerusahaanRegisterForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            alamat = form.cleaned_data["alamat"]
+            nomor_telepon = form.cleaned_data["nomor_telepon"]
+            nama_perusahaan = form.cleaned_data["nama_perusahaan"]
 
-        try:
-            with transaction.atomic():
-                no_identitas = str(uuid.uuid4())
+            try:
+                with transaction.atomic():
+                    no_identitas = str(uuid.uuid4())
 
-                with connection.cursor() as cursor:
-                    cursor.execute(
-                        """
-                        INSERT INTO users (email, password, alamat, nomor_telepon)
-                        VALUES (%s, %s, %s, %s)
-                        """,
-                        [email, make_password(password), alamat, nomor_telepon]
-                    )
+                    with connection.cursor() as cursor:
+                        cursor.execute("""
+                            INSERT INTO users (email, password, alamat, nomor_telepon)
+                            VALUES (%s, %s, %s, %s)
+                        """, [email, make_password(password), alamat, nomor_telepon])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO klien (no_identitas, tanggal_registrasi, email)
-                        VALUES (%s, %s, %s)
-                        """,
-                        [no_identitas, date.today(), email]
-                    )
+                        cursor.execute("""
+                            INSERT INTO klien (no_identitas, tanggal_registrasi, email)
+                            VALUES (%s, %s, %s)
+                        """, [no_identitas, date.today(), email])
 
-                    cursor.execute(
-                        """
-                        INSERT INTO perusahaan (no_identitas_klien, nama_perusahaan)
-                        VALUES (%s, %s)
-                        """,
-                        [no_identitas, nama_perusahaan]
-                    )
+                        cursor.execute("""
+                            INSERT INTO perusahaan (no_identitas_klien, nama_perusahaan)
+                            VALUES (%s, %s)
+                        """, [no_identitas, nama_perusahaan])
 
-                messages.success(request, "Registrasi perusahaan berhasil!")
-                return redirect("login")
+                    messages.success(request, "Registrasi perusahaan berhasil!")
+                    return redirect('main:login')
 
-        except Exception as e:
-            messages.error(request, f"Terjadi kesalahan saat registrasi: {str(e)}")
+            except IntegrityError:
+                messages.error(request, "Email sudah terdaftar.")
+            except DatabaseError as e:
+                messages.error(request, f"Terjadi kesalahan: {str(e)}")
+        else:
+            messages.error(request, "Data tidak valid. Silakan periksa input Anda.")
+    else:
+        form = PerusahaanRegisterForm()
 
-    return render(request, "login_register/register_perusahaan.html")
+    return render(request, 'login_register/register_perusahaan.html', {'form': form})
 
 def login(request):
     if request.method == "POST":
