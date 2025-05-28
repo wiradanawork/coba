@@ -3,7 +3,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from django.db import connection
 
-kode_obat_count = 10
 def list_obat(request):
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -25,14 +24,7 @@ def list_obat(request):
 
 def create_obat(request):
     if request.method == 'POST':
-        with connection.cursor() as cursor:
-            cursor.execute("""
-                SELECT value
-                FROM counter
-                WHERE name = 'kode_obat'
-            """)
-            current_counter = cursor.fetchone()
-        new_counter_value = current_counter[0]
+        biaya_perawatan
 
         kode = f"MED{new_counter_value+1:03d}"
         nama = request.POST.get('nama')
