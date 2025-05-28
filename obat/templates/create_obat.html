@@ -16,22 +16,22 @@
 
             <div class="flex flex-col space-y-2">
                 <label for="nama" class="font-medium text-gray-700">Nama</label>
-                {{ form.nama }}
+                <input type="text" name="nama" id="nama" required class="p-2 border border-gray-300 rounded-md" placeholder="Nama">
             </div>
-
+            
             <div class="flex flex-col space-y-2">
                 <label for="harga" class="font-medium text-gray-700">Harga Satuan</label>
-                {{ form.harga }}
+                <input type="number" name="harga" id="harga" required class="p-2 border border-gray-300 rounded-md" placeholder="Harga Satuan">
             </div>
-
+            
             <div class="flex flex-col space-y-2">
-                <label for="dosis" class="font-medium text-gray-700">Dosis Awal</label>
-                {{ form.dosis }}
+                <label for="dosis" class="font-medium text-gray-700">Dosis</label>
+                <input type="text" name="dosis" id="dosis" required class="p-2 border border-gray-300 rounded-md" placeholder="Dosis">
             </div>
-
+            
             <div class="flex flex-col space-y-2">
                 <label for="stok" class="font-medium text-gray-700">Stok Awal</label>
-                {{ form.stok }}
+                <input type="number" name="stok" id="stok" required class="p-2 border border-gray-300 rounded-md" placeholder="Stok Awal">
             </div>
 
             <div class="flex justify-between items-center mt-6">
