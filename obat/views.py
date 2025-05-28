@@ -1,8 +1,6 @@
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from .models import *
-from .forms import *
 from django.db import connection
 
 kode_obat_count = 10
@@ -57,7 +55,7 @@ def create_obat(request):
                     SET value = %s
                     WHERE name = 'kode_obat'
                 """, [new_counter_value + 1])
-                
+
                 return redirect('obat:list_obat')
             except Exception as e:
                 return HttpResponseBadRequest(f"Error: {e}")
