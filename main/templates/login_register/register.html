@@ -15,17 +15,17 @@
                 <div>
                     <p class="text-lg font-semibold mb-2 text-gray-700">Pegawai</p>
                     <div class="space-y-2"></div>
-                        <a href="{% url 'register_fdo' %}">
+                        <a href="{% url 'main:register_fdo' %}">
                             <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                                 Front-Desk Officer
                             </button>
                         </a>
-                        <a href="{% url 'register_dokter_hewan' %}">
+                        <a href="{% url 'main:register_dh' %}">
                             <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                                 Dokter Hewan
                             </button>
                         </a>
-                        <a href="{% url 'register_ph' %}">
+                        <a href="{% url 'main:register_ph' %}">
                             <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                                 Perawat Hewan
                             </button>
@@ -35,12 +35,12 @@
                 <div>
                     <p class="text-lg font-semibold mb-2 text-gray-700">Klien</p>
                     <div class="space-y-2"></div>
-                        <a href="{% url 'register_individu' %}">
+                        <a href="{% url 'main:register_individu' %}">
                             <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                                 Individu
                             </button>
                         </a>
-                        <a href="{% url 'register_perusahaan' %}">
+                        <a href="{% url 'main:register_perusahaan' %}">
                             <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
                                 Perusahaan
                             </button>
