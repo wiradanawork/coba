@@ -15,16 +15,36 @@
                 <div>
                     <p class="text-lg font-semibold mb-2 text-gray-700">Pegawai</p>
                     <div class="space-y-2"></div>
-                        <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Front-Desk Officer</button>
-                        <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Dokter Hewan</button>
-                        <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Perawat Hewan</button>
+                        <a href="{% url 'register_fdo' %}">
+                            <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                                Front-Desk Officer
+                            </button>
+                        </a>
+                        <a href="{% url 'register_dokter_hewan' %}">
+                            <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                                Dokter Hewan
+                            </button>
+                        </a>
+                        <a href="{% url 'register_ph' %}">
+                            <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                                Perawat Hewan
+                            </button>
+                        </a>
                     </div>
                 </div>
                 <div>
                     <p class="text-lg font-semibold mb-2 text-gray-700">Klien</p>
                     <div class="space-y-2"></div>
-                        <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Individu</button>
-                        <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">Perusahaan</button>
+                        <a href="{% url 'register_individu' %}">
+                            <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                                Individu
+                            </button>
+                        </a>
+                        <a href="{% url 'register_perusahaan' %}">
+                            <button class="w-48 bg-gray-900 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+                                Perusahaan
+                            </button>
+                        </a>
                     </div>
                 </div>
             </div>
